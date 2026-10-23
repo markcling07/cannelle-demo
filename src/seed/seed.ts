@@ -173,6 +173,7 @@ const seed = async () => {
     { key: 'ground', fr: 'Moulue', en: 'Ground' },
     { key: 'blends', fr: 'Mélanges', en: 'Blends' },
     { key: 'gifts', fr: 'Coffrets', en: 'Gift sets' },
+    { key: 'other', fr: 'Autres épices', en: 'Other spices' },
   ]
 
   const categories: Record<string, number> = {}
@@ -465,6 +466,50 @@ const seed = async () => {
           { label: 'Box', value: 'Wood, reusable' },
           { label: 'Card', value: 'French and English' },
           { label: 'Total weight', value: '320 g' },
+        ],
+      },
+    },
+    {
+      slug: 'clous-de-girofle',
+      label: 'Girofle',
+      colours: ['#43260f', '#8d5a2b'] as [string, string],
+      alt: {
+        fr: 'Clous de girofle entiers séchés',
+        en: 'Whole dried cloves',
+      },
+      category: 'other',
+      reference: 'EPI-GIR-007',
+      price: 14,
+      fr: {
+        title: 'Clous de girofle entiers',
+        shortDescription:
+          'Boutons floraux cueillis avant éclosion et séchés au soleil. Chauds et puissants.',
+        body: [
+          'Le clou de girofle est le bouton floral du giroflier, cueilli à la main juste avant qu’il ne s’ouvre, puis séché au soleil jusqu’à prendre sa couleur brun sombre.',
+          'Madagascar en est l’un des premiers producteurs mondiaux. C’est l’eugénol qui lui donne ce parfum chaud et sa légère action anesthésiante.',
+          'À utiliser entier dans un bouillon ou un vin chaud, ou moulu dans un mélange d’épices. Comptez-en peu : il couvre vite le reste.',
+        ],
+        features: [
+          { label: 'Espèce', value: 'Syzygium aromaticum' },
+          { label: 'Origine', value: 'Côte est, Madagascar' },
+          { label: 'Teneur en eugénol', value: '15 à 18 %' },
+          { label: 'Conditionnement', value: 'Sachet kraft, 100 g' },
+        ],
+      },
+      en: {
+        title: 'Whole Cloves',
+        shortDescription:
+          'Flower buds picked before they open, then sun dried. Warm and powerful.',
+        body: [
+          'A clove is the flower bud of the clove tree, picked by hand just before it opens, then dried in the sun until it turns deep brown.',
+          'Madagascar is one of the largest producers in the world. Eugenol is what gives cloves their warm scent and their faint numbing effect.',
+          'Use them whole in a stock or in mulled wine, or ground in a spice blend. Use few: they cover everything else quickly.',
+        ],
+        features: [
+          { label: 'Species', value: 'Syzygium aromaticum' },
+          { label: 'Origin', value: 'East coast, Madagascar' },
+          { label: 'Eugenol content', value: '15 to 18%' },
+          { label: 'Packaging', value: 'Kraft pouch, 100 g' },
         ],
       },
     },
