@@ -513,6 +513,93 @@ const seed = async () => {
         ],
       },
     },
+    {
+      slug: 'ylang-ylang',
+      label: 'Ylang-Ylang',
+      colours: ['#2d2140', '#7a5aa0'] as [string, string],
+      alt: {
+        fr: 'Flacons ambrés d’huile essentielle',
+        en: 'Amber bottles of essential oil',
+      },
+      category: 'other',
+      reference: 'EPI-YLA-008',
+      price: 28,
+      fr: {
+        title: 'Huile essentielle d’Ylang-Ylang',
+        shortDescription:
+          'Distillation à la vapeur des fleurs fraîches. Première fraction, qualité « extra ».',
+        body: [
+          'Les fleurs sont cueillies au petit matin, lorsque leur teneur en huile est la plus élevée, puis distillées dans les heures qui suivent.',
+          'La distillation est fractionnée. La première fraction, dite « extra », concentre les notes florales les plus fines ; c’est celle que recherche la parfumerie.',
+          'Quelques gouttes suffisent : en diffusion, ou diluée dans une huile végétale pour le massage. À conserver à l’abri de la lumière.',
+        ],
+        features: [
+          { label: 'Espèce', value: 'Cananga odorata' },
+          { label: 'Partie distillée', value: 'Fleur fraîche' },
+          { label: 'Fraction', value: 'Extra (première)' },
+          { label: 'Conditionnement', value: 'Flacon ambré, 10 ml' },
+        ],
+      },
+      en: {
+        title: 'Ylang-Ylang Essential Oil',
+        shortDescription:
+          'Steam distilled from fresh flowers. First fraction, "extra" grade.',
+        body: [
+          'The flowers are picked at first light, when their oil content is highest, and distilled within hours.',
+          'Distillation is fractional. The first fraction, known as "extra", holds the finest floral notes, and is the one perfumery looks for.',
+          'A few drops are enough: in a diffuser, or diluted in a carrier oil for massage. Keep it away from light.',
+        ],
+        features: [
+          { label: 'Species', value: 'Cananga odorata' },
+          { label: 'Plant part', value: 'Fresh flower' },
+          { label: 'Fraction', value: 'Extra (first)' },
+          { label: 'Packaging', value: 'Amber bottle, 10 ml' },
+        ],
+      },
+    },
+    {
+      slug: 'cacao',
+      label: 'Cacao',
+      colours: ['#3b2114', '#8b5a34'] as [string, string],
+      alt: {
+        fr: 'Cabosse de cacao et fèves concassées',
+        en: 'Cacao pod and cocoa nibs',
+      },
+      category: 'other',
+      reference: 'EPI-CAC-009',
+      price: 16,
+      fr: {
+        title: 'Fèves de cacao torréfiées',
+        shortDescription:
+          'Cacao du Sambirano, fermenté sept jours puis torréfié doucement.',
+        body: [
+          'La vallée du Sambirano, au nord-ouest de Madagascar, produit un cacao reconnu pour ses notes d’agrumes et de fruits rouges — rares chez un Trinitario.',
+          'Les fèves sont fermentées sept jours en caisses de bois, séchées au soleil, puis torréfiées à basse température pour préserver l’acidité du fruit.',
+          'À concasser en éclats pour la pâtisserie, à infuser, ou simplement à grignoter.',
+        ],
+        features: [
+          { label: 'Origine', value: 'Vallée du Sambirano, Madagascar' },
+          { label: 'Variété', value: 'Trinitario' },
+          { label: 'Fermentation', value: '7 jours' },
+          { label: 'Conditionnement', value: 'Sachet kraft, 250 g' },
+        ],
+      },
+      en: {
+        title: 'Roasted Cacao Beans',
+        shortDescription: 'Sambirano cacao, fermented for seven days then lightly roasted.',
+        body: [
+          'The Sambirano valley in north-west Madagascar produces a cacao known for its citrus and red-fruit notes — unusual in a Trinitario.',
+          'The beans are fermented for seven days in wooden boxes, sun dried, then roasted at low temperature to keep the fruit acidity intact.',
+          'Crack them into nibs for baking, steep them, or simply eat them as they are.',
+        ],
+        features: [
+          { label: 'Origin', value: 'Sambirano valley, Madagascar' },
+          { label: 'Variety', value: 'Trinitario' },
+          { label: 'Fermentation', value: '7 days' },
+          { label: 'Packaging', value: 'Kraft pouch, 250 g' },
+        ],
+      },
+    },
   ]
 
   for (const product of products) {
