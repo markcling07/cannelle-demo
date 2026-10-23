@@ -537,26 +537,101 @@ h3 {
   margin-bottom: 72px;
 }
 
-.detail__media img {
-  width: 100%;
+/* --- product gallery ----------------------------------------------------- */
+
+.gallery__frame {
+  position: relative;
   border-radius: var(--radius);
+  overflow: hidden;
   background: var(--tile);
 }
 
-.detail__gallery {
+.gallery__frame img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 1 / 0.92;
+  object-fit: cover;
+}
+
+.gallery__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  /* 44px keeps it a comfortable touch target on a phone. */
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 92%);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgb(17 17 17 / 12%), 0 6px 18px rgb(17 17 17 / 14%);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s ease;
+}
+
+.gallery__nav:hover {
+  background: #fff;
+}
+
+.gallery__nav--prev {
+  left: 12px;
+}
+
+.gallery__nav--next {
+  right: 12px;
+}
+
+.gallery__counter {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  margin: 0;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  background: rgb(17 17 17 / 72%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.gallery__thumbs {
   list-style: none;
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
   gap: 8px;
 }
 
-.detail__gallery img {
+.gallery__thumb {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--tile);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.gallery__thumb:hover {
+  border-color: var(--ink);
+}
+
+.gallery__thumb.is-current {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.gallery__thumb img {
+  width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: 6px;
-  background: var(--tile);
+  display: block;
 }
 
 .detail__title {

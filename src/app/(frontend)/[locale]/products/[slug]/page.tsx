@@ -6,6 +6,7 @@ import config from '@payload-config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
 import type { Product } from '@/payload-types'
+import { ProductGallery, type GalleryImage } from '@/components/ProductGallery'
 import { asMedia, buildSrcSet, bestUrl } from '@/lib/media'
 import { formatPrice, isLocale, otherLocale, t, type Locale } from '@/lib/locale'
 
@@ -97,9 +98,19 @@ export default async function ProductPage({ params }: PageParams) {
 
   const image = asMedia(product.image)
   const price = formatPrice(product.price, product.currency, locale)
-  const gallery = Array.isArray(product.gallery)
+  const extras = Array.isArray(product.gallery)
     ? product.gallery.map(asMedia).filter((m): m is NonNullable<typeof m> => Boolean(m))
     : []
+
+  // The main photograph first, then the gallery — one set to step through.
+  const images: GalleryImage[] = [image, ...extras]
+    .filter((media): media is NonNullable<typeof media> => Boolean(media))
+    .map((media) => ({
+      url: bestUrl(media, 'hero'),
+      srcSet: buildSrcSet(media),
+      thumbUrl: bestUrl(media, 'thumbnail'),
+      alt: media.alt ?? '',
+    }))
 
   return (
     <div className="container">
@@ -109,29 +120,14 @@ export default async function ProductPage({ params }: PageParams) {
 
       <article className="detail">
         <div className="detail__media">
-          {image ? (
-            <img
-              src={bestUrl(image, 'hero')}
-              srcSet={buildSrcSet(image)}
-              sizes="(max-width: 900px) 100vw, 50vw"
-              alt={image.alt ?? ''}
-            />
-          ) : null}
-
-          {gallery.length > 0 ? (
-            <ul className="detail__gallery">
-              {gallery.map((media) => (
-                <li key={media.id}>
-                  <img
-                    src={bestUrl(media, 'thumbnail')}
-                    alt={media.alt ?? ''}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </li>
-              ))}
-            </ul>
-          ) : null}
+          <ProductGallery
+            images={images}
+            labels={{
+              previous: t('previousImage', locale),
+              next: t('nextImage', locale),
+              group: t('productPhotos', locale),
+            }}
+          />
         </div>
 
         <div>
