@@ -22,10 +22,16 @@ import { placeholderImage, avatarImage } from './placeholderImage'
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /**
- * Real photographs live in src/seed/images, named after the product slug —
- * for example `coffret-decouverte.png`. Drop a file in there and the seed uses
- * it instead of a generated placeholder, so real photography survives
- * `npm run seed` instead of being wiped by it.
+ * Real photographs live in src/seed/images, named after the product slug.
+ * Drop files in there and the seed uses them instead of generated
+ * placeholders, so real photography survives `npm run seed` rather than being
+ * wiped by it.
+ *
+ *   coffret-decouverte.png     -> the main photograph
+ *   coffret-decouverte-2.webp  -> first additional photograph
+ *   coffret-decouverte-3.webp  -> second, and so on
+ *
+ * Numbering must not skip: the search stops at the first gap.
  */
 const MIME: Record<string, string> = {
   jpg: 'image/jpeg',
@@ -34,12 +40,29 @@ const MIME: Record<string, string> = {
   webp: 'image/webp',
 }
 
-const realPhoto = (slug: string): { buffer: Buffer; ext: string } | null => {
+type Photo = { buffer: Buffer; ext: string }
+
+const findPhoto = (name: string): Photo | null => {
   for (const ext of Object.keys(MIME)) {
-    const file = path.resolve(dirname, 'images', `${slug}.${ext}`)
+    const file = path.resolve(dirname, 'images', `${name}.${ext}`)
     if (fs.existsSync(file)) return { buffer: fs.readFileSync(file), ext }
   }
   return null
+}
+
+const realPhoto = (slug: string): Photo | null => findPhoto(slug)
+
+/** Everything after the main photograph, for the product's gallery. */
+const extraPhotos = (slug: string): (Photo & { index: number })[] => {
+  const found: (Photo & { index: number })[] = []
+
+  for (let index = 2; index <= 8; index++) {
+    const photo = findPhoto(`${slug}-${index}`)
+    if (!photo) break
+    found.push({ ...photo, index })
+  }
+
+  return found
 }
 
 /**
@@ -449,8 +472,12 @@ const seed = async () => {
 
   for (const product of products) {
     const photo = realPhoto(product.slug)
+    const extras = extraPhotos(product.slug)
 
-    if (photo) payload.logger.info(`using real photograph for ${product.slug}`)
+    if (photo) {
+      const extraNote = extras.length > 0 ? ` (+${extras.length} in the gallery)` : ''
+      payload.logger.info(`using real photograph for ${product.slug}${extraNote}`)
+    }
 
     const imageId = await uploadImage(
       product.slug,
@@ -458,6 +485,14 @@ const seed = async () => {
       product.alt,
       photo?.ext ?? 'jpg',
     )
+
+    const galleryIds: number[] = []
+
+    for (const extra of extras) {
+      galleryIds.push(
+        await uploadImage(`${product.slug}-${extra.index}`, extra.buffer, product.alt, extra.ext),
+      )
+    }
 
     const created = await payload.create({
       collection: 'products',
@@ -468,6 +503,7 @@ const seed = async () => {
         description: richText(product.fr.body),
         features: product.fr.features,
         image: imageId,
+        gallery: galleryIds,
         category: categories[product.category],
         reference: product.reference,
         price: product.price,
