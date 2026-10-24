@@ -146,7 +146,7 @@ const seed = async () => {
     slug: 'site-settings',
     locale: 'fr',
     data: {
-      siteName: 'Cannelle',
+      siteName: 'GROUPE JAOVAZAHA',
       tagline: 'Cannelle de Ceylan et de Cassia',
       newsletterHeading:
         'Inscrivez-vous à la lettre d’information\net recevez nos nouveautés',
@@ -160,7 +160,7 @@ const seed = async () => {
     slug: 'site-settings',
     locale: 'en',
     data: {
-      siteName: 'Cannelle',
+      siteName: 'GROUPE JAOVAZAHA',
       tagline: 'Ceylon and Cassia cinnamon',
       newsletterHeading: 'Subscribe to the newsletter\nand stay up to date',
       contactEmail: 'contact@demo.local',
@@ -223,6 +223,22 @@ const seed = async () => {
     })
 
     return media.id
+  }
+
+  // --- logo ---------------------------------------------------------------
+  // src/seed/images/logo.png (or .jpg / .webp). Shared by both languages.
+  const logo = findPhoto('logo')
+
+  if (logo) {
+    const logoId = await uploadImage(
+      'logo',
+      logo.buffer,
+      { fr: 'Logo GROUPE JAOVAZAHA', en: 'GROUPE JAOVAZAHA logo' },
+      logo.ext,
+    )
+
+    await payload.updateGlobal({ slug: 'site-settings', data: { logo: logoId } })
+    payload.logger.info('logo set in site settings')
   }
 
   // --- products -----------------------------------------------------------

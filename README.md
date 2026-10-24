@@ -4,10 +4,10 @@ A working demonstration of **Payload CMS 3** connected to a **React / Next.js**
 front end: a small cinnamon catalogue and journal, managed independently in
 **French and English**.
 
-The sample shop is called **Cannelle**. That name, the tagline and the
-newsletter wording are all one field each under **Site settings** — change them
-to GROUPE JAOVAZAHA in the admin panel if you want the client's own name on it.
-No code change needed.
+The site carries the client's name, **GROUPE JAOVAZAHA**, and logo. The name,
+logo, tagline and newsletter wording are all one field each under
+**Site settings**, so they can be changed in the admin panel. No code change
+needed.
 
 All content in this project is fictional sample content. Nothing here is
 connected to groupejaovazaha.com, and no paid service is required to run it.

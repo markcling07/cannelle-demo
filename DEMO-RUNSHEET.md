@@ -27,9 +27,9 @@ Read this once the night before. On the day, keep it open on a second screen.
       **Administrator**. Use a password you are happy to send in an email, and
       tell him to change it.
 
-- [ ] **Decide the site name.** The demo shop is called **Cannelle**. If you
-      want his company name on it: Site settings → Site name, in both
-      languages. One field, no code.
+- [ ] **Check the site name and logo.** The demo carries his company name,
+      **GROUPE JAOVAZAHA**, and his logo. Both are under Site settings —
+      Site name in each language, Logo once for both. One field each, no code.
 
 - [ ] **Replace at least one placeholder photograph** with a real cinnamon
       photo. The generated gradients are obviously fake and he will notice.

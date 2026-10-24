@@ -628,6 +628,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SiteSetting {
   id: number;
   siteName: string;
+  /**
+   * Shown in the header beside the site name, and as the browser tab icon. A square image works best.
+   */
+  logo?: (number | null) | Media;
   tagline?: string | null;
   /**
    * Shown above the sign-up form. Line breaks are kept.
@@ -645,6 +649,7 @@ export interface SiteSetting {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
+  logo?: T;
   tagline?: T;
   newsletterHeading?: T;
   contactEmail?: T;

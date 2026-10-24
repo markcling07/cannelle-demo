@@ -33,6 +33,18 @@ export const SiteSettings: GlobalConfig = {
       label: { fr: 'Nom du site', en: 'Site name' },
     },
     {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      label: { fr: 'Logo', en: 'Logo' },
+      admin: {
+        description: {
+          fr: 'Affiché dans l’en-tête à côté du nom du site, et comme icône de l’onglet. Une image carrée convient le mieux.',
+          en: 'Shown in the header beside the site name, and as the browser tab icon. A square image works best.',
+        },
+      },
+    },
+    {
       name: 'tagline',
       type: 'text',
       localized: true,
