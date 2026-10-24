@@ -180,8 +180,10 @@ const seed = async () => {
 
   // --- categories ---------------------------------------------------------
   const categoryData = [
+    { key: 'spices', fr: 'Épices', en: 'Spices' },
+    { key: 'pantry', fr: 'Épicerie fine', en: 'Fine foods' },
+    { key: 'oils', fr: 'Huiles essentielles', en: 'Essential oils' },
     { key: 'gifts', fr: 'Coffrets', en: 'Gift sets' },
-    { key: 'other', fr: 'Autres épices', en: 'Other spices' },
   ]
 
   const categories: Record<string, number> = {}
@@ -299,7 +301,7 @@ const seed = async () => {
         fr: 'Clous de girofle entiers séchés',
         en: 'Whole dried cloves',
       },
-      category: 'other',
+      category: 'spices',
       reference: 'EPI-GIR-007',
       price: 14,
       fr: {
@@ -343,7 +345,7 @@ const seed = async () => {
         fr: 'Flacons ambrés d’huile essentielle',
         en: 'Amber bottles of essential oil',
       },
-      category: 'other',
+      category: 'oils',
       reference: 'EPI-YLA-008',
       price: 28,
       fr: {
@@ -387,7 +389,7 @@ const seed = async () => {
         fr: 'Cabosse de cacao et fèves concassées',
         en: 'Cacao pod and cocoa nibs',
       },
-      category: 'other',
+      category: 'pantry',
       reference: 'EPI-CAC-009',
       price: 16,
       fr: {
@@ -430,7 +432,7 @@ const seed = async () => {
         fr: 'Gousses de vanille Bourbon noires et charnues',
         en: 'Plump black Bourbon vanilla pods',
       },
-      category: 'other',
+      category: 'spices',
       reference: 'EPI-VAN-010',
       price: 24,
       fr: {
@@ -474,7 +476,7 @@ const seed = async () => {
         fr: 'Baies roses séchées',
         en: 'Dried pink peppercorns',
       },
-      category: 'other',
+      category: 'spices',
       reference: 'EPI-BAI-011',
       price: 11,
       fr: {
@@ -507,6 +509,226 @@ const seed = async () => {
           { label: 'Origin', value: 'East coast, Madagascar' },
           { label: 'Use', value: 'Add at the end' },
           { label: 'Packaging', value: 'Glass jar, 40 g' },
+        ],
+      },
+    },
+    {
+      slug: 'poivre-noir',
+      label: 'Poivre',
+      colours: ['#1f1a16', '#5a4a3c'] as [string, string],
+      alt: {
+        fr: 'Grains de poivre noir',
+        en: 'Black peppercorns',
+      },
+      category: 'spices',
+      reference: 'EPI-POI-012',
+      price: 9,
+      fr: {
+        title: 'Poivre noir de Madagascar',
+        shortDescription:
+          'Grains entiers séchés au soleil. Parfum boisé, piquant net sans être brûlant.',
+        body: [
+          'Le poivre noir est le fruit du poivrier, Piper nigrum, une liane qui grimpe le long d’un tuteur. Les grappes sont cueillies encore vertes, puis séchées au soleil : en quelques jours, la peau fonce et se ride jusqu’à donner ce grain noir que l’on connaît.',
+          'Le poivre de Madagascar est apprécié pour son parfum boisé, légèrement fruité. Son piquant est franc, sans être brûlant.',
+          'Gardez-le en grains et moulez-le au dernier moment : moulu, il perd vite son parfum. Ajoutez-le de préférence en fin de cuisson.',
+        ],
+        features: [
+          { label: 'Espèce', value: 'Piper nigrum' },
+          { label: 'Origine', value: 'Madagascar' },
+          { label: 'Forme', value: 'Grains entiers' },
+          { label: 'Conditionnement', value: 'Bocal verre, 80 g' },
+        ],
+      },
+      en: {
+        title: 'Madagascar Black Pepper',
+        shortDescription:
+          'Whole sun-dried peppercorns. Woody scent, a clean heat that never burns.',
+        body: [
+          'Black pepper is the fruit of Piper nigrum, a vine that climbs a support tree. The clusters are picked while still green, then dried in the sun: within a few days the skin darkens and wrinkles into the familiar black peppercorn.',
+          'Madagascar pepper is prized for its woody, slightly fruity scent. Its heat is clean and direct without burning.',
+          'Keep it whole and grind it at the last moment: ground pepper loses its scent quickly. Add it towards the end of cooking.',
+        ],
+        features: [
+          { label: 'Species', value: 'Piper nigrum' },
+          { label: 'Origin', value: 'Madagascar' },
+          { label: 'Form', value: 'Whole peppercorns' },
+          { label: 'Packaging', value: 'Glass jar, 80 g' },
+        ],
+      },
+    },
+    {
+      slug: 'curcuma',
+      label: 'Curcuma',
+      colours: ['#8a4f06', '#e0a020'] as [string, string],
+      alt: {
+        fr: 'Curcuma moulu et racines de curcuma',
+        en: 'Ground turmeric and turmeric roots',
+      },
+      category: 'spices',
+      reference: 'EPI-CUR-013',
+      price: 8,
+      fr: {
+        title: 'Curcuma moulu de Madagascar',
+        shortDescription:
+          'Racines bouillies, séchées au soleil puis moulues. Couleur intense, saveur terreuse.',
+        body: [
+          'Le curcuma, Curcuma longa, est un rhizome de la même famille que le gingembre. Après la récolte, les racines sont bouillies, séchées au soleil puis moulues en une poudre d’un jaune orangé profond.',
+          'Sa saveur est douce, terreuse et légèrement amère. C’est la curcumine qui lui donne sa couleur — et qui tache : attention aux plans de travail et aux tissus.',
+          'Il accompagne le riz, les lentilles, les currys ou un lait chaud. Une pincée de poivre noir à ses côtés est une association classique.',
+        ],
+        features: [
+          { label: 'Espèce', value: 'Curcuma longa' },
+          { label: 'Origine', value: 'Madagascar' },
+          { label: 'Mouture', value: 'Fine' },
+          { label: 'Conditionnement', value: 'Bocal verre, 70 g' },
+        ],
+      },
+      en: {
+        title: 'Madagascar Ground Turmeric',
+        shortDescription:
+          'Roots boiled, sun dried and then ground. Deep colour, earthy flavour.',
+        body: [
+          'Turmeric, Curcuma longa, is a rhizome from the same family as ginger. After harvest the roots are boiled, dried in the sun and ground into a deep orange-yellow powder.',
+          'The flavour is mild, earthy and slightly bitter. Curcumin gives it its colour — and it stains, so mind your worktops and fabrics.',
+          'It goes with rice, lentils, curries or warm milk. A pinch of black pepper alongside is a classic pairing.',
+        ],
+        features: [
+          { label: 'Species', value: 'Curcuma longa' },
+          { label: 'Origin', value: 'Madagascar' },
+          { label: 'Grind', value: 'Fine' },
+          { label: 'Packaging', value: 'Glass jar, 70 g' },
+        ],
+      },
+    },
+    {
+      slug: 'gingembre',
+      label: 'Gingembre',
+      colours: ['#7a5a2e', '#d2b07a'] as [string, string],
+      alt: {
+        fr: 'Racines de gingembre et gingembre moulu',
+        en: 'Ginger roots and ground ginger',
+      },
+      category: 'spices',
+      reference: 'EPI-GIN-014',
+      price: 8,
+      fr: {
+        title: 'Gingembre moulu de Madagascar',
+        shortDescription:
+          'Rhizome séché puis moulu. Chaud et citronné, en pâtisserie comme en cuisine.',
+        body: [
+          'Le gingembre, Zingiber officinale, se récolte quand ses tiges commencent à jaunir. Les rhizomes sont lavés, tranchés, séchés puis moulus.',
+          'Séché, il perd un peu de la fraîcheur du gingembre frais mais gagne en chaleur : son piquant est plus profond, avec une note citronnée.',
+          'Une demi-cuillère à café suffit pour un gâteau, une compote ou un bouillon. Il s’accorde très bien avec le clou de girofle et la vanille.',
+        ],
+        features: [
+          { label: 'Espèce', value: 'Zingiber officinale' },
+          { label: 'Origine', value: 'Madagascar' },
+          { label: 'Mouture', value: 'Fine' },
+          { label: 'Conditionnement', value: 'Bocal verre, 60 g' },
+        ],
+      },
+      en: {
+        title: 'Madagascar Ground Ginger',
+        shortDescription:
+          'Dried and ground rhizome. Warm and lemony, for baking and cooking alike.',
+        body: [
+          'Ginger, Zingiber officinale, is harvested when its stems start to turn yellow. The rhizomes are washed, sliced, dried and ground.',
+          'Drying takes away some of fresh ginger’s brightness but adds warmth: the heat runs deeper, with a lemony note.',
+          'Half a teaspoon is enough for a cake, a compote or a stock. It pairs very well with cloves and vanilla.',
+        ],
+        features: [
+          { label: 'Species', value: 'Zingiber officinale' },
+          { label: 'Origin', value: 'Madagascar' },
+          { label: 'Grind', value: 'Fine' },
+          { label: 'Packaging', value: 'Glass jar, 60 g' },
+        ],
+      },
+    },
+    {
+      slug: 'miel-litchi',
+      label: 'Miel',
+      colours: ['#8a5a1c', '#e0b062'] as [string, string],
+      alt: {
+        fr: 'Pot de miel ambré et cuillère à miel en bois',
+        en: 'Jar of amber honey with a wooden dipper',
+      },
+      category: 'pantry',
+      reference: 'EPI-MIE-015',
+      price: 14,
+      fr: {
+        title: 'Miel de litchi de Madagascar',
+        shortDescription:
+          'Récolté pendant la floraison des litchis, sur la côte est. Doux, floral, ambre clair.',
+        body: [
+          'La région de Toamasina, sur la côte est de Madagascar, est le pays du litchi. Pendant la courte floraison des arbres, quelques mois avant la saison des fruits, les abeilles en butinent les petites fleurs.',
+          'Ce miel est clair et doux, avec un parfum floral délicat. Comme la plupart des miels non chauffés, il finit par cristalliser : quelques minutes au bain-marie tiède le rendent de nouveau liquide.',
+          'Sur une tartine, dans un yaourt ou un thé. Évitez de le chauffer fort, il y perdrait son parfum. Ne convient pas aux enfants de moins d’un an.',
+        ],
+        features: [
+          { label: 'Fleur', value: 'Litchi' },
+          { label: 'Origine', value: 'Région de Toamasina, Madagascar' },
+          { label: 'Texture', value: 'Liquide, cristallise avec le temps' },
+          { label: 'Conditionnement', value: 'Pot verre, 250 g' },
+        ],
+      },
+      en: {
+        title: 'Madagascar Litchi Honey',
+        shortDescription:
+          'Gathered while the litchi trees flower on the east coast. Mild, floral, pale amber.',
+        body: [
+          'The Toamasina region on Madagascar’s east coast is litchi country. During the trees’ short flowering, a few months before the fruit season, the bees forage on their small blossoms.',
+          'This honey is pale and mild, with a delicate floral scent. Like most unheated honeys it eventually crystallises; a few minutes in a warm water bath makes it runny again.',
+          'On toast, in yoghurt or in tea. Avoid heating it hard, which takes away its scent. Not suitable for children under one year old.',
+        ],
+        features: [
+          { label: 'Flower', value: 'Litchi' },
+          { label: 'Origin', value: 'Toamasina region, Madagascar' },
+          { label: 'Texture', value: 'Runny, crystallises over time' },
+          { label: 'Packaging', value: 'Glass jar, 250 g' },
+        ],
+      },
+    },
+    {
+      slug: 'noix-de-cajou',
+      label: 'Cajou',
+      colours: ['#8a6a3a', '#e8d2a6'] as [string, string],
+      alt: {
+        fr: 'Noix de cajou décortiquées',
+        en: 'Shelled cashew nuts',
+      },
+      category: 'pantry',
+      reference: 'EPI-CAJ-016',
+      price: 12,
+      fr: {
+        title: 'Noix de cajou de Madagascar',
+        shortDescription:
+          'Noix entières, décortiquées une à une, non salées. Tendres et légèrement sucrées.',
+        body: [
+          'La noix de cajou pousse sous un fruit étonnant, la pomme de cajou. L’anacardier, Anacardium occidentale, est cultivé dans le nord-ouest de Madagascar.',
+          'Sa coque renferme une résine irritante : les noix sont chauffées, décortiquées une à une, puis séchées et triées. Nous les gardons entières et sans sel.',
+          'À grignoter telles quelles, à dorer quelques minutes à la poêle ou à mixer dans une sauce. Fruits à coque : à éviter en cas d’allergie.',
+        ],
+        features: [
+          { label: 'Espèce', value: 'Anacardium occidentale' },
+          { label: 'Origine', value: 'Nord-ouest, Madagascar' },
+          { label: 'Préparation', value: 'Décortiquées, non salées' },
+          { label: 'Conditionnement', value: 'Sachet kraft, 200 g' },
+        ],
+      },
+      en: {
+        title: 'Madagascar Cashew Nuts',
+        shortDescription:
+          'Whole nuts, shelled one by one and unsalted. Tender and lightly sweet.',
+        body: [
+          'The cashew nut grows beneath a surprising fruit, the cashew apple. The cashew tree, Anacardium occidentale, is grown in north-west Madagascar.',
+          'Its shell holds an irritant resin, so the nuts are heated and shelled one by one, then dried and sorted. We keep them whole and unsalted.',
+          'Eat them as they are, toast them for a few minutes in a dry pan, or blend them into a sauce. Tree nuts: avoid them if you have a nut allergy.',
+        ],
+        features: [
+          { label: 'Species', value: 'Anacardium occidentale' },
+          { label: 'Origin', value: 'North-west Madagascar' },
+          { label: 'Preparation', value: 'Shelled, unsalted' },
+          { label: 'Packaging', value: 'Kraft pouch, 200 g' },
         ],
       },
     },
