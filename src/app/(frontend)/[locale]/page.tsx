@@ -8,7 +8,17 @@ import type { Where } from 'payload'
 import { NewsletterForm } from '@/components/NewsletterForm'
 import { SortSelect, type SortKey } from '@/components/SortSelect'
 import { asMedia, buildSrcSet, bestUrl } from '@/lib/media'
-import { formatPrice, isLocale, showingResults, t, type Locale } from '@/lib/locale'
+import { Stars } from '@/components/Stars'
+import { reviewStats } from '@/lib/reviews'
+import {
+  formatPrice,
+  isLocale,
+  ratingLabel,
+  showingResults,
+  stockStatus,
+  t,
+  type Locale,
+} from '@/lib/locale'
 
 // Always read the database on request, so a product published in the
 // administration area appears on the public site straight away.
@@ -98,6 +108,7 @@ export default async function CataloguePage({
   }
 
   const hasMore = products.docs.length < products.totalDocs
+  const ratings = await reviewStats(products.docs.map((product) => product.id))
 
   return (
     <div className="container">
@@ -148,11 +159,14 @@ export default async function CataloguePage({
             // The first row is above the fold on every screen size, so those
             // images load straight away instead of waiting for a scroll.
             const eager = index < 3
+            const rating = ratings.get(product.id)
+            const soldOut = stockStatus(product.stock, product.inStock, locale).tone === 'out'
 
             return (
               <li key={product.id} className="product-card">
                 <Link href={`/${locale}/products/${product.slug}`}>
                   <div className="product-card__media">
+                    {soldOut ? <span className="product-card__badge">{t('soldOut', locale)}</span> : null}
                     {image ? (
                       <img
                         src={bestUrl(image, 'card')}
@@ -173,6 +187,13 @@ export default async function CataloguePage({
 
                   {product.shortDescription ? (
                     <p className="product-card__text">{product.shortDescription}</p>
+                  ) : null}
+
+                  {rating ? (
+                    <p className="product-card__rating">
+                      <Stars value={rating.average} label={ratingLabel(rating.average, locale)} size="sm" />
+                      <span>({rating.count})</span>
+                    </p>
                   ) : null}
                 </Link>
               </li>

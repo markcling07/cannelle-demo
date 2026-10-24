@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { CartQuantity } from '@/components/CartQuantity'
-import { FREE_SHIPPING_FROM, loadCart } from '@/lib/cart'
+import { FREE_SHIPPING_FROM, MAX_QUANTITY, loadCart } from '@/lib/cart'
 import { bestUrl } from '@/lib/media'
 import { fill, formatPrice, isLocale, t, type Locale } from '@/lib/locale'
 
@@ -58,7 +58,19 @@ export default async function CartPage({ params }: PageProps) {
                   <p className="cart-line__unit">
                     {money(item.price)} {t('each', locale)}
                   </p>
-                  <CartQuantity productId={item.id} qty={item.qty} locale={locale} />
+                  <CartQuantity
+                    productId={item.id}
+                    qty={item.qty}
+                    max={Math.min(MAX_QUANTITY, item.stock ?? MAX_QUANTITY)}
+                    locale={locale}
+                  />
+                  {item.overStock ? (
+                    <p className="cart-line__warning" role="alert">
+                      {item.available
+                        ? fill(t('cartOverStock', locale), { count: String(item.stock) })
+                        : t('cartUnavailable', locale)}
+                    </p>
+                  ) : null}
                 </div>
 
                 <p className="cart-line__total">{money(item.lineTotal)}</p>
@@ -88,9 +100,13 @@ export default async function CartPage({ params }: PageProps) {
               </p>
             ) : null}
 
-            <Link href={`/${locale}/checkout`} className="btn-accent btn-block">
-              {t('proceedToCheckout', locale)}
-            </Link>
+            {cart.hasStockIssue ? (
+              <p className="cart__hint cart__hint--warning">{t('orderStockError', locale)}</p>
+            ) : (
+              <Link href={`/${locale}/checkout`} className="btn-accent btn-block">
+                {t('proceedToCheckout', locale)}
+              </Link>
+            )}
 
             <Link href={`/${locale}`} className="cart__continue">
               {t('continueShopping', locale)}

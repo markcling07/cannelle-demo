@@ -6,21 +6,24 @@ import { useState, useTransition } from 'react'
 
 import { addToCart } from '@/app/(frontend)/cart-actions'
 import { QuantityStepper } from '@/components/QuantityStepper'
-import { formatPrice, t, type Locale } from '@/lib/locale'
+import { fill, formatPrice, t, type Locale } from '@/lib/locale'
 
-type Status = 'idle' | 'added' | 'error'
+type Status = 'idle' | 'added' | 'error' | 'stock'
 
 type Props = {
   productId: number
   price: number
   currency: string | null | undefined
+  /** The most that can be chosen: the stock left, capped at 20. */
+  maxQty: number
   locale: Locale
 }
 
-export function AddToCart({ productId, price, currency, locale }: Props) {
+export function AddToCart({ productId, price, currency, maxQty, locale }: Props) {
   const router = useRouter()
   const [qty, setQty] = useState(1)
   const [status, setStatus] = useState<Status>('idle')
+  const [stockLimit, setStockLimit] = useState(maxQty)
   const [pending, startTransition] = useTransition()
 
   // Rounded to the cent, the same way the cart computes its line totals.
@@ -31,7 +34,12 @@ export function AddToCart({ productId, price, currency, locale }: Props) {
       const result = await addToCart(productId, qty)
 
       if (!result.ok) {
-        setStatus('error')
+        if (result.reason === 'stock') {
+          setStockLimit(result.stock)
+          setStatus('stock')
+        } else {
+          setStatus('error')
+        }
         return
       }
 
@@ -48,6 +56,7 @@ export function AddToCart({ productId, price, currency, locale }: Props) {
             setQty(next)
             setStatus('idle')
           }}
+          max={maxQty}
           disabled={pending}
           labels={{
             group: t('quantity', locale),
@@ -79,7 +88,11 @@ export function AddToCart({ productId, price, currency, locale }: Props) {
         {t('buyNow', locale)}
       </button>
 
-      <p className="buy__status" role="status" data-state={status}>
+      <p
+        className="buy__status"
+        role="status"
+        data-state={status === 'stock' ? 'error' : status}
+      >
         {status === 'added' ? (
           <>
             {t('addedToCart', locale)}{' '}
@@ -87,6 +100,7 @@ export function AddToCart({ productId, price, currency, locale }: Props) {
           </>
         ) : null}
         {status === 'error' ? t('cartError', locale) : null}
+        {status === 'stock' ? fill(t('stockShort', locale), { count: String(stockLimit) }) : null}
       </p>
     </div>
   )

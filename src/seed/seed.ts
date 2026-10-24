@@ -3,8 +3,8 @@
  *
  *   npm run seed
  *
- * Safe to run repeatedly: it clears products, categories, articles and
- * photographs first, then recreates them. User accounts and newsletter
+ * Safe to run repeatedly: it clears products, reviews, categories, articles
+ * and photographs first, then recreates them. User accounts and newsletter
  * sign-ups are kept.
  *
  * Everything here is fictional sample content, as agreed for the demonstration.
@@ -133,7 +133,7 @@ const seed = async () => {
   await ensureUser(EDITOR_EMAIL, EDITOR_PASSWORD, 'Éditeur', ['editor'])
 
   // --- clear previous sample content --------------------------------------
-  for (const collection of ['products', 'posts', 'categories', 'media'] as const) {
+  for (const collection of ['reviews', 'products', 'posts', 'categories', 'media'] as const) {
     const { docs } = await payload.find({ collection, limit: 500, depth: 0 })
     for (const doc of docs) {
       await payload.delete({ collection, id: doc.id })
@@ -264,6 +264,7 @@ const seed = async () => {
       category: 'gifts',
       reference: 'CAN-COF-006',
       price: 45,
+      stock: 8,
       fr: {
         title: 'Coffret découverte',
         shortDescription: 'Les quatre cannelles, en petits formats, dans une boîte en bois.',
@@ -304,6 +305,7 @@ const seed = async () => {
       category: 'spices',
       reference: 'EPI-GIR-007',
       price: 14,
+      stock: 25,
       fr: {
         title: 'Clous de girofle entiers',
         shortDescription:
@@ -348,6 +350,7 @@ const seed = async () => {
       category: 'oils',
       reference: 'EPI-YLA-008',
       price: 28,
+      stock: 0,
       fr: {
         title: 'Huile essentielle d’Ylang-Ylang',
         shortDescription:
@@ -392,6 +395,7 @@ const seed = async () => {
       category: 'pantry',
       reference: 'EPI-CAC-009',
       price: 16,
+      stock: 15,
       fr: {
         title: 'Fèves de cacao torréfiées',
         shortDescription:
@@ -435,6 +439,7 @@ const seed = async () => {
       category: 'spices',
       reference: 'EPI-VAN-010',
       price: 24,
+      stock: 3,
       fr: {
         title: 'Vanille Bourbon de Madagascar',
         shortDescription:
@@ -479,6 +484,7 @@ const seed = async () => {
       category: 'spices',
       reference: 'EPI-BAI-011',
       price: 11,
+      stock: 12,
       fr: {
         title: 'Baies roses de Madagascar',
         shortDescription:
@@ -523,6 +529,7 @@ const seed = async () => {
       category: 'spices',
       reference: 'EPI-POI-012',
       price: 9,
+      stock: 40,
       fr: {
         title: 'Poivre noir de Madagascar',
         shortDescription:
@@ -567,6 +574,7 @@ const seed = async () => {
       category: 'spices',
       reference: 'EPI-CUR-013',
       price: 8,
+      stock: 30,
       fr: {
         title: 'Curcuma moulu de Madagascar',
         shortDescription:
@@ -611,6 +619,7 @@ const seed = async () => {
       category: 'spices',
       reference: 'EPI-GIN-014',
       price: 8,
+      stock: 18,
       fr: {
         title: 'Gingembre moulu de Madagascar',
         shortDescription:
@@ -655,6 +664,7 @@ const seed = async () => {
       category: 'pantry',
       reference: 'EPI-MIE-015',
       price: 14,
+      stock: 5,
       fr: {
         title: 'Miel de litchi de Madagascar',
         shortDescription:
@@ -699,6 +709,7 @@ const seed = async () => {
       category: 'pantry',
       reference: 'EPI-CAJ-016',
       price: 12,
+      stock: 24,
       fr: {
         title: 'Noix de cajou de Madagascar',
         shortDescription:
@@ -733,6 +744,8 @@ const seed = async () => {
       },
     },
   ]
+
+  const productIds: Record<string, number> = {}
 
   for (const product of products) {
     const photo = realPhoto(product.slug)
@@ -772,11 +785,14 @@ const seed = async () => {
         reference: product.reference,
         price: product.price,
         currency: 'EUR',
+        stock: product.stock,
         inStock: true,
         _status: 'published',
         publishedAt: new Date().toISOString(),
       },
     })
+
+    productIds[product.slug] = created.id
 
     await payload.update({
       collection: 'products',
@@ -793,6 +809,68 @@ const seed = async () => {
 
     payload.logger.info(`product published: ${product.fr.title} / ${product.en.title}`)
   }
+
+  // --- reviews ------------------------------------------------------------
+  // Sample reviews in both languages. One is left pending, so the approval
+  // queue in the admin panel has something in it for the demonstration.
+  const reviews: {
+    product: string
+    name: string
+    rating: number
+    language: 'fr' | 'en'
+    daysAgo: number
+    comment: string
+    pending?: boolean
+  }[] = [
+    { product: 'vanille-bourbon', name: 'Sophie L.', rating: 5, language: 'fr', daysAgo: 3, comment: 'Gousses très souples et charnues, avec un parfum incroyable. J’en ai utilisé une pour une crème brûlée : rien à voir avec la vanille du supermarché.' },
+    { product: 'vanille-bourbon', name: 'James W.', rating: 5, language: 'en', daysAgo: 12, comment: 'Plump, oily pods with a deep, almost smoky aroma. Worth every cent for baking.' },
+    { product: 'vanille-bourbon', name: 'Rindra A.', rating: 4, language: 'fr', daysAgo: 27, comment: 'Très belle qualité, le tube en verre garde bien la souplesse des gousses. Un peu cher, mais on en utilise peu.' },
+    { product: 'vanille-bourbon', name: 'Marc D.', rating: 3, language: 'fr', daysAgo: 1, comment: 'Bonne vanille, mais la livraison a été un peu longue à mon goût.', pending: true },
+    { product: 'baies-roses', name: 'Claire M.', rating: 5, language: 'fr', daysAgo: 6, comment: 'Parfaites sur un carpaccio de saint-jacques. Croquantes, fruitées, juste ce qu’il faut de piquant.' },
+    { product: 'baies-roses', name: 'Tom H.', rating: 4, language: 'en', daysAgo: 19, comment: 'Lovely sweet, resinous flavour. Smaller jar than I expected, but a little goes a long way.' },
+    { product: 'clous-de-girofle', name: 'Hery R.', rating: 5, language: 'fr', daysAgo: 9, comment: 'Des clous bien entiers et très parfumés. Indispensables dans mon vin chaud.' },
+    { product: 'clous-de-girofle', name: 'Anne-Laure P.', rating: 4, language: 'fr', daysAgo: 22, comment: 'Très puissants, il faut vraiment en mettre peu ! Bonne qualité.' },
+    { product: 'clous-de-girofle', name: 'Daniel K.', rating: 5, language: 'en', daysAgo: 40, comment: 'Fresh and aromatic — the difference from old supermarket cloves is obvious.' },
+    { product: 'cacao', name: 'Julie B.', rating: 5, language: 'fr', daysAgo: 4, comment: 'Les notes d’agrumes sont bien là, comme annoncé. J’en mets en éclats sur mon porridge.' },
+    { product: 'cacao', name: 'Mark S.', rating: 4, language: 'en', daysAgo: 15, comment: 'Great fruity beans. A bit bitter on their own, perfect crushed into baking.' },
+    { product: 'cacao', name: 'Fanja R.', rating: 5, language: 'fr', daysAgo: 33, comment: 'Le meilleur cacao que j’ai goûté. On sent une fermentation soignée.' },
+    { product: 'ylang-ylang', name: 'Nathalie G.', rating: 5, language: 'fr', daysAgo: 8, comment: 'Un parfum floral très doux, quelques gouttes suffisent dans le diffuseur.' },
+    { product: 'ylang-ylang', name: 'Emma C.', rating: 4, language: 'en', daysAgo: 25, comment: 'Beautiful scent and quite strong, so I dilute it well. Shame it sold out so fast.' },
+    { product: 'poivre-noir', name: 'Pierre V.', rating: 5, language: 'fr', daysAgo: 2, comment: 'Un poivre très aromatique, bien moins agressif que ceux du commerce. Je ne peux plus m’en passer.' },
+    { product: 'poivre-noir', name: 'Sarah J.', rating: 5, language: 'en', daysAgo: 11, comment: 'Woody, almost citrusy. My pepper mill has never smelled this good.' },
+    { product: 'poivre-noir', name: 'Lova R.', rating: 4, language: 'fr', daysAgo: 30, comment: 'Très bon poivre, des grains réguliers. Le bocal est pratique.' },
+    { product: 'curcuma', name: 'Isabelle T.', rating: 4, language: 'fr', daysAgo: 7, comment: 'Belle couleur et goût doux. Attention, ça tache vraiment !' },
+    { product: 'curcuma', name: 'Ravi P.', rating: 5, language: 'en', daysAgo: 21, comment: 'Vibrant and earthy, much fresher than what I usually buy. Great in dal.' },
+    { product: 'gingembre', name: 'Céline F.', rating: 5, language: 'fr', daysAgo: 5, comment: 'Parfait pour mes pains d’épices, bien piquant et parfumé.' },
+    { product: 'gingembre', name: 'Oliver B.', rating: 3, language: 'en', daysAgo: 17, comment: 'Good flavour, though I prefer fresh ginger for most dishes. Fine for baking.' },
+    { product: 'gingembre', name: 'Miora H.', rating: 4, language: 'fr', daysAgo: 36, comment: 'Bonne qualité, mouture très fine.' },
+    { product: 'miel-litchi', name: 'Hélène D.', rating: 5, language: 'fr', daysAgo: 3, comment: 'Un miel délicat au goût de fleur, mes enfants l’adorent sur leurs tartines.' },
+    { product: 'miel-litchi', name: 'Grace N.', rating: 5, language: 'en', daysAgo: 14, comment: 'Light, floral and not too sweet. Lovely in tea.' },
+    { product: 'miel-litchi', name: 'Tiana R.', rating: 4, language: 'fr', daysAgo: 29, comment: 'Très bon miel. Il a cristallisé au bout de quelques semaines, mais un passage au bain-marie a suffi.' },
+    { product: 'noix-de-cajou', name: 'Antoine M.', rating: 5, language: 'fr', daysAgo: 6, comment: 'Des noix entières, tendres et bien fraîches. Je les fais dorer à la poêle, un régal.' },
+    { product: 'noix-de-cajou', name: 'Lucy A.', rating: 4, language: 'en', daysAgo: 20, comment: 'Good quality whole cashews. Would love a roasted, salted option too.' },
+    { product: 'coffret-decouverte', name: 'Camille R.', rating: 5, language: 'fr', daysAgo: 10, comment: 'Offert à ma mère, elle a adoré la fiche qui explique les différences entre les cannelles.' },
+    { product: 'coffret-decouverte', name: 'Ben T.', rating: 4, language: 'en', daysAgo: 31, comment: 'Nice gift, well presented, and the wooden box is reusable.' },
+  ]
+
+  for (const review of reviews) {
+    const product = productIds[review.product]
+    if (!product) continue
+
+    await payload.create({
+      collection: 'reviews',
+      data: {
+        product,
+        name: review.name,
+        rating: review.rating,
+        comment: review.comment,
+        language: review.language,
+        status: review.pending ? 'pending' : 'approved',
+        createdAt: new Date(Date.now() - review.daysAgo * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    })
+  }
+  payload.logger.info(`reviews created: ${reviews.length} (1 pending approval)`)
 
   // --- journal ------------------------------------------------------------
   const posts = [

@@ -182,7 +182,7 @@ export function CheckoutForm({
   const [phase, setPhase] = useState<Phase>('idle')
   const [submitted, setSubmitted] = useState(false)
   const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({})
-  const [orderFailed, setOrderFailed] = useState(false)
+  const [orderFailed, setOrderFailed] = useState<false | 'empty' | 'stock'>(false)
   const [, startTransition] = useTransition()
 
   const [fields, setFields] = useState<Fields>({
@@ -265,7 +265,7 @@ export function CheckoutForm({
 
       if (result?.error) {
         setPhase('idle')
-        setOrderFailed(true)
+        setOrderFailed(result.error)
       }
     })
 
@@ -525,7 +525,7 @@ export function CheckoutForm({
 
         {orderFailed ? (
           <p className="alert" role="alert">
-            {t('cartError', locale)}
+            {t(orderFailed === 'stock' ? 'orderStockError' : 'cartError', locale)}
           </p>
         ) : null}
 

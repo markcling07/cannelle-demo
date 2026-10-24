@@ -8,8 +8,23 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Product } from '@/payload-types'
 import { AddToCart } from '@/components/AddToCart'
 import { ProductGallery, type GalleryImage } from '@/components/ProductGallery'
+import { ReviewForm } from '@/components/ReviewForm'
+import { Stars } from '@/components/Stars'
+import { MAX_QUANTITY } from '@/lib/cart'
 import { asMedia, buildSrcSet, bestUrl } from '@/lib/media'
-import { formatPrice, isLocale, otherLocale, t, type Locale } from '@/lib/locale'
+import { approvedReviews, reviewStats } from '@/lib/reviews'
+import {
+  formatDate,
+  formatPrice,
+  formatRating,
+  isLocale,
+  otherLocale,
+  ratingLabel,
+  reviewCount,
+  stockStatus,
+  t,
+  type Locale,
+} from '@/lib/locale'
 
 export const dynamic = 'force-dynamic'
 
@@ -113,6 +128,12 @@ export default async function ProductPage({ params }: PageParams) {
       alt: media.alt ?? '',
     }))
 
+  const stock = stockStatus(product.stock, product.inStock, locale)
+  const [stats, reviews] = await Promise.all([
+    reviewStats([product.id]).then((map) => map.get(product.id)),
+    approvedReviews(product.id),
+  ])
+
   return (
     <div className="container">
       <Link href={`/${locale}`} className="back-link">
@@ -134,24 +155,36 @@ export default async function ProductPage({ params }: PageParams) {
         <div>
           <h1 className="detail__title">{product.title}</h1>
 
+          {stats ? (
+            <a href="#reviews" className="detail__rating">
+              <Stars value={stats.average} label={ratingLabel(stats.average, locale)} />
+              <span>{formatRating(stats.average, locale)}</span>
+              <span className="detail__rating-count">({reviewCount(stats.count, locale)})</span>
+            </a>
+          ) : null}
+
           {product.shortDescription ? (
             <p className="detail__lead">{product.shortDescription}</p>
           ) : null}
 
           {price ? <p className="detail__price">{price}</p> : null}
 
-          <p className={product.inStock ? 'detail__stock is-in' : 'detail__stock'}>
-            {product.inStock ? t('inStock', locale) : t('outOfStock', locale)}
+          <p className="detail__stock" data-tone={stock.tone}>
+            <span className="detail__stock-dot" aria-hidden="true" />
+            {stock.text}
           </p>
 
-          {typeof product.price === 'number' ? (
+          {typeof product.price === 'number' && stock.tone !== 'out' ? (
             <AddToCart
               productId={product.id}
               price={product.price}
               currency={product.currency}
+              maxQty={Math.min(MAX_QUANTITY, product.stock ?? MAX_QUANTITY)}
               locale={locale}
             />
           ) : null}
+
+          {stock.tone === 'out' ? <p className="buy buy--soldout">{t('soldOutNote', locale)}</p> : null}
 
           {product.description ? (
             <div className="rich-text">
@@ -180,6 +213,64 @@ export default async function ProductPage({ params }: PageParams) {
           ) : null}
         </div>
       </article>
+
+      {/* --- reviews --------------------------------------------------------- */}
+      <section id="reviews" className="reviews" aria-labelledby="reviews-heading">
+        <div className="reviews__summary">
+          <h2 id="reviews-heading" className="reviews__heading">
+            {t('reviews', locale)}
+          </h2>
+
+          {stats ? (
+            <>
+              <p className="reviews__average">
+                {formatRating(stats.average, locale)}
+                <span> / 5</span>
+              </p>
+              <Stars value={stats.average} label={ratingLabel(stats.average, locale)} size="lg" />
+              <p className="reviews__count">{reviewCount(stats.count, locale)}</p>
+
+              <ul className="reviews__bars">
+                {[5, 4, 3, 2, 1].map((star) => {
+                  const n = stats.distribution[star - 1]
+                  return (
+                    <li key={star} className="reviews__bar">
+                      <span>{star} ★</span>
+                      <span className="reviews__track" aria-hidden="true">
+                        <span style={{ width: `${(n / stats.count) * 100}%` }} />
+                      </span>
+                      <span className="reviews__bar-count">{n}</span>
+                    </li>
+                  )
+                })}
+              </ul>
+            </>
+          ) : (
+            <p className="reviews__empty">{t('noReviews', locale)}</p>
+          )}
+        </div>
+
+        <div className="reviews__main">
+          {reviews.length > 0 ? (
+            <ul className="reviews__list">
+              {reviews.map((review) => (
+                <li key={review.id} className="review">
+                  <div className="review__head">
+                    <Stars value={review.rating} label={ratingLabel(review.rating, locale)} size="sm" />
+                    <span className="review__name">{review.name}</span>
+                    <span className="review__date">{formatDate(review.createdAt, locale)}</span>
+                  </div>
+                  <p className="review__comment" lang={review.language ?? undefined}>
+                    {review.comment}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+          <ReviewForm productId={product.id} locale={locale} />
+        </div>
+      </section>
     </div>
   )
 }

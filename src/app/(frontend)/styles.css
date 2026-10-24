@@ -295,6 +295,7 @@ h3 {
 }
 
 .product-card__media {
+  position: relative;
   aspect-ratio: 1 / 0.92;
   background: var(--tile);
   border-radius: var(--radius);
@@ -999,13 +1000,48 @@ h3 {
 }
 
 .detail__stock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 0.8125rem;
-  color: var(--muted);
+  color: #2f7d32;
   margin: 0 0 24px;
 }
 
-.detail__stock.is-in {
-  color: #2f7d32;
+.detail__stock-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Low stock nudges, sold out stops. */
+.detail__stock[data-tone='low'] {
+  color: #b45309;
+  font-weight: 600;
+}
+
+.detail__stock[data-tone='out'] {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.detail__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 0.875rem;
+}
+
+.detail__rating-count {
+  color: var(--muted);
+}
+
+.detail__rating:hover .detail__rating-count {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .detail__reference {
@@ -1794,6 +1830,296 @@ h3 {
   margin: 0;
 }
 
+/* --- stars, stock badges --------------------------------------------------- */
+
+/* Two rows of the same five glyphs: a grey base and a gold copy clipped to
+   the rating, so 4.6 shows four and three-fifths stars. */
+.stars {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+
+.stars__base {
+  color: #dcdcdc;
+}
+
+.stars__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  overflow: hidden;
+  color: #e0a526;
+}
+
+.stars--sm {
+  font-size: 0.8125rem;
+  letter-spacing: 1px;
+}
+
+.stars--md {
+  font-size: 1rem;
+}
+
+.stars--lg {
+  font-size: 1.375rem;
+}
+
+.product-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.product-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.buy--soldout {
+  display: block;
+  color: var(--muted);
+  font-size: 0.875rem;
+  background: var(--tile);
+  border-color: var(--tile);
+}
+
+.cart-line__warning {
+  margin: 10px 0 0;
+  font-size: 0.8125rem;
+  color: #b3261e;
+}
+
+.cart__hint--warning {
+  color: #b3261e;
+}
+
+/* --- reviews on the product page ------------------------------------------ */
+
+.reviews {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: 1fr;
+  margin: 0 0 40px;
+  padding-top: 48px;
+  border-top: 1px solid var(--line);
+}
+
+.reviews__heading {
+  margin-bottom: 18px;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.reviews__average {
+  margin: 0 0 6px;
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.reviews__average span {
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+
+.reviews__count {
+  margin: 8px 0 20px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.reviews__bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 320px;
+}
+
+.reviews__bar {
+  display: grid;
+  grid-template-columns: 34px 1fr 24px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.reviews__track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--tile);
+  overflow: hidden;
+}
+
+.reviews__track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #e0a526;
+}
+
+.reviews__bar-count {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.reviews__empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.reviews__list {
+  list-style: none;
+  margin: 0 0 32px;
+  padding: 0;
+}
+
+.review {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.review:first-child {
+  padding-top: 0;
+}
+
+.review__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+}
+
+.review__name {
+  font-weight: 600;
+}
+
+.review__date {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.review__comment {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.review-form {
+  padding: 24px;
+  border-radius: var(--radius);
+  background: var(--tile);
+}
+
+.review-form__title {
+  margin-bottom: 16px;
+  font-size: 1.0625rem;
+}
+
+.review-form__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.review-form__rating {
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.review-form__rating legend {
+  float: left;
+  margin-right: 12px;
+  font-size: 0.8125rem;
+}
+
+.star-input {
+  position: relative;
+  cursor: pointer;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: #cfcfcf;
+  transition: color 0.1s ease;
+}
+
+.star-input.is-on {
+  color: #e0a526;
+}
+
+.star-input input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.star-input:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.review-form__comment {
+  resize: vertical;
+  min-height: 110px;
+  font-family: inherit;
+}
+
+.review-form__footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+
+.review-form__note {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.review-form__error {
+  margin: 12px 0 0;
+  font-size: 0.8125rem;
+  color: #b3261e;
+}
+
+.review-form__done {
+  margin: 0;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  background: #eaf4e3;
+  color: #2c5a17;
+  font-size: 0.9375rem;
+}
+
 /* --- narrow phones: keep the header on one line --------------------------- */
 
 @media (max-width: 420px) {
@@ -2005,6 +2331,17 @@ h3 {
   .confirm__grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
+  }
+
+  .reviews {
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 72px;
+  }
+
+  .reviews__summary {
+    position: sticky;
+    top: 24px;
+    align-self: start;
   }
 }
 

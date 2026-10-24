@@ -13,6 +13,7 @@ import { Categories } from './collections/Categories'
 import { Products } from './collections/Products'
 import { Posts } from './collections/Posts'
 import { Subscribers } from './collections/Subscribers'
+import { Reviews } from './collections/Reviews'
 import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -55,7 +56,7 @@ export default buildConfig({
     },
   },
 
-  collections: [Products, Categories, Posts, Media, Users, Subscribers],
+  collections: [Products, Categories, Reviews, Posts, Media, Users, Subscribers],
   globals: [SiteSettings],
 
   editor: lexicalEditor(),

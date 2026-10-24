@@ -34,7 +34,50 @@ const STRINGS = {
   productPhotos: { fr: 'Photographies du produit', en: 'Product photographs' },
   features: { fr: 'Caractéristiques', en: 'Key features' },
   inStock: { fr: 'En stock', en: 'In stock' },
-  outOfStock: { fr: 'Sur commande', en: 'On order' },
+  soldOut: { fr: 'Rupture de stock', en: 'Out of stock' },
+  soldOutNote: {
+    fr: 'Ce produit est momentanément épuisé.',
+    en: 'This product is temporarily sold out.',
+  },
+  stockShort: {
+    fr: 'Stock insuffisant : {count} au maximum, panier compris.',
+    en: 'Not enough stock: {count} at most, including your cart.',
+  },
+  cartOverStock: {
+    fr: 'Seulement {count} en stock : réduisez la quantité.',
+    en: 'Only {count} in stock: please reduce the quantity.',
+  },
+  cartUnavailable: {
+    fr: 'Ce produit n’est plus disponible : retirez-le du panier.',
+    en: 'This product is no longer available: please remove it.',
+  },
+  orderStockError: {
+    fr: 'Un article n’est plus disponible dans la quantité demandée. Vérifiez votre panier.',
+    en: 'An item is no longer available in the quantity requested. Please check your cart.',
+  },
+  // --- reviews --------------------------------------------------------------
+  reviews: { fr: 'Avis clients', en: 'Customer reviews' },
+  noReviews: {
+    fr: 'Aucun avis pour le moment. Soyez le premier à donner le vôtre.',
+    en: 'No reviews yet. Be the first to share yours.',
+  },
+  writeReview: { fr: 'Donner votre avis', en: 'Write a review' },
+  yourName: { fr: 'Votre nom', en: 'Your name' },
+  yourRating: { fr: 'Votre note', en: 'Your rating' },
+  yourComment: { fr: 'Votre avis', en: 'Your review' },
+  sendReview: { fr: 'Publier mon avis', en: 'Submit review' },
+  reviewThanks: {
+    fr: 'Merci ! Votre avis sera publié après validation par notre équipe.',
+    en: 'Thank you! Your review will appear once our team has approved it.',
+  },
+  reviewInvalid: {
+    fr: 'Indiquez votre nom, une note et un avis d’au moins 10 caractères.',
+    en: 'Please give your name, a rating and a review of at least 10 characters.',
+  },
+  reviewModeration: {
+    fr: 'Les avis sont vérifiés avant publication.',
+    en: 'Reviews are checked before they are published.',
+  },
   noProducts: {
     fr: 'Aucun produit publié pour le moment.',
     en: 'No products published yet.',
@@ -217,6 +260,53 @@ export const cartLabel = (count: number, locale: Locale): string =>
   locale === 'fr'
     ? `Panier, ${count} article${count > 1 ? 's' : ''}`
     : `Cart, ${count} item${count === 1 ? '' : 's'}`
+
+/** At or below this many units the product page warns that stock is low. */
+export const LOW_STOCK = 5
+
+export type StockTone = 'in' | 'low' | 'out'
+
+/**
+ * "En stock — 24 disponibles", "Plus que 3 en stock", "Rupture de stock".
+ * A product with no stock figure is not tracked and simply shows "In stock".
+ */
+export const stockStatus = (
+  stock: number | null | undefined,
+  available: boolean | null | undefined,
+  locale: Locale,
+): { tone: StockTone; text: string } => {
+  if (available === false || stock === 0) return { tone: 'out', text: t('soldOut', locale) }
+  if (typeof stock !== 'number') return { tone: 'in', text: t('inStock', locale) }
+
+  if (stock <= LOW_STOCK) {
+    if (locale === 'fr') {
+      return { tone: 'low', text: stock === 1 ? 'Plus qu’un en stock' : `Plus que ${stock} en stock` }
+    }
+    return { tone: 'low', text: `Only ${stock} left in stock` }
+  }
+
+  return {
+    tone: 'in',
+    text: locale === 'fr' ? `En stock — ${stock} disponibles` : `In stock — ${stock} available`,
+  }
+}
+
+/** "8 avis" / "8 reviews". */
+export const reviewCount = (count: number, locale: Locale): string =>
+  locale === 'fr' ? `${count} avis` : `${count} review${count === 1 ? '' : 's'}`
+
+/** "4,6" / "4.6" — one decimal, in the reader's own notation. */
+export const formatRating = (value: number, locale: Locale): string =>
+  new Intl.NumberFormat(locale === 'fr' ? 'fr-FR' : 'en-GB', {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(value)
+
+/** Accessible name for a star rating: "Note : 4,6 sur 5" / "Rated 4.6 out of 5". */
+export const ratingLabel = (value: number, locale: Locale): string =>
+  locale === 'fr'
+    ? `Note : ${formatRating(value, locale)} sur 5`
+    : `Rated ${formatRating(value, locale)} out of 5`
 
 /** Fills a "{name}" placeholder in one of the strings above. */
 export const fill = (text: string, values: Record<string, string>): string =>

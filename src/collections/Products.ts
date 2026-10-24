@@ -12,7 +12,7 @@ export const Products: CollectionConfig = {
 
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'price', '_status', 'updatedAt'],
+    defaultColumns: ['title', 'category', 'price', 'stock', '_status', 'updatedAt'],
     group: { fr: 'Contenu', en: 'Content' },
     description: {
       fr: 'Le catalogue. Chaque produit existe en français et en anglais.',
@@ -172,10 +172,36 @@ export const Products: CollectionConfig = {
               label: { fr: 'Catégorie', en: 'Category' },
             },
             {
-              name: 'inStock',
-              type: 'checkbox',
-              defaultValue: true,
-              label: { fr: 'Disponible', en: 'Available' },
+              type: 'row',
+              fields: [
+                {
+                  name: 'stock',
+                  type: 'number',
+                  min: 0,
+                  admin: {
+                    width: '50%',
+                    step: 1,
+                    description: {
+                      fr: 'Unités disponibles. Diminue à chaque commande ; à 0, le produit ne peut plus être commandé. Laissez vide pour ne pas suivre le stock.',
+                      en: 'Units available. Goes down with every order; at 0 the product can no longer be ordered. Leave empty not to track stock.',
+                    },
+                  },
+                  label: { fr: 'Stock', en: 'Stock' },
+                },
+                {
+                  name: 'inStock',
+                  type: 'checkbox',
+                  defaultValue: true,
+                  label: { fr: 'Disponible', en: 'Available' },
+                  admin: {
+                    width: '50%',
+                    description: {
+                      fr: 'Décochez pour retirer le produit de la vente, quel que soit le stock.',
+                      en: 'Untick to take the product off sale, whatever the stock.',
+                    },
+                  },
+                },
+              ],
             },
           ],
         },

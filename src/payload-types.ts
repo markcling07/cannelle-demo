@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     products: Product;
     categories: Category;
+    reviews: Review;
     posts: Post;
     media: Media;
     users: User;
@@ -82,6 +83,7 @@ export interface Config {
   collectionsSelect: {
     products: ProductsSelect<false> | ProductsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -179,6 +181,13 @@ export interface Product {
   price?: number | null;
   currency?: ('EUR' | 'USD' | 'MGA') | null;
   category?: (number | null) | Category;
+  /**
+   * Units available. Goes down with every order; at 0 the product can no longer be ordered. Leave empty not to track stock.
+   */
+  stock?: number | null;
+  /**
+   * Untick to take the product off sale, whatever the stock.
+   */
   inStock?: boolean | null;
   /**
    * Leave empty to generate it from the title. Separate for each language.
@@ -253,6 +262,26 @@ export interface Category {
    * Leave empty to generate it from the title. Separate for each language.
    */
   slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Reviews left on product pages. A review only appears on the site once it is "Approved".
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: number;
+  product: number | Product;
+  name: string;
+  rating: number;
+  comment: string;
+  status: 'pending' | 'approved' | 'rejected';
+  /**
+   * The language of the site when the review was written.
+   */
+  language?: ('fr' | 'en') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -380,6 +409,10 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
+        relationTo: 'reviews';
+        value: number | Review;
+      } | null)
+    | ({
         relationTo: 'posts';
         value: number | Post;
       } | null)
@@ -458,6 +491,7 @@ export interface ProductsSelect<T extends boolean = true> {
   price?: T;
   currency?: T;
   category?: T;
+  stock?: T;
   inStock?: T;
   slug?: T;
   publishedAt?: T;
@@ -472,6 +506,20 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  product?: T;
+  name?: T;
+  rating?: T;
+  comment?: T;
+  status?: T;
+  language?: T;
   updatedAt?: T;
   createdAt?: T;
 }

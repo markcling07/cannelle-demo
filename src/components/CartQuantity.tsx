@@ -10,10 +10,13 @@ import { t, type Locale } from '@/lib/locale'
 export function CartQuantity({
   productId,
   qty,
+  max,
   locale,
 }: {
   productId: number
   qty: number
+  /** The stock left, capped at 20. */
+  max: number
   locale: Locale
 }) {
   const [pending, startTransition] = useTransition()
@@ -25,6 +28,8 @@ export function CartQuantity({
       <QuantityStepper
         value={qty}
         onChange={set}
+        // A line already over the stock can still come down to it.
+        max={Math.max(max, Math.min(qty, 20))}
         disabled={pending}
         labels={{
           group: t('quantity', locale),

@@ -74,6 +74,33 @@ export const writeCart = async (lines: CartLine[]): Promise<void> => {
 export const countItems = (lines: CartLine[]): number =>
   lines.reduce((sum, line) => sum + line.qty, 0)
 
+/**
+ * The header badge: only lines whose product still exists and is published,
+ * so a cookie left over from a deleted product never inflates the count.
+ */
+export const cartItemCount = async (): Promise<number> => {
+  const lines = await readCart()
+  if (lines.length === 0) return 0
+
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'products',
+    depth: 0,
+    limit: lines.length,
+    draft: false,
+    select: { price: true },
+    where: {
+      and: [
+        { id: { in: lines.map((line) => line.id) } },
+        { _status: { equals: 'published' } },
+      ],
+    },
+  })
+
+  const live = new Set(docs.map((doc) => doc.id))
+  return countItems(lines.filter((line) => live.has(line.id)))
+}
+
 export const shippingFor = (subtotal: number): number =>
   subtotal === 0 || subtotal >= FREE_SHIPPING_FROM ? 0 : SHIPPING_FLAT
 
@@ -86,10 +113,17 @@ export type CartItem = {
   currency: string
   image: Media | null
   lineTotal: number
+  /** Units left, or null when the product's stock is not tracked. */
+  stock: number | null
+  available: boolean
+  /** Asks for more than is left, or the product was taken off sale. */
+  overStock: boolean
 }
 
 export type Cart = {
   items: CartItem[]
+  /** At least one line cannot be ordered as it stands. */
+  hasStockIssue: boolean
   count: number
   subtotal: number
   shipping: number
@@ -106,7 +140,15 @@ export const loadCart = async (locale: Locale, lines?: CartLine[]): Promise<Cart
   const cartLines = lines ?? (await readCart())
 
   if (cartLines.length === 0) {
-    return { items: [], count: 0, subtotal: 0, shipping: 0, total: 0, currency: 'EUR' }
+    return {
+      items: [],
+      hasStockIssue: false,
+      count: 0,
+      subtotal: 0,
+      shipping: 0,
+      total: 0,
+      currency: 'EUR',
+    }
   }
 
   const payload = await getPayload({ config })
@@ -131,6 +173,9 @@ export const loadCart = async (locale: Locale, lines?: CartLine[]): Promise<Cart
     const product = byId.get(line.id)
     if (!product || typeof product.price !== 'number') return []
 
+    const stock = typeof product.stock === 'number' ? product.stock : null
+    const available = product.inStock !== false && stock !== 0
+
     return [
       {
         id: product.id,
@@ -141,6 +186,9 @@ export const loadCart = async (locale: Locale, lines?: CartLine[]): Promise<Cart
         currency: product.currency ?? 'EUR',
         image: asMedia(product.image),
         lineTotal: roundMoney(product.price * line.qty),
+        stock,
+        available,
+        overStock: !available || (stock !== null && line.qty > stock),
       },
     ]
   })
@@ -150,6 +198,7 @@ export const loadCart = async (locale: Locale, lines?: CartLine[]): Promise<Cart
 
   return {
     items,
+    hasStockIssue: items.some((item) => item.overStock),
     count: items.reduce((sum, item) => sum + item.qty, 0),
     subtotal,
     shipping,

@@ -23,7 +23,8 @@ export default async function CheckoutPage({ params }: PageProps) {
   const locale: Locale = raw
 
   const cart = await loadCart(locale)
-  if (cart.items.length === 0) redirect(`/${locale}/cart`)
+  // The cart page explains what to fix when a line exceeds the stock.
+  if (cart.items.length === 0 || cart.hasStockIssue) redirect(`/${locale}/cart`)
 
   const summary = toSummary(cart, locale)
 
