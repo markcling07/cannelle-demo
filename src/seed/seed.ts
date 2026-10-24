@@ -603,6 +603,94 @@ const seed = async () => {
   ]
 
   for (const product of products) {
+    {
+      slug: 'vanille-bourbon',
+      label: 'Vanille',
+      colours: ['#2a1a10', '#6e4a2c'] as [string, string],
+      alt: {
+        fr: 'Gousses de vanille Bourbon noires et charnues',
+        en: 'Plump black Bourbon vanilla pods',
+      },
+      category: 'other',
+      reference: 'EPI-VAN-010',
+      price: 24,
+      fr: {
+        title: 'Vanille Bourbon de Madagascar',
+        shortDescription:
+          'Gousses noires et souples de la région SAVA, pollinisées une à une à la main.',
+        body: [
+          'La vanille est le fruit d’une orchidée. Hors de son Mexique d’origine, aucun insecte ne la pollinise : chaque fleur est fécondée à la main, le matin même où elle s’ouvre.',
+          'Nos gousses viennent de la région SAVA, au nord-est de Madagascar. Après la récolte, elles sont échaudées, mises à suer en caisses, séchées au soleil puis affinées plusieurs mois. C’est cette préparation lente qui fait naître la vanilline.',
+          'Fendez la gousse dans la longueur et grattez les graines dans une crème ou un lait chaud. La gousse vidée parfume encore un bocal de sucre.',
+        ],
+        features: [
+          { label: 'Espèce', value: 'Vanilla planifolia' },
+          { label: 'Origine', value: 'Région SAVA, Madagascar' },
+          { label: 'Catégorie', value: 'Gourmet, 14 à 16 cm' },
+          { label: 'Conditionnement', value: 'Tube verre, 5 gousses' },
+        ],
+      },
+      en: {
+        title: 'Madagascar Bourbon Vanilla',
+        shortDescription:
+          'Supple black pods from the SAVA region, each flower pollinated by hand.',
+        body: [
+          'Vanilla is the fruit of an orchid. Outside its native Mexico no insect pollinates it, so every flower is fertilised by hand, on the one morning it opens.',
+          'Our pods come from the SAVA region in north-east Madagascar. After harvest they are blanched, sweated in boxes, sun dried and then conditioned for several months. That slow curing is what develops the vanillin.',
+          'Split the pod lengthways and scrape the seeds into warm cream or milk. The empty pod will still scent a jar of sugar.',
+        ],
+        features: [
+          { label: 'Species', value: 'Vanilla planifolia' },
+          { label: 'Origin', value: 'SAVA region, Madagascar' },
+          { label: 'Grade', value: 'Gourmet, 14 to 16 cm' },
+          { label: 'Packaging', value: 'Glass tube, 5 pods' },
+        ],
+      },
+    },
+    {
+      slug: 'baies-roses',
+      label: 'Baies roses',
+      colours: ['#5a1a22', '#c0566a'] as [string, string],
+      alt: {
+        fr: 'Baies roses séchées',
+        en: 'Dried pink peppercorns',
+      },
+      category: 'other',
+      reference: 'EPI-BAI-011',
+      price: 11,
+      fr: {
+        title: 'Baies roses de Madagascar',
+        shortDescription:
+          'Petites baies croquantes, douces et légèrement résineuses. Le « faux poivre ».',
+        body: [
+          'Malgré leur nom de « poivre rose », ces baies ne sont pas un poivre : ce sont les fruits du Schinus terebinthifolius, un arbuste qui pousse le long de la côte est de Madagascar.',
+          'Cueillies en grappes à maturité puis séchées, elles gardent une coque fine et cassante. Leur saveur est douce, fruitée, à peine piquante, avec une note de résine.',
+          'Écrasez-les entre les doigts plutôt qu’au moulin, et ajoutez-les en fin de cuisson : sur un poisson, un carpaccio ou une salade de fruits. De la même famille que la noix de cajou et la mangue, elles sont à éviter en cas d’allergie à ces fruits.',
+        ],
+        features: [
+          { label: 'Espèce', value: 'Schinus terebinthifolius' },
+          { label: 'Origine', value: 'Côte est, Madagascar' },
+          { label: 'Usage', value: 'En fin de cuisson' },
+          { label: 'Conditionnement', value: 'Bocal verre, 40 g' },
+        ],
+      },
+      en: {
+        title: 'Madagascar Pink Peppercorns',
+        shortDescription:
+          'Small crisp berries, sweet and lightly resinous. The "false pepper".',
+        body: [
+          'Despite the name, pink peppercorns are not pepper at all. They are the fruit of Schinus terebinthifolius, a shrub that grows along the east coast of Madagascar.',
+          'They are picked in clusters when ripe, then dried, leaving a thin brittle shell. The flavour is sweet and fruity, barely hot, with a resinous edge.',
+          'Crush them between your fingers rather than in a mill, and add them at the end: over fish, a carpaccio or a fruit salad. They belong to the same family as cashew and mango, so avoid them if you are allergic to either.',
+        ],
+        features: [
+          { label: 'Species', value: 'Schinus terebinthifolius' },
+          { label: 'Origin', value: 'East coast, Madagascar' },
+          { label: 'Use', value: 'Add at the end' },
+          { label: 'Packaging', value: 'Glass jar, 40 g' },
+        ],
+      },
+    },
     const photo = realPhoto(product.slug)
     const extras = extraPhotos(product.slug)
 
