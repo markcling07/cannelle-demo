@@ -145,7 +145,12 @@ export default async function ProductPage({ params }: PageParams) {
           </p>
 
           {typeof product.price === 'number' ? (
-            <AddToCart productId={product.id} locale={locale} />
+            <AddToCart
+              productId={product.id}
+              price={product.price}
+              currency={product.currency}
+              locale={locale}
+            />
           ) : null}
 
           {product.description ? (

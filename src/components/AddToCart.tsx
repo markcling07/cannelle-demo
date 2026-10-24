@@ -6,17 +6,27 @@ import { useState, useTransition } from 'react'
 
 import { addToCart } from '@/app/(frontend)/cart-actions'
 import { QuantityStepper } from '@/components/QuantityStepper'
-import { t, type Locale } from '@/lib/locale'
+import { formatPrice, t, type Locale } from '@/lib/locale'
 
 type Status = 'idle' | 'added' | 'error'
 
-export function AddToCart({ productId, locale }: { productId: number; locale: Locale }) {
+type Props = {
+  productId: number
+  price: number
+  currency: string | null | undefined
+  locale: Locale
+}
+
+export function AddToCart({ productId, price, currency, locale }: Props) {
   const router = useRouter()
   const [qty, setQty] = useState(1)
   const [status, setStatus] = useState<Status>('idle')
   const [pending, startTransition] = useTransition()
 
-  const add = (thenCheckout: boolean) =>
+  // Rounded to the cent, the same way the cart computes its line totals.
+  const total = Math.round(price * qty * 100) / 100
+
+  const add =(thenCheckout: boolean) =>
     startTransition(async () => {
       const result = await addToCart(productId, qty)
 
@@ -55,6 +65,15 @@ export function AddToCart({ productId, locale }: { productId: number; locale: Lo
           {t('addToCart', locale)}
         </button>
       </div>
+
+      <p className="buy__total" aria-live="polite">
+        <span className="buy__breakdown">
+          {qty > 1 ? `${qty} × ${formatPrice(price, currency, locale)}` : null}
+        </span>
+        <span>
+          {t('total', locale)} <strong>{formatPrice(total, currency, locale)}</strong>
+        </span>
+      </p>
 
       <button type="button" className="btn-ink" onClick={() => add(true)} disabled={pending}>
         {t('buyNow', locale)}

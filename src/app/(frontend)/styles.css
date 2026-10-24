@@ -906,6 +906,26 @@ h3 {
   flex: 1;
 }
 
+.buy__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 2px 0;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.buy__breakdown {
+  color: var(--muted);
+}
+
+.buy__total strong {
+  margin-left: 4px;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
 .buy__status {
   margin: 0;
   min-height: 1.3em;
