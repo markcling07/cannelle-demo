@@ -8,21 +8,13 @@ import type { Where } from 'payload'
 import { NewsletterForm } from '@/components/NewsletterForm'
 import { SortSelect, type SortKey } from '@/components/SortSelect'
 import { asMedia, buildSrcSet, bestUrl } from '@/lib/media'
-import {
-  formatDate,
-  formatPrice,
-  isLocale,
-  showingResults,
-  t,
-  type Locale,
-} from '@/lib/locale'
+import { formatPrice, isLocale, showingResults, t, type Locale } from '@/lib/locale'
 
 // Always read the database on request, so a product published in the
 // administration area appears on the public site straight away.
 export const dynamic = 'force-dynamic'
 
 const PAGE_SIZE = 6
-const JOURNAL_COUNT = 6
 
 const SORT_ORDER: Record<SortKey, string> = {
   default: '-publishedAt',
@@ -75,7 +67,7 @@ export default async function CataloguePage({
 
   if (selected) conditions.push({ category: { equals: selected.id } })
 
-  const [settings, products, posts] = await Promise.all([
+  const [settings, products] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings', locale, depth: 0 }),
     payload.find({
       collection: 'products',
@@ -85,17 +77,6 @@ export default async function CataloguePage({
       sort: SORT_ORDER[sortKey],
       draft: false,
       where: { and: conditions },
-    }),
-    payload.find({
-      collection: 'posts',
-      locale,
-      depth: 1,
-      limit: JOURNAL_COUNT,
-      sort: '-publishedAt',
-      draft: false,
-      where: {
-        and: [{ _status: { equals: 'published' } }, { title: { exists: true } }],
-      },
     }),
   ])
 
@@ -207,67 +188,6 @@ export default async function CataloguePage({
           </Link>
         </div>
       ) : null}
-
-      {/* --- journal ------------------------------------------------------ */}
-      <section className="journal" id="journal">
-        <div className="journal__head">
-          <h2>{t('recentPosts', locale)}</h2>
-        </div>
-
-        {posts.docs.length === 0 ? (
-          <p className="empty">{t('noPosts', locale)}</p>
-        ) : (
-          <ul className="post-grid">
-            {posts.docs.map((post) => {
-              const cover = asMedia(post.coverImage)
-              const avatar = asMedia(post.authorAvatar)
-              const date = formatDate(post.publishedAt, locale)
-
-              return (
-                <li key={post.id} className="post-card">
-                  <Link href={`/${locale}/journal/${post.slug}`}>
-                    <div className="post-card__media">
-                      {cover ? (
-                        <img
-                          src={bestUrl(cover, 'card')}
-                          srcSet={buildSrcSet(cover)}
-                          sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-                          alt={cover.alt ?? ''}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : null}
-                    </div>
-
-                    <h3 className="post-card__title">{post.title}</h3>
-
-                    {post.excerpt ? <p className="post-card__text">{post.excerpt}</p> : null}
-
-                    <p className="byline">
-                      {avatar ? (
-                        <img
-                          className="byline__avatar"
-                          src={bestUrl(avatar, 'thumbnail')}
-                          alt=""
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : null}
-                      <span>{post.authorName}</span>
-                      {date ? (
-                        <>
-                          <span className="byline__dot">•</span>
-                          <span className="byline__date">{date}</span>
-                        </>
-                      ) : null}
-                    </p>
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        )}
-      </section>
 
       {/* --- newsletter --------------------------------------------------- */}
       <section className="newsletter">

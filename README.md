@@ -30,7 +30,7 @@ Plus, beyond the agreed list:
 
 | Also included | Where it is |
 |---|---|
-| Journal / blog, two sample articles | Journal collection; section at the bottom of the catalogue, articles at `/fr/journal/…` |
+| Journal / blog, six sample articles | Journal collection; its own page at `/fr/journal` (header link), articles at `/fr/journal/…` |
 | Category filter, result count, price sorting | The pills and controls above the grid — all real, driven by the URL |
 | Newsletter sign-up | Writes to the **Newsletter** collection; duplicates and bad addresses are handled |
 

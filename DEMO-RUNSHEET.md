@@ -226,7 +226,8 @@ but keeps everything, so you can put it back in one click. Delete is permanent."
 *You added these. He did not ask for them. Say so — it reads as generosity
 rather than scope creep.*
 
-Show the Journal section at the bottom of the catalogue, open one article.
+Click **Journal** in the header — it has its own page, separate from the
+catalogue — and open one article.
 
 **Say:** *"The journal works exactly like the products — same two languages,
 same draft and publish, same photographs. Useful for Google, because a shop with

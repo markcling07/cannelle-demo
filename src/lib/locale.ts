@@ -47,7 +47,6 @@ const STRINGS = {
     fr: "Ce contenu n'a pas encore de version française.",
     en: 'This content does not have an English version yet.',
   },
-  recentPosts: { fr: 'Derniers articles', en: 'Recent posts' },
   readArticle: { fr: "Lire l'article", en: 'Read article' },
   newsletterHeading: {
     fr: 'Inscrivez-vous à la lettre d’information\net restez informé',

@@ -77,7 +77,7 @@ export default async function ArticlePage({ params }: PageParams) {
 
       return (
         <div className="container">
-          <Link href={`/${locale}#journal`} className="back-link">
+          <Link href={`/${locale}/journal`} className="back-link">
             {t('backToJournal', locale)}
           </Link>
           <p className="empty">{t('notTranslated', locale)}</p>
@@ -94,7 +94,7 @@ export default async function ArticlePage({ params }: PageParams) {
 
   return (
     <div className="container">
-      <Link href={`/${locale}#journal`} className="back-link">
+      <Link href={`/${locale}/journal`} className="back-link">
         {t('backToJournal', locale)}
       </Link>
 

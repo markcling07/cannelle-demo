@@ -340,32 +340,6 @@ h3 {
 
 /* --- journal ------------------------------------------------------------- */
 
-.journal {
-  margin-top: 96px;
-}
-
-.journal__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.journal__head h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.journal__all {
-  font-size: 0.8125rem;
-  color: var(--muted);
-}
-
-.journal__all:hover {
-  color: var(--ink);
-}
-
 .post-grid {
   list-style: none;
   margin: 0;

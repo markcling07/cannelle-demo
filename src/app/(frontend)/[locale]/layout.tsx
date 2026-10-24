@@ -6,6 +6,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 
 import { LocaleSwitcher } from '@/components/LocaleSwitcher'
+import { SiteNav } from '@/components/SiteNav'
 import { LOCALES, isLocale, t, type Locale } from '@/lib/locale'
 import '../styles.css'
 
@@ -65,8 +66,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           </Link>
 
           <nav className="site-nav" aria-label={siteName}>
-            <Link href={`/${locale}`}>{t('catalogue', locale)}</Link>
-            <Link href={`/${locale}#journal`}>{t('journal', locale)}</Link>
+            <SiteNav locale={locale} />
             <LocaleSwitcher current={locale} />
           </nav>
         </header>
@@ -79,7 +79,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           <div className="site-footer__bar">
             <nav className="site-footer__nav" aria-label={siteName}>
               <Link href={`/${locale}`}>{t('catalogue', locale)}</Link>
-              <Link href={`/${locale}#journal`}>{t('journal', locale)}</Link>
+              <Link href={`/${locale}/journal`}>{t('journal', locale)}</Link>
             </nav>
 
             <div className="site-footer__contact">
