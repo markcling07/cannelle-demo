@@ -6,6 +6,7 @@ import config from '@payload-config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
 import type { Product } from '@/payload-types'
+import { AddToCart } from '@/components/AddToCart'
 import { ProductGallery, type GalleryImage } from '@/components/ProductGallery'
 import { asMedia, buildSrcSet, bestUrl } from '@/lib/media'
 import { formatPrice, isLocale, otherLocale, t, type Locale } from '@/lib/locale'
@@ -142,6 +143,10 @@ export default async function ProductPage({ params }: PageParams) {
           <p className={product.inStock ? 'detail__stock is-in' : 'detail__stock'}>
             {product.inStock ? t('inStock', locale) : t('outOfStock', locale)}
           </p>
+
+          {typeof product.price === 'number' ? (
+            <AddToCart productId={product.id} locale={locale} />
+          ) : null}
 
           {product.description ? (
             <div className="rich-text">

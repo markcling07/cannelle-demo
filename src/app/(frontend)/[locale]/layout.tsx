@@ -7,6 +7,7 @@ import config from '@payload-config'
 
 import { LocaleSwitcher } from '@/components/LocaleSwitcher'
 import { SiteNav } from '@/components/SiteNav'
+import { countItems, readCart } from '@/lib/cart'
 import { LOCALES, isLocale, t, type Locale } from '@/lib/locale'
 import { asMedia } from '@/lib/media'
 import '../styles.css'
@@ -72,7 +73,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           </Link>
 
           <nav className="site-nav" aria-label={siteName}>
-            <SiteNav locale={locale} />
+            <SiteNav locale={locale} cartCount={countItems(await readCart())} />
             <LocaleSwitcher current={locale} />
           </nav>
         </header>

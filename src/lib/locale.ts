@@ -70,6 +70,108 @@ const STRINGS = {
     fr: 'Une erreur est survenue. Réessayez.',
     en: 'Something went wrong. Please try again.',
   },
+  // --- basket and mock checkout --------------------------------------------
+  cart: { fr: 'Panier', en: 'Cart' },
+  quantity: { fr: 'Quantité', en: 'Quantity' },
+  decrease: { fr: 'Diminuer la quantité', en: 'Decrease quantity' },
+  increase: { fr: 'Augmenter la quantité', en: 'Increase quantity' },
+  addToCart: { fr: 'Ajouter au panier', en: 'Add to cart' },
+  buyNow: { fr: 'Acheter maintenant', en: 'Buy now' },
+  addedToCart: { fr: 'Ajouté au panier.', en: 'Added to your cart.' },
+  viewCart: { fr: 'Voir le panier', en: 'View cart' },
+  cartError: {
+    fr: 'Ce produit ne peut pas être commandé pour le moment.',
+    en: 'This product cannot be ordered right now.',
+  },
+  cartEmpty: { fr: 'Votre panier est vide.', en: 'Your cart is empty.' },
+  continueShopping: { fr: '← Continuer mes achats', en: '← Continue shopping' },
+  remove: { fr: 'Retirer', en: 'Remove' },
+  each: { fr: 'l’unité', en: 'each' },
+  orderSummary: { fr: 'Récapitulatif', en: 'Order summary' },
+  subtotal: { fr: 'Sous-total', en: 'Subtotal' },
+  shipping: { fr: 'Livraison', en: 'Shipping' },
+  shippingFree: { fr: 'Offerte', en: 'Free' },
+  freeShippingHint: {
+    fr: 'Plus que {amount} pour la livraison offerte.',
+    en: '{amount} more for free shipping.',
+  },
+  total: { fr: 'Total', en: 'Total' },
+  proceedToCheckout: { fr: 'Passer au paiement', en: 'Proceed to checkout' },
+  checkout: { fr: 'Paiement', en: 'Checkout' },
+  backToCart: { fr: '← Retour au panier', en: '← Back to cart' },
+  testMode: { fr: 'Mode test', en: 'Test mode' },
+  testModeText: {
+    fr: 'Aucun paiement réel n’est effectué. Carte acceptée : 4242 4242 4242 4242 — carte refusée : 4000 0000 0000 0002, avec toute date future et tout CVC.',
+    en: 'No real payment is taken. Approved card: 4242 4242 4242 4242 — declined card: 4000 0000 0000 0002, with any future date and any CVC.',
+  },
+  contact: { fr: 'Contact', en: 'Contact' },
+  emailAddress: { fr: 'Adresse e-mail', en: 'Email address' },
+  phone: { fr: 'Téléphone', en: 'Phone' },
+  deliveryAddress: { fr: 'Adresse de livraison', en: 'Delivery address' },
+  fullName: { fr: 'Nom complet', en: 'Full name' },
+  address: { fr: 'Adresse', en: 'Address' },
+  postalCode: { fr: 'Code postal', en: 'Postcode' },
+  city: { fr: 'Ville', en: 'City' },
+  country: { fr: 'Pays', en: 'Country' },
+  paymentMethod: { fr: 'Moyen de paiement', en: 'Payment method' },
+  methodCard: { fr: 'Carte bancaire', en: 'Card' },
+  methodMobile: { fr: 'Mobile Money', en: 'Mobile Money' },
+  methodPaypal: { fr: 'PayPal', en: 'PayPal' },
+  cardNumber: { fr: 'Numéro de carte', en: 'Card number' },
+  cardExpiry: { fr: 'Expiration (MM / AA)', en: 'Expiry (MM / YY)' },
+  cardCvc: { fr: 'CVC', en: 'CVC' },
+  cardName: { fr: 'Nom sur la carte', en: 'Name on card' },
+  operator: { fr: 'Opérateur', en: 'Operator' },
+  mobileNumber: { fr: 'Numéro Mobile Money', en: 'Mobile Money number' },
+  mobileHint: {
+    fr: 'Vous recevrez une demande de confirmation sur ce numéro.',
+    en: 'You will receive a confirmation request on this number.',
+  },
+  paypalHint: {
+    fr: 'Vous serez redirigé vers PayPal pour vous connecter et confirmer le paiement.',
+    en: 'You will be redirected to PayPal to sign in and confirm the payment.',
+  },
+  securePayment: {
+    fr: 'Paiement sécurisé par notre prestataire. Vos coordonnées bancaires ne sont jamais conservées sur ce site.',
+    en: 'Payment secured by our payment provider. Your card details are never stored on this site.',
+  },
+  payAmount: { fr: 'Payer {amount}', en: 'Pay {amount}' },
+  processing: { fr: 'Paiement en cours…', en: 'Processing payment…' },
+  processingHint: {
+    fr: 'Ne fermez pas cette page.',
+    en: 'Please do not close this page.',
+  },
+  awaitingMobile: {
+    fr: 'Demande envoyée au {phone}. Validez le paiement avec votre code secret sur votre téléphone.',
+    en: 'Request sent to {phone}. Confirm the payment with your PIN on your phone.',
+  },
+  redirectPaypal: { fr: 'Redirection vers PayPal…', en: 'Redirecting to PayPal…' },
+  declined: {
+    fr: 'Paiement refusé par votre banque. Vérifiez vos informations ou utilisez une autre carte.',
+    en: 'Your bank declined the payment. Check your details or use another card.',
+  },
+  errRequired: { fr: 'Champ obligatoire.', en: 'This field is required.' },
+  errEmail: { fr: 'Adresse e-mail invalide.', en: 'Invalid email address.' },
+  errPhone: { fr: 'Numéro de téléphone invalide.', en: 'Invalid phone number.' },
+  errCardNumber: { fr: 'Numéro de carte invalide.', en: 'Invalid card number.' },
+  errExpiry: { fr: 'Date d’expiration invalide.', en: 'Invalid expiry date.' },
+  errCvc: { fr: 'CVC invalide.', en: 'Invalid CVC.' },
+  errFixForm: {
+    fr: 'Vérifiez les champs signalés.',
+    en: 'Please check the highlighted fields.',
+  },
+  orderConfirmed: {
+    fr: 'Merci, votre commande est confirmée',
+    en: 'Thank you, your order is confirmed',
+  },
+  orderNumber: { fr: 'Commande n°', en: 'Order no.' },
+  orderDate: { fr: 'Date', en: 'Date' },
+  paidWith: { fr: 'Payé par', en: 'Paid with' },
+  deliverTo: { fr: 'Livraison à', en: 'Delivering to' },
+  demoNoCharge: {
+    fr: 'Démonstration : aucun montant n’a été débité et aucun e-mail n’a été envoyé.',
+    en: 'Demonstration: nothing has been charged and no email has been sent.',
+  },
   skipToContent: { fr: 'Aller au contenu', en: 'Skip to content' },
   demoNotice: {
     fr: 'Démonstration — contenu fictif',
@@ -86,6 +188,16 @@ export const showingResults = (shown: number, total: number, locale: Locale): st
   locale === 'fr'
     ? `Affichage de ${shown} sur ${total} résultats`
     : `Showing ${shown} of ${total} results`
+
+/** "Panier, 2 articles" / "Cart, 2 items" — the cart icon's accessible name. */
+export const cartLabel = (count: number, locale: Locale): string =>
+  locale === 'fr'
+    ? `Panier, ${count} article${count > 1 ? 's' : ''}`
+    : `Cart, ${count} item${count === 1 ? '' : 's'}`
+
+/** Fills a "{name}" placeholder in one of the strings above. */
+export const fill = (text: string, values: Record<string, string>): string =>
+  text.replace(/\{(\w+)\}/g, (match, key: string) => values[key] ?? match)
 
 /** The other language, for the switcher in the header. */
 export const otherLocale = (locale: Locale): Locale => (locale === 'fr' ? 'en' : 'fr')
