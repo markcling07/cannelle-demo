@@ -32,6 +32,9 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
  *   coffret-decouverte-3.webp  -> second, and so on
  *
  * Numbering must not skip: the search stops at the first gap.
+ *
+ * Journal covers follow the same rule as `journal-<slug>`, ideally 1600x1000
+ * so they fill the 16:10 article header exactly.
  */
 const MIME: Record<string, string> = {
   jpg: 'image/jpeg',
@@ -600,9 +603,6 @@ const seed = async () => {
         ],
       },
     },
-  ]
-
-  for (const product of products) {
     {
       slug: 'vanille-bourbon',
       label: 'Vanille',
@@ -691,6 +691,9 @@ const seed = async () => {
         ],
       },
     },
+  ]
+
+  for (const product of products) {
     const photo = realPhoto(product.slug)
     const extras = extraPhotos(product.slug)
 
@@ -757,8 +760,8 @@ const seed = async () => {
       label: 'Journal',
       colours: ['#5e3418', '#bf8347'] as [string, string],
       alt: {
-        fr: 'Bâtons de Ceylan et de Cassia côte à côte',
-        en: 'Ceylon and Cassia sticks side by side',
+        fr: 'Bâtons de cannelle de différentes épaisseurs sur un linge clair',
+        en: 'Cinnamon sticks of different thicknesses on pale linen',
       },
       author: { name: 'Hanta Rakoto', initials: 'HR', colour: '#7a4418' },
       daysAgo: 4,
@@ -790,8 +793,8 @@ const seed = async () => {
       label: 'Cuisine',
       colours: ['#6f4a20', '#d2a368'] as [string, string],
       alt: {
-        fr: 'Pommes au four à la cannelle',
-        en: 'Baked apples with cinnamon',
+        fr: 'Tasse de café et bâtons de cannelle',
+        en: 'A cup of coffee and cinnamon sticks',
       },
       author: { name: 'Léa Marchand', initials: 'LM', colour: '#5c3a1e' },
       daysAgo: 11,
@@ -818,13 +821,149 @@ const seed = async () => {
         ],
       },
     },
+    {
+      slug: 'chocolat-chaud',
+      label: 'Recette',
+      colours: ['#3b2114', '#8b5a34'] as [string, string],
+      alt: {
+        fr: 'Chocolat chaud, bâtons de cannelle et carrés de chocolat noir',
+        en: 'Hot chocolate, cinnamon sticks and squares of dark chocolate',
+      },
+      author: { name: 'Léa Marchand', initials: 'LM', colour: '#5c3a1e' },
+      daysAgo: 2,
+      fr: {
+        title: 'Chocolat chaud à la cannelle et à la vanille',
+        excerpt:
+          'Une recette pour deux tasses : du chocolat noir, une demi-gousse de vanille et un bâton de Ceylan.',
+        body: [
+          'Pour deux tasses : 50 cl de lait entier, 1 bâton de cannelle de Ceylan, ½ gousse de vanille, 80 g de chocolat noir à 70 %, une pincée de sel, et du sucre selon votre goût.',
+          'Fendez la demi-gousse dans la longueur et grattez les graines dans le lait. Ajoutez la gousse vidée et le bâton de cannelle, portez à frémissement, puis couvrez et laissez infuser dix minutes hors du feu. Retirez la gousse et le bâton.',
+          'Remettez sur feu doux, ajoutez le chocolat haché et le sel, et fouettez sans laisser bouillir jusqu’à ce que le mélange épaississe légèrement. Goûtez avant de sucrer : un chocolat à 70 % en demande peu.',
+          'Pour une version plus intense, faites infuser une cuillère à soupe d’éclats de fèves de cacao avec les épices, puis filtrez. Un clou de girofle apporte une note plus chaude, mais un seul suffit. Rincée et séchée, la gousse de vanille parfumera ensuite un bocal de sucre.',
+        ],
+      },
+      en: {
+        title: 'Hot chocolate with cinnamon and vanilla',
+        excerpt:
+          'A recipe for two cups: dark chocolate, half a vanilla pod and a Ceylon quill.',
+        body: [
+          'For two cups: 500 ml whole milk, 1 Ceylon cinnamon quill, ½ vanilla pod, 80 g dark chocolate (70%), a pinch of salt, and sugar to taste.',
+          'Split the half pod lengthways and scrape the seeds into the milk. Add the empty pod and the cinnamon, bring to a simmer, then cover and leave to infuse off the heat for ten minutes. Lift out the pod and the quill.',
+          'Return the pan to a low heat, add the chopped chocolate and the salt, and whisk without letting it boil until it thickens slightly. Taste before adding sugar: a 70% chocolate needs very little.',
+          'For a deeper version, infuse a tablespoon of cocoa nibs along with the spices, then strain. A single clove adds a warmer note, but one is plenty. Rinsed and dried, the vanilla pod will go on to scent a jar of sugar.',
+        ],
+      },
+    },
+    {
+      slug: 'vanille-affinage',
+      label: 'Vanille',
+      colours: ['#2a1a10', '#6e4a2c'] as [string, string],
+      alt: {
+        fr: 'Gousses de vanille noires et souples sur un linge blanc',
+        en: 'Supple black vanilla pods on white linen',
+      },
+      author: { name: 'Hanta Rakoto', initials: 'HR', colour: '#7a4418' },
+      daysAgo: 18,
+      fr: {
+        title: 'De la gousse verte à la gousse noire : l’affinage de la vanille',
+        excerpt:
+          'Au moment de la cueillette, la vanille est verte et ne sent presque rien. Son parfum naît pendant des mois de préparation.',
+        body: [
+          'Une gousse de vanille fraîchement cueillie est verte, ferme et presque inodore. La vanilline y est encore liée à un sucre, sous forme de glucovanilline, et ne se libère qu’au cours d’une lente transformation.',
+          'Dans la région SAVA, les gousses sont d’abord échaudées : plongées quelques minutes dans une eau à environ 65 °C, ce qui arrête leur maturation. Elles passent ensuite un jour ou deux enveloppées de couvertures au fond de caisses en bois, où elles « suent » et commencent à brunir.',
+          'Viennent alors des semaines d’alternance : exposées au soleil quelques heures par jour, puis rentrées pour transpirer de nouveau. Les gousses perdent peu à peu leur eau, deviennent souples et prennent leur couleur noire. Il faut en moyenne cinq à six kilos de vanille verte pour obtenir un kilo de vanille préparée.',
+          'Reste l’affinage : deux à trois mois de repos dans des malles fermées, avec un tri gousse par gousse. C’est là que le parfum s’arrondit. Sur les plus belles gousses apparaissent parfois de fins cristaux blancs, le givre : ce n’est pas de la moisissure, mais de la vanilline.',
+        ],
+      },
+      en: {
+        title: 'From green pod to black pod: how vanilla is cured',
+        excerpt:
+          'When it is picked, vanilla is green and has almost no scent. Its fragrance develops over months of careful preparation.',
+        body: [
+          'A freshly picked vanilla pod is green, firm and almost odourless. Its vanillin is still bound to a sugar, as glucovanillin, and is only released through a slow transformation.',
+          'In the SAVA region the pods are first blanched: dipped for a few minutes in water at around 65 °C, which stops them ripening. They then spend a day or two wrapped in blankets at the bottom of wooden boxes, where they "sweat" and begin to turn brown.',
+          'Weeks of alternation follow: a few hours in the sun each day, then back indoors to sweat again. The pods slowly lose their water, become supple and turn black. On average it takes five to six kilos of green vanilla to make one kilo of cured vanilla.',
+          'Last comes conditioning: two to three months resting in closed trunks, sorted pod by pod. This is where the scent rounds out. The finest pods sometimes grow fine white crystals, known as frost. It is not mould, but vanillin.',
+        ],
+      },
+    },
+    {
+      slug: 'cacao-fermentation',
+      label: 'Cacao',
+      colours: ['#3b2114', '#8b5a34'] as [string, string],
+      alt: {
+        fr: 'Cabosse de cacao ouverte, fèves dans leur pulpe blanche',
+        en: 'An open cacao pod, beans in their white pulp',
+      },
+      author: { name: 'Tojo Andrianaivo', initials: 'TA', colour: '#4f2410' },
+      daysAgo: 25,
+      fr: {
+        title: 'Ce que la fermentation donne au cacao',
+        excerpt:
+          'Une fève de cacao crue n’a pas le goût du chocolat. Il apparaît en sept jours, dans une caisse en bois.',
+        body: [
+          'À l’ouverture d’une cabosse, les fèves sont enrobées d’une pulpe blanche, sucrée et acidulée. La fève elle-même, croquée crue, est amère, astringente, et n’évoque en rien le chocolat.',
+          'Dans le Sambirano, fèves et pulpe sont versées dans des caisses en bois et couvertes de feuilles de bananier. Les levures transforment d’abord les sucres de la pulpe en alcool, que des bactéries changent ensuite en acide acétique. La masse chauffe jusqu’à 45 à 50 °C.',
+          'Tous les deux jours environ, les fèves sont brassées, passées d’une caisse à l’autre pour y faire entrer de l’air. Le germe meurt, la fève vire du violet au brun, et se forment les précurseurs des arômes que la torréfaction révélera plus tard.',
+          'Au bout de sept jours, les fèves sont séchées au soleil jusqu’à ne plus contenir qu’environ 7 % d’eau. Pour vérifier le travail, on en coupe un échantillon dans la longueur : une fève bien fermentée est brune et fissurée à l’intérieur ; une fève grise et compacte, dite « ardoisée », ne l’a pas été.',
+        ],
+      },
+      en: {
+        title: 'What fermentation gives cacao',
+        excerpt:
+          'A raw cacao bean does not taste of chocolate. That flavour appears over seven days, in a wooden box.',
+        body: [
+          'When a pod is opened, the beans are coated in a white pulp, sweet and tart. The bean itself, bitten raw, is bitter and astringent, and tastes nothing like chocolate.',
+          'In the Sambirano, beans and pulp are tipped into wooden boxes and covered with banana leaves. Yeasts first turn the sugars in the pulp into alcohol, which bacteria then convert into acetic acid. The mass heats up to 45–50 °C.',
+          'Every couple of days the beans are turned, moved from one box to the next to let air in. The germ dies, the bean shifts from purple to brown, and the precursors of the flavours that roasting will later bring out begin to form.',
+          'After seven days the beans are dried in the sun until only about 7% water remains. To check the work, a sample is cut lengthways: a well-fermented bean is brown and cracked inside; a grey, dense bean, known as "slaty", was not fermented.',
+        ],
+      },
+    },
+    {
+      slug: 'conserver-epices',
+      label: 'Conseils',
+      colours: ['#5e3418', '#bf8347'] as [string, string],
+      alt: {
+        fr: 'Bocaux d’épices en verre sur une étagère',
+        en: 'Glass jars of spices on a shelf',
+      },
+      author: { name: 'Léa Marchand', initials: 'LM', colour: '#5c3a1e' },
+      daysAgo: 32,
+      fr: {
+        title: 'Bien conserver ses épices',
+        excerpt:
+          'La lumière, l’air, la chaleur et l’humidité : quatre ennemis, et quelques gestes simples pour garder le parfum plus longtemps.',
+        body: [
+          'Une épice ne se gâte pas vraiment : elle s’éteint. Son parfum tient dans des huiles essentielles volatiles, qui s’échappent un peu plus chaque fois que le bocal reste ouvert, au soleil ou près d’une source de chaleur.',
+          'Le bon endroit est donc un placard sombre, loin de la cuisinière et du four, dans des bocaux qui ferment bien. Le verre convient parfaitement, à condition d’être rangé à l’abri de la lumière. Et jamais de cuillère humide dans le bocal : l’humidité fait prendre la poudre en masse et peut faire moisir les baies.',
+          'Achetez entier quand c’est possible. Un bâton de cannelle ou un clou de girofle garde son parfum deux à trois ans ; la même épice moulue commence à faiblir au bout de six mois à un an. Un petit moulin réservé aux épices suffit pour moudre au dernier moment.',
+          'Deux cas particuliers : la vanille se garde dans un tube ou un papier bien fermé, au frais mais pas au réfrigérateur ; les huiles essentielles restent dans leur flacon ambré, bouchon bien vissé. Et pour savoir si une épice est encore bonne, frottez-en un peu entre vos doigts : si l’odeur est faible, il est temps de la renouveler.',
+        ],
+      },
+      en: {
+        title: 'How to store your spices',
+        excerpt:
+          'Light, air, heat and moisture: four enemies, and a few simple habits that keep the scent alive for longer.',
+        body: [
+          'Spices do not really go off: they fade. Their scent lives in volatile essential oils, which escape a little more every time the jar is left open, in the sun or near a source of heat.',
+          'The right place is a dark cupboard, away from the hob and the oven, in jars that close properly. Glass is perfect, as long as it is kept out of the light. And never put a damp spoon in the jar: moisture makes powders cake and can turn berries mouldy.',
+          'Buy whole whenever you can. A cinnamon stick or a clove keeps its scent for two to three years; the same spice ground starts to fade after six months to a year. A small grinder kept just for spices is all you need to grind at the last minute.',
+          'Two special cases: vanilla keeps in a tube or tightly closed paper, somewhere cool but not in the fridge; essential oils stay in their amber bottle with the cap screwed on tight. To tell whether a spice is still good, rub a little between your fingers: if the smell is faint, it is time to replace it.',
+        ],
+      },
+    },
   ]
 
   for (const post of posts) {
+    const cover = findPhoto(`journal-${post.slug}`)
+    if (cover) payload.logger.info(`using real photograph for journal-${post.slug}`)
+
     const coverId = await uploadImage(
       `journal-${post.slug}`,
-      await placeholderImage(sharp, post.label, post.colours),
+      cover?.buffer ?? (await placeholderImage(sharp, post.label, post.colours)),
       post.alt,
+      cover?.ext ?? 'jpg',
     )
 
     const avatarId = await uploadImage(

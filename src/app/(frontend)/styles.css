@@ -802,6 +802,10 @@ h3 {
     grid-template-columns: repeat(3, 1fr);
   }
 
+  .post-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   .filter-bar {
     flex-direction: row;
     align-items: center;

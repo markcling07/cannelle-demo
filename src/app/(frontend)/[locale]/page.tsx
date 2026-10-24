@@ -22,7 +22,7 @@ import {
 export const dynamic = 'force-dynamic'
 
 const PAGE_SIZE = 6
-const JOURNAL_COUNT = 2
+const JOURNAL_COUNT = 6
 
 const SORT_ORDER: Record<SortKey, string> = {
   default: '-publishedAt',
@@ -231,7 +231,7 @@ export default async function CataloguePage({
                         <img
                           src={bestUrl(cover, 'card')}
                           srcSet={buildSrcSet(cover)}
-                          sizes="(max-width: 600px) 100vw, 50vw"
+                          sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
                           alt={cover.alt ?? ''}
                           loading="lazy"
                           decoding="async"
