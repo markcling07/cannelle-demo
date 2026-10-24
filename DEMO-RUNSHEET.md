@@ -1,7 +1,9 @@
 # Demonstration run-sheet — Monday 26 October
 
 For Célestin Mahavita Jaovazaha, GROUPE JAOVAZAHA.
-Target length: **20 minutes**, plus questions.
+Target length: **20 minutes** for his seven points, then about **6 minutes**
+of extras (journal, basket, stock, reviews), plus questions. If time is short,
+cut the extras, never his points.
 
 Read this once the night before. On the day, keep it open on a second screen.
 
@@ -31,9 +33,14 @@ Read this once the night before. On the day, keep it open on a second screen.
       **GROUPE JAOVAZAHA**, and his logo. Both are under Site settings —
       Site name in each language, Logo once for both. One field each, no code.
 
-- [ ] **Replace at least one placeholder photograph** with a real cinnamon
-      photo. The generated gradients are obviously fake and he will notice.
-      Media library → upload → then set it on a product.
+- [ ] **Know where the photographs come from.** Every product has real
+      photographs now — stock images chosen to match each product, not his
+      own goods. Bring one of **his** product photos for step 3 anyway:
+      seeing his own picture on his own site lands better than anything else.
+
+- [ ] **Check the tagline.** Site settings → Tagline, in each language. It
+      shows in Google results. The seed sets *Épices et vanille de
+      Madagascar* / *Spices and vanilla from Madagascar*.
 
 - [ ] **Run through this whole sheet once, out loud, with a timer.** This is
       the single highest-value thing you can do. Do not skip it.
@@ -49,7 +56,12 @@ Read this once the night before. On the day, keep it open on a second screen.
 - [ ] Close every other tab, notification, and messaging app.
 - [ ] Have the product text ready to paste, French and English, in a notepad.
       Do not compose sentences live.
-- [ ] Re-run `npm run seed` for a clean catalogue.
+- [ ] Re-run `npm run seed` for a clean catalogue. This also refills the
+      stock your rehearsal orders used up, and puts back the one pending
+      review you will approve in step 10.
+- [ ] If you show the deployed site: after any collection change, the Neon
+      database must be updated first (README, *Deploying*, step 5) or pages
+      fail. Check the live site loads a product page before the call.
 
 ### The link
 
@@ -80,6 +92,7 @@ is still covered — the mapping is in the right-hand column.
 | 7 | Computer and phone | Displays correctly on both |
 | 8 | Delete | Delete the product |
 | 9 | Journal + newsletter | *(extra — yours, not asked for)* |
+| 10 | Basket, stock and reviews | *(extra — yours, not asked for)* |
 
 ---
 
@@ -91,8 +104,8 @@ Go to `/admin`. Type the email and password while he watches.
 secure cookie that expires after eight hours. After five wrong attempts the
 account locks itself for ten minutes."*
 
-Then point at the left sidebar: **Products, Categories, Journal, Media library,
-Users, Newsletter.**
+Then point at the left sidebar: **Products, Categories, Avis clients, Journal,
+Media library, Users, Newsletter.**
 
 **Say:** *"Everything the site shows is in this list. Nothing here needs a
 developer."*
@@ -128,10 +141,12 @@ and what Google reads. It is per language, so it gets translated too."*
 
 Add two or three **Key features** with the + button.
 
-Then the **Commercial details** tab: reference, price, currency, category.
+Then the **Commercial details** tab: reference, price, currency, category
+(**Épices**), and **Stock** — type 10.
 
-**Say:** *"Price and reference sit outside the language system. One price, two
-languages — change it once."*
+**Say:** *"Price, reference and stock sit outside the language system. One
+price, two languages — change it once. The stock goes down by itself every
+time someone orders."*
 
 Click **Save Draft**.
 
@@ -227,17 +242,60 @@ but keeps everything, so you can put it back in one click. Delete is permanent."
 rather than scope creep.*
 
 Click **Journal** in the header — it has its own page, separate from the
-catalogue — and open one article.
+catalogue. The latest article fills the screen as a large photograph; scroll
+through the introduction, the featured article and the numbered index, then
+open one article.
 
 **Say:** *"The journal works exactly like the products — same two languages,
-same draft and publish, same photographs. Useful for Google, because a shop with
-nothing but product pages ranks poorly."*
+same draft and publish, same photographs. Publish a new article and it takes
+the top of the page by itself. Useful for Google, because a shop with nothing
+but product pages ranks poorly."*
+
+If he likes it, show that the introduction sentence is his to change:
+Site settings → **Page Journal**.
 
 Then the newsletter box. Type an address, click **Envoyer**, then show it appear
 under **Newsletter** in the admin.
 
 **Say:** *"The addresses are collected and stored. Sending the actual newsletter
 would be a separate tool — I have not connected one yet."*
+
+---
+
+### 10. Basket, stock and reviews — 4 min
+
+*Also yours, not asked for. Say so, and say plainly that the payment is
+simulated — before he asks.*
+
+**Stock and reviews.** Open **Vanille Bourbon de Madagascar**. Point at the
+stars under the title, then the orange **Plus que 3 en stock**. Scroll to
+**Avis clients**: the average, the star bars, the reviews.
+
+**The order.** Back up, set the quantity to 3 — the + button stops there —
+**Ajouter au panier**. The cart icon shows 3. Open the cart, **Passer au
+paiement**, fill the form, pay with `4242 4242 4242 4242`, any future date,
+any CVC. Wait for the confirmation.
+
+Reload the vanilla page: **Rupture de stock**, no buy button.
+
+**Say:** *"It behaves exactly as if a payment provider were connected — the
+stock really went down — but no money moves. Connecting a real one, cards,
+PayPal, MVola, Orange Money, is part of the real project and I will price it
+separately."*
+
+*Optional, if he enjoys it:* pay with `4000 0000 0000 0002` instead — the
+"bank" refuses it and nothing is ordered.
+
+**Moderation.** Admin → **Avis clients** (*Reviews* if the admin is in
+English). One review is **En attente** / *Pending* (Marc D., on the vanilla).
+Open it, set **Approuvé** / *Approved*, save. Reload the vanilla
+page — it is there.
+
+**Say:** *"Nobody can post on your site without you seeing it first. Reviews
+wait here until you or Heide approve them."*
+
+> Re-run `npm run seed` after rehearsing this step — it refills the vanilla
+> and puts the pending review back.
 
 ---
 
@@ -250,7 +308,10 @@ product name, short description, full description, key features, web address,
 photograph alternative text, journal articles, and all the site wording.
 
 **Shared between both:**
-price, currency, reference, category, availability, and the photograph itself.
+price, currency, reference, category, stock, availability, and the photograph
+itself.
+
+**Reviews** are written in one language and shown on both versions.
 
 **Say it like this:**
 
@@ -276,10 +337,12 @@ Show this on screen by walking the sidebar, not by reading a list.
 | | Editor | Administrator |
 |---|---|---|
 | Products — create, edit, publish, delete | yes | yes |
+| Stock levels | yes | yes |
+| Approve or reject reviews | yes | yes |
 | Journal articles | yes | yes |
 | Categories | yes | yes |
 | Photographs | yes | yes |
-| Site name, tagline, newsletter wording, contact details | yes | yes |
+| Site name, logo, tagline, journal introduction, newsletter wording, contact details | yes | yes |
 | See the newsletter list | yes | yes |
 | Delete newsletter entries | no | yes |
 | Create accounts and set roles | no | yes |
@@ -339,13 +402,21 @@ You do not have to answer on the call, and you should not guess.
 are based on the pages you actually want rather than my assumptions. You will
 have it within two days."*
 
-### "Can we have a shopping basket?"
+### "Can it take real payments?"
 
-**Say:** *"Not in this demonstration — this is a catalogue, which is what we
-agreed. A basket and payment is real additional work and I would rather price it
-properly than bolt it on."*
+**Say:** *"Not yet — the basket and checkout you saw are real, but the payment
+is simulated. Taking real money means opening accounts with payment providers —
+cards and PayPal, and MVola or Orange Money for customers in Madagascar — plus
+order emails, saving orders, and terms of sale. That is real additional work and
+I would rather price it properly than bolt it on."*
 
 Do not say yes to a date on the call.
+
+### "Are those reviews real?"
+
+**Say:** *"No — they are sample reviews I wrote so you can see how it looks.
+They are removed before the site goes live, and from then on every review comes
+from a real customer and waits for your approval."*
 
 ### "Who owns it?"
 
@@ -367,6 +438,10 @@ as the software.
 | A field looks empty that should not be | Check the **Locale** selector top right — you are probably in the other language. |
 | Product will not appear publicly | Check the status says **Published**, not Draft. |
 | Images do not appear | Check `BLOB_READ_WRITE_TOKEN` is set in the Vercel environment variables. |
+| A product says **Rupture de stock** | A rehearsal order used it up. Raise its **Stock** in the admin, or re-seed. |
+| Checkout sends you back to the cart | A line asks for more than is in stock — the cart says which. Lower it. |
+| A new review does not appear | It is waiting under **Avis clients**. Set it to **Approuvé**. |
+| Product pages fail on the deployed site only | The Neon database is missing a recent change. README, *Deploying*, step 5. |
 | Everything is broken | *"Let me reset to a clean state — one moment."* Run `npm run seed`, restart. **Do not debug live.** |
 
 **The rule: never type code on screen while he watches.** If you cannot fix it
@@ -391,10 +466,12 @@ to the demonstration first.
 
 ## Honest reminders
 
-- The photographs are generated placeholders. If he asks whether they are real
-  products, say no — it is sample content, as agreed.
-- There is no basket, no payment, and no newsletter sending. Do not imply
-  otherwise.
+- The photographs are stock images chosen to match each product, not his
+  goods. If he asks, say so — it is sample content, as agreed.
+- The reviews, stock figures and product details are invented sample content
+  too.
+- The payment is simulated: nothing is charged and orders are not saved. There
+  is no newsletter sending either. Do not imply otherwise.
 - This stack is new to you. That is fine. Show what it does, and if he asks
   something you do not know, say *"I will confirm that and come back to you"*
   rather than guessing. One wrong confident answer costs more than three

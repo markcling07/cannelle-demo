@@ -147,7 +147,7 @@ const seed = async () => {
     locale: 'fr',
     data: {
       siteName: 'GROUPE JAOVAZAHA',
-      tagline: 'Cannelle de Ceylan et de Cassia',
+      tagline: 'Épices et vanille de Madagascar',
       newsletterHeading:
         'Inscrivez-vous à la lettre d’information\net recevez nos nouveautés',
       journalStatement: 'Des carnets de terrain, de la plantation à la cuisine :',
@@ -165,7 +165,7 @@ const seed = async () => {
     locale: 'en',
     data: {
       siteName: 'GROUPE JAOVAZAHA',
-      tagline: 'Ceylon and Cassia cinnamon',
+      tagline: 'Spices and vanilla from Madagascar',
       newsletterHeading: 'Subscribe to the newsletter\nand stay up to date',
       journalStatement: 'Field notes, from the plantation to the kitchen:',
       journalAccent: 'the stories behind our spices.',
