@@ -64,6 +64,42 @@ export const SiteSettings: GlobalConfig = {
     },
     {
       type: 'collapsible',
+      label: { fr: 'Page Journal', en: 'Journal page' },
+      admin: {
+        description: {
+          fr: 'Le texte d’introduction sous la grande photo du journal.',
+          en: 'The introduction below the journal’s large photograph.',
+        },
+      },
+      fields: [
+        {
+          name: 'journalStatement',
+          type: 'textarea',
+          localized: true,
+          label: { fr: 'Phrase d’accroche', en: 'Statement' },
+        },
+        {
+          name: 'journalAccent',
+          type: 'text',
+          localized: true,
+          label: { fr: 'Fin de la phrase, en couleur', en: 'End of the statement, in colour' },
+          admin: {
+            description: {
+              fr: 'Affichée en vert juste après la phrase d’accroche.',
+              en: 'Shown in green straight after the statement.',
+            },
+          },
+        },
+        {
+          name: 'journalIntro',
+          type: 'textarea',
+          localized: true,
+          label: { fr: 'Paragraphe d’introduction', en: 'Introduction paragraph' },
+        },
+      ],
+    },
+    {
+      type: 'collapsible',
       label: { fr: 'Coordonnées', en: 'Contact details' },
       fields: [
         {

@@ -48,6 +48,29 @@ const STRINGS = {
     en: 'This content does not have an English version yet.',
   },
   readArticle: { fr: "Lire l'article", en: 'Read article' },
+  explore: { fr: 'Explorer', en: 'Explore' },
+  latestArticle: { fr: 'Dernier article', en: 'Latest article' },
+  featured: { fr: 'À la une', en: 'Featured' },
+  allArticles: { fr: 'Tous les articles', en: 'All articles' },
+  viewCatalogue: { fr: 'Voir le catalogue', en: 'See the catalog' },
+  subscribe: { fr: 'S’inscrire', en: 'Subscribe' },
+  journalNewsletterPrompt: {
+    fr: 'Recevez les prochains articles directement par e-mail.',
+    en: 'Get the next articles straight to your inbox.',
+  },
+  // Defaults for the journal introduction, used until Site settings has its own.
+  journalStatement: {
+    fr: 'Des carnets de terrain, de la plantation à la cuisine :',
+    en: 'Field notes, from the plantation to the kitchen:',
+  },
+  journalAccent: {
+    fr: 'ce que nos épices racontent.',
+    en: 'the stories behind our spices.',
+  },
+  journalIntro: {
+    fr: 'Récoltes, préparation, recettes et conseils : notre équipe partage ce qu’elle sait des épices de Madagascar, de la vanille de la SAVA au cacao du Sambirano.',
+    en: 'Harvests, curing, recipes and advice: our team shares what it knows about Madagascar’s spices, from SAVA vanilla to Sambirano cacao.',
+  },
   newsletterHeading: {
     fr: 'Inscrivez-vous à la lettre d’information\net restez informé',
     en: 'Subscribe to the newsletter\nand stay up to date',

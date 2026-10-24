@@ -150,6 +150,10 @@ const seed = async () => {
       tagline: 'Cannelle de Ceylan et de Cassia',
       newsletterHeading:
         'Inscrivez-vous à la lettre d’information\net recevez nos nouveautés',
+      journalStatement: 'Des carnets de terrain, de la plantation à la cuisine :',
+      journalAccent: 'ce que nos épices racontent.',
+      journalIntro:
+        'Récoltes, préparation, recettes et conseils : notre équipe partage ce qu’elle sait des épices de Madagascar, de la vanille de la SAVA au cacao du Sambirano.',
       contactEmail: 'contact@demo.local',
       contactPhone: '+33 7 83 74 69 83',
       address: 'Antananarivo, Madagascar\nBureau commercial — France',
@@ -163,6 +167,10 @@ const seed = async () => {
       siteName: 'GROUPE JAOVAZAHA',
       tagline: 'Ceylon and Cassia cinnamon',
       newsletterHeading: 'Subscribe to the newsletter\nand stay up to date',
+      journalStatement: 'Field notes, from the plantation to the kitchen:',
+      journalAccent: 'the stories behind our spices.',
+      journalIntro:
+        'Harvests, curing, recipes and advice: our team shares what it knows about Madagascar’s spices, from SAVA vanilla to Sambirano cacao.',
       contactEmail: 'contact@demo.local',
       contactPhone: '+33 7 83 74 69 83',
       address: 'Antananarivo, Madagascar\nSales office — France',

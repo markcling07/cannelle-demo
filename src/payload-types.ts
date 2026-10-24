@@ -637,6 +637,12 @@ export interface SiteSetting {
    * Shown above the sign-up form. Line breaks are kept.
    */
   newsletterHeading?: string | null;
+  journalStatement?: string | null;
+  /**
+   * Shown in green straight after the statement.
+   */
+  journalAccent?: string | null;
+  journalIntro?: string | null;
   contactEmail?: string | null;
   contactPhone?: string | null;
   address?: string | null;
@@ -652,6 +658,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   logo?: T;
   tagline?: T;
   newsletterHeading?: T;
+  journalStatement?: T;
+  journalAccent?: T;
+  journalIntro?: T;
   contactEmail?: T;
   contactPhone?: T;
   address?: T;
