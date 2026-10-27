@@ -19,7 +19,7 @@ import { SiteSettings } from './globals/SiteSettings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const databaseUrl = process.env.DATABASE_URL ?? ''
+const databaseUrl = (process.env.DATABASE_URL ?? '').replace(/^﻿/, '').trim()
 const usePostgres = /^postgres(ql)?:\/\//i.test(databaseUrl)
 
 /**
@@ -44,7 +44,7 @@ const database = usePostgres
     })
 
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'),
 
   admin: {
     user: Users.slug,
