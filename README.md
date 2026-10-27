@@ -22,6 +22,10 @@ The official logos, photographs and validated texts will replace it.
 The previous version — a small shop with a basket, checkout, prices, stock
 and reviews — is kept in git under the tag `shop-version`.
 
+**Picking the project up on another computer?** Start with
+[HANDOFF.md](HANDOFF.md): where everything is, setting up, going live, and
+what is still to do.
+
 ---
 
 ## What the site contains
