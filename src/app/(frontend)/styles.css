@@ -878,7 +878,7 @@ h3 {
   flex-wrap: wrap;
   gap: 10px;
   list-style: none;
-  margin: 0 0 16px;
+  margin: 0 0 48px;
   padding: 0;
 }
 
@@ -907,10 +907,95 @@ h3 {
   font-weight: 500;
 }
 
-.filter-meta {
-  margin: 0 0 32px;
-  font-size: 0.8125rem;
+/* The catalogue page: one large story per product, like a blog index.
+   Stacked on a phone; side by side from 900px, alternating sides. */
+.story-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.story {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+.story + .story {
+  margin-top: 48px;
+  padding-top: 48px;
+  border-top: 1px solid var(--line);
+}
+
+.story__media {
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--tile);
+}
+
+.story__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.story__media:hover img {
+  transform: scale(1.03);
+}
+
+.story__eyebrow {
+  margin: 0 0 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+}
+
+.story__title {
+  margin-bottom: 14px;
+  font-size: clamp(2rem, 4.5vw, 2.875rem);
+}
+
+.story__title a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.story__text {
+  max-width: 52ch;
+  margin: 0 0 20px;
   color: var(--muted);
+  font-size: 1.0625rem;
+}
+
+.story__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin: 0 0 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.story__facts dt {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.story__facts dd {
+  margin: 2px 0 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
 }
 
 .product-grid {
@@ -2381,6 +2466,21 @@ main:has(> .section--green:last-child) + .site-footer {
     padding-bottom: 104px;
   }
 
+  .story {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 64px;
+  }
+
+  .story + .story {
+    margin-top: 72px;
+    padding-top: 72px;
+  }
+
+  /* Every other story puts its photograph on the right. */
+  .story:nth-child(even) .story__media {
+    order: 2;
+  }
+
   .page-header {
     padding-block: 72px 48px;
   }
@@ -2703,6 +2803,7 @@ main:has(> .section--green:last-child) + .site-footer {
   .card__media img,
   .jcard__media img,
   .album__thumb img,
+  .story__media img,
   .btn-arrow__icon,
   .main-nav__sub,
   .menu-toggle__bars::before,
@@ -2714,6 +2815,7 @@ main:has(> .section--green:last-child) + .site-footer {
   .card__link:hover .card__media img,
   .jcard:hover .jcard__media img,
   .album__thumb:hover img,
+  .story__media:hover img,
   .btn-arrow:hover .btn-arrow__icon {
     transform: none;
   }

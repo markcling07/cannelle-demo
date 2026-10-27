@@ -4,15 +4,15 @@ import { notFound } from 'next/navigation'
 import type { Where } from 'payload'
 
 import { PageHeader } from '@/components/PageHeader'
-import { ProductCard } from '@/components/ProductCard'
+import { ProductStory } from '@/components/ProductStory'
 import { getGlobal, getPayloadClient, publishedIn } from '@/lib/content'
-import { isLocale, showingResults, t, type Locale } from '@/lib/locale'
+import { isLocale, t, type Locale } from '@/lib/locale'
 
 // Always read the database on request, so a product published in the
 // administration area appears on the public site straight away.
 export const dynamic = 'force-dynamic'
 
-const PAGE_SIZE = 9
+const PAGE_SIZE = 12
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>
 
@@ -34,7 +34,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-/** The professional catalogue: category filter and grid, no prices. */
+/**
+ * The professional catalogue, laid out like a blog index rather than a shop:
+ * a category filter, then one large story per product. No prices.
+ */
 export default async function ProductsPage({ params, searchParams }: PageProps) {
   const { locale: raw } = await params
   if (!isLocale(raw)) notFound()
@@ -110,19 +113,15 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
           )}
         </ul>
 
-        <p className="filter-meta">
-          {showingResults(products.docs.length, products.totalDocs, locale)}
-        </p>
-
         {products.docs.length === 0 ? (
           <p className="empty">{t('noProducts', locale)}</p>
         ) : (
-          <ul className="product-grid">
+          <ol className="story-list">
             {products.docs.map((product, index) => (
-              // The first row is above the fold on every screen size.
-              <ProductCard key={product.id} product={product} locale={locale} eager={index < 3} />
+              // Only the first story is above the fold.
+              <ProductStory key={product.id} product={product} locale={locale} eager={index === 0} />
             ))}
-          </ul>
+          </ol>
         )}
 
         {products.docs.length < products.totalDocs ? (

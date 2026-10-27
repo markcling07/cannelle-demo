@@ -88,7 +88,7 @@ const STRINGS = {
 
   // --- products -------------------------------------------------------------
   allProducts: { fr: 'Tout', en: 'All' },
-  viewProduct: { fr: 'Voir le produit', en: 'View product' },
+  viewProduct: { fr: 'Découvrir le produit', en: 'Discover the product' },
   backToProducts: { fr: '← Nos produits', en: '← Our products' },
   productPhotos: { fr: 'Photographies du produit', en: 'Product photographs' },
   technicalInfo: { fr: 'Fiche technique', en: 'Technical information' },
@@ -246,12 +246,6 @@ export const PARTNER_TYPE_KEYS = {
   institutional: 'partnerInstitutional',
   other: 'partnerOther',
 } as const satisfies Record<string, StringKey>
-
-/** "Affichage de 6 sur 12 résultats" / "Showing 6 of 12 results" */
-export const showingResults = (shown: number, total: number, locale: Locale): string =>
-  locale === 'fr'
-    ? `Affichage de ${shown} sur ${total} résultats`
-    : `Showing ${shown} of ${total} results`
 
 /** Fills a "{name}" placeholder in one of the strings above. */
 export const fill = (text: string, values: Record<string, string>): string =>
