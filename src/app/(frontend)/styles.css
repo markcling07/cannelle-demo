@@ -950,10 +950,11 @@ h3 {
   transform: scale(1.03);
 }
 
-/* Lead: a large photograph, the text panel overlapping its edge. */
+/* Lead: a large photograph and, beside it, a raised text panel. */
 .lead {
   display: grid;
   grid-template-columns: 1fr;
+  gap: 24px;
 }
 
 .lead__media {
@@ -963,7 +964,6 @@ h3 {
 
 .lead__panel {
   position: relative;
-  margin: -48px 16px 0;
   padding: 28px 24px;
   border-radius: 16px;
   background: var(--paper);
@@ -2584,14 +2584,12 @@ main:has(> .section--green:last-child) + .site-footer {
     margin-top: 112px;
   }
 
-  .lead {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    align-items: center;
+  /* Stacked until 1080px, so the photograph is kept wide and short here. */
+  .lead__media {
+    aspect-ratio: 16 / 10;
   }
 
-  /* The panel reaches back over the photograph's right edge. */
   .lead__panel {
-    margin: 0 0 0 -120px;
     padding: 44px 48px;
   }
 
@@ -2951,6 +2949,17 @@ main:has(> .section--green:last-child) + .site-footer {
   /* Shown in the top row instead (.header-contact). */
   .main-nav__item--cta {
     display: none;
+  }
+
+  /* The lead's photograph and text panel side by side, with room to read. */
+  .lead {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    align-items: center;
+    gap: 56px;
+  }
+
+  .lead__media {
+    aspect-ratio: 5 / 4;
   }
 }
 
