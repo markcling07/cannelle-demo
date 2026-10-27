@@ -23,17 +23,11 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const product = await findBySlug('products', slug, raw)
   if (!product?.title) return {}
 
-  const image = asMedia(product.image)
-
+  // The share card comes from opengraph-image.tsx beside this file.
   return {
     title: product.title,
     description: product.shortDescription ?? undefined,
     alternates: { canonical: `/${raw}/products/${product.slug}` },
-    openGraph: {
-      title: product.title,
-      description: product.shortDescription ?? undefined,
-      images: image ? [{ url: bestUrl(image, 'hero') }] : undefined,
-    },
   }
 }
 

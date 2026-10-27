@@ -78,6 +78,26 @@ them New / In progress / Closed and can keep internal notes.
 **No email is sent** — there is no mail service connected, and none can be
 added without a subscription decision. A hidden field catches most spam bots.
 
+### Share cards
+
+A link shared on WhatsApp, Facebook, LinkedIn or X shows a 1200 × 630 card
+in the Group's green: the logo and name, the page's title and short text, and
+its photo.
+
+- **Products, news, companies, projects** — the item's own title, summary and
+  main photo, with its category and company, date, country or progress above
+  the title.
+- **List pages** — the title and introduction from *Section introductions*,
+  with the logo as a seal.
+- **Home, About** — the banner or page title, text and photo.
+
+Cards are drawn from the current content when a network asks for one, so
+nothing extra is edited in the admin. Networks keep their own copy for a
+while; [Facebook's Sharing Debugger](https://developers.facebook.com/tools/debug/)
+and LinkedIn's [Post Inspector](https://www.linkedin.com/post-inspector/)
+fetch a fresh one. Each page's card is the `opengraph-image.tsx` beside it;
+the layout is in `src/lib/shareCard.tsx`.
+
 ---
 
 ## Running it locally
@@ -133,7 +153,7 @@ because its file system is not writable between requests.
 | `DATABASE_URL` | the Neon connection string |
 | `PAYLOAD_SECRET` | a long random string — `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
 | `BLOB_READ_WRITE_TOKEN` | the Blob token |
-| `NEXT_PUBLIC_SERVER_URL` | `https://<your-project>.vercel.app` (optional — Vercel's own address is used when empty) |
+| `NEXT_PUBLIC_SERVER_URL` | `https://<your-project>.vercel.app` (optional — Vercel's own address is used when empty; set it to the Group's domain once there is one, so share cards and media links use it) |
 
 **4. Seed the deployed database** — point your local `.env` at the Neon
 connection string and the Blob token, then run `npm run seed` once.
@@ -281,6 +301,10 @@ src/
     content.ts             shared look-ups: by address, translations, globals
     locale.ts              interface wording in both languages
     media.ts               picks the right image size
+    metadata.ts            site name and language for social networks
+    shareCard.tsx          draws the share cards
+    siteUrl.ts             the site's public address
+  assets/fonts/            the two typefaces as WOFF, for the share cards
   components/              menu, product card, gallery, photo viewer, forms…
   app/(payload)/           the admin panel (from the Payload template)
   app/(frontend)/

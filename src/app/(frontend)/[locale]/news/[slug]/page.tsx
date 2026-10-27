@@ -5,8 +5,8 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 
 import { MediaImage } from '@/components/MediaImage'
 import { findBySlug, redirectToTranslation } from '@/lib/content'
-import { asMedia, bestUrl } from '@/lib/media'
 import { formatDate, isLocale, t, type Locale } from '@/lib/locale'
+import { siteOpenGraph } from '@/lib/metadata'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,18 +19,17 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const post = await findBySlug('posts', slug, raw)
   if (!post?.title) return {}
 
-  const cover = asMedia(post.coverImage)
-
+  // The share card comes from opengraph-image.tsx beside this file.
   return {
     title: post.title,
     description: post.excerpt ?? undefined,
     alternates: { canonical: `/${raw}/news/${post.slug}` },
     openGraph: {
+      ...(await siteOpenGraph(raw)),
       type: 'article',
       title: post.title,
       description: post.excerpt ?? undefined,
       publishedTime: post.publishedAt ?? undefined,
-      images: cover ? [{ url: bestUrl(cover, 'hero') }] : undefined,
     },
   }
 }

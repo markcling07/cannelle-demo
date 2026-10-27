@@ -9,6 +9,8 @@ import { MainNav, type NavItem } from '@/components/MainNav'
 import { getCompanies, getGlobal } from '@/lib/content'
 import { LOCALES, isLocale, t, type Locale } from '@/lib/locale'
 import { asMedia, bestUrl } from '@/lib/media'
+import { siteOpenGraph } from '@/lib/metadata'
+import { SITE_URL } from '@/lib/siteUrl'
 import '../styles.css'
 
 // Fetched at build time and served from the site itself: no request to
@@ -49,9 +51,12 @@ export async function generateMetadata({
   const logo = asMedia(settings?.logo)
 
   return {
+    // Share cards and canonical links are written as full addresses on this base.
+    metadataBase: new URL(SITE_URL),
     title: { default: name, template: `%s — ${name}` },
     description: settings?.tagline ?? undefined,
     icons: logo?.url ? { icon: bestUrl(logo, 'thumbnail') } : undefined,
+    openGraph: await siteOpenGraph(locale),
   }
 }
 

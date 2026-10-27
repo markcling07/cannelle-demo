@@ -26,6 +26,7 @@ import { HomePage } from './globals/HomePage'
 import { LegalPages } from './globals/LegalPages'
 import { SectionIntros } from './globals/SectionIntros'
 import { SiteSettings } from './globals/SiteSettings'
+import { SITE_URL } from './lib/siteUrl'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -55,7 +56,7 @@ const database = usePostgres
     })
 
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'),
+  serverURL: SITE_URL,
 
   admin: {
     user: Users.slug,

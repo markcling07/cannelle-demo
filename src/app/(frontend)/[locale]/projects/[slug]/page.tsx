@@ -6,7 +6,6 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Company } from '@/payload-types'
 import { MediaImage } from '@/components/MediaImage'
 import { findBySlug, redirectToTranslation } from '@/lib/content'
-import { asMedia, bestUrl } from '@/lib/media'
 import { PROJECT_STATUS_KEYS, isLocale, t, type Locale } from '@/lib/locale'
 
 export const dynamic = 'force-dynamic'
@@ -20,13 +19,11 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const project = await findBySlug('projects', slug, raw, 1)
   if (!project?.title) return {}
 
-  const cover = asMedia(project.coverImage)
-
+  // The share card comes from opengraph-image.tsx beside this file.
   return {
     title: project.title,
     description: project.summary ?? undefined,
     alternates: { canonical: `/${raw}/projects/${project.slug}` },
-    openGraph: { images: cover ? [{ url: bestUrl(cover, 'hero') }] : undefined },
   }
 }
 

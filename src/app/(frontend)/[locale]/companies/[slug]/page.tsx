@@ -6,7 +6,6 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import { MediaImage } from '@/components/MediaImage'
 import { ProductCard } from '@/components/ProductCard'
 import { findBySlug, getPayloadClient, publishedIn, redirectToTranslation } from '@/lib/content'
-import { asMedia, bestUrl } from '@/lib/media'
 import { fill, isLocale, t, type Locale } from '@/lib/locale'
 
 export const dynamic = 'force-dynamic'
@@ -20,13 +19,11 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const company = await findBySlug('companies', slug, raw, 1)
   if (!company) return {}
 
-  const cover = asMedia(company.coverImage)
-
+  // The share card comes from opengraph-image.tsx beside this file.
   return {
     title: `${company.shortName} — ${company.name}`,
     description: company.summary ?? company.tagline ?? undefined,
     alternates: { canonical: `/${raw}/companies/${company.slug}` },
-    openGraph: { images: cover ? [{ url: bestUrl(cover, 'hero') }] : undefined },
   }
 }
 
