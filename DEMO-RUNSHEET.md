@@ -79,8 +79,11 @@ day, keep it open on a second screen.
 
 ### 1. The home page — 3 min
 
-Open `/fr`. Let the banner sit for a second, then scroll to **Notre
-organisation**.
+Open the bare site address: it lands on **Actualités**, which is what a
+visitor sees first. **Say:** *"Visitors arrive on the news, so the site
+always looks alive."* Then click the **GROUPE JAOVAZAHA logo** to reach the
+institutional home page (`/fr`). Let the banner sit for a second, then scroll
+to **Notre organisation**.
 
 Point at the diagram: GROUPE JAOVAZAHA on top, a line down to **MFC —
 Madagascar** and **EAC — France**, and a dashed card for **Projets futurs**.

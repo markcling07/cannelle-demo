@@ -47,6 +47,11 @@ statement and the Group's contact details are under **Settings → Site settings
 Every address exists in both languages: `/fr/...` and `/en/...`. The old
 `/journal` addresses redirect to `/news`.
 
+**Visitors land on News.** Opening the bare site address goes to `/fr/news`.
+The institutional home page with the Group above MFC and EAC stays at `/fr`
+and `/en`, and the logo in the header always leads there. The landing page is
+set in `src/proxy.ts`.
+
 ### Product pages
 
 As asked, the catalogue has **no prices, stock, basket, "Buy now" or
@@ -285,7 +290,7 @@ src/
   seed/seed.ts             builds the sample content
   seed/institutional.ts    the fictional texts: companies, team, projects, news…
   seed/images/             the photographs the seed uploads
-  proxy.ts                 sends "/" to "/fr"
+  proxy.ts                 sends "/" to "/fr/news", the landing page
 ```
 
 ---
