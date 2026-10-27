@@ -1,27 +1,30 @@
 /* ---------------------------------------------------------------------------
    GROUPE JAOVAZAHA — public site.
-   Institutional look taken from the logo: deep green, gold, cream paper,
-   serif headings. Mobile first — base rules target a phone, media queries
-   add columns.
+   The Group's official colours: deep forest green, elegant gold, warm
+   ivory, dark charcoal; serif headings. Mobile first — base rules target a
+   phone, media queries add columns.
    --------------------------------------------------------------------------- */
 
 :root {
-  /* Sampled from the logo. Swap for the official values when the brand
-     guide arrives — everything below reads from these. */
-  --green-900: #15301b;
-  --green-800: #1d3d23;
-  --green-700: #2b5633;
-  --green-100: #e6ece2;
-  --gold: #a87830;
-  --gold-dark: #8a6226;
-  --gold-100: #f4ead6;
+  /* Official colours supplied by GROUPE JAOVAZAHA. */
+  --green-900: #0b4f3c; /* deep forest green — primary */
+  --gold: #d4af37; /* elegant gold — accent: borders, lines, buttons, details */
+  --paper: #f7f4ea; /* warm ivory — main background */
+  --ink: #222222; /* dark charcoal — text */
 
-  --ink: #1c241d;
-  --muted: #687064;
-  --line: #e4ddcc;
-  --paper: #fffdf8;
-  --cream: #f6f1e4;
-  --tile: #efe9da;
+  /* Shades derived from them. The official gold is too light to be read as
+     text on ivory (1.9:1), so small gold text uses --gold-dark (4.8:1 on
+     the ivory bands), and gold buttons carry charcoal text. */
+  --green-800: #093f30;
+  --green-700: #0e6249;
+  --green-100: #e2ede8;
+  --gold-dark: #7e610c;
+  --gold-100: #f3e6bc;
+
+  --muted: #5e655c;
+  --line: #ddd5bf;
+  --cream: #eee8d6;
+  --tile: #e6dfcb;
   --error: #b3261e;
 
   --radius: 10px;
@@ -153,6 +156,9 @@ h3 {
   height: 52px;
   object-fit: contain;
   flex: none;
+  /* The current logo file has a white background; multiplying lets the
+     ivory page show through it. A transparent PNG or SVG is unaffected. */
+  mix-blend-mode: multiply;
 }
 
 .brand__name {
@@ -451,11 +457,12 @@ h3 {
 
 .btn--gold {
   background: var(--gold);
-  color: #fff;
+  color: var(--ink);
 }
 
+/* A slightly deeper gold, so the charcoal text stays readable. */
 .btn--gold:hover {
-  background: var(--gold-dark);
+  background: #c49f2a;
 }
 
 .btn--outline {
@@ -504,7 +511,7 @@ h3 {
 }
 
 .btn-arrow:hover {
-  background: #eedfbf;
+  background: #ecdba4;
 }
 
 .btn-arrow__icon {
@@ -602,8 +609,8 @@ h3 {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgb(21 48 27 / 88%), rgb(21 48 27 / 30%) 55%, rgb(21 48 27 / 5%)),
-    linear-gradient(to right, rgb(21 48 27 / 55%), rgb(21 48 27 / 0%) 70%);
+    linear-gradient(to top, rgb(11 79 60 / 88%), rgb(11 79 60 / 30%) 55%, rgb(11 79 60 / 5%)),
+    linear-gradient(to right, rgb(11 79 60 / 55%), rgb(11 79 60 / 0%) 70%);
   pointer-events: none;
 }
 
@@ -665,7 +672,7 @@ h3 {
 .org__root-label {
   margin: 6px 0 0;
   font-size: 0.8125rem;
-  color: var(--gold-100);
+  color: var(--gold);
 }
 
 /* Phone: the companies hang off a rail that starts right under the Group's
@@ -759,7 +766,7 @@ h3 {
 .org-card__text {
   margin: 0 0 18px;
   font-size: 0.9375rem;
-  color: #3f463e;
+  color: var(--ink);
 }
 
 .org-card .section__link {
@@ -1195,7 +1202,7 @@ h3 {
   margin: 0;
   padding: 4px 11px;
   border-radius: var(--radius-pill);
-  background: rgb(21 48 27 / 78%);
+  background: rgb(11 79 60 / 78%);
   color: #fff;
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
@@ -1278,7 +1285,7 @@ h3 {
   font-size: 2.25rem;
   font-weight: 600;
   line-height: 1;
-  color: var(--gold);
+  color: var(--gold-dark);
 }
 
 .value__title {
@@ -1319,7 +1326,7 @@ h3 {
 
 .founder__role {
   margin: 6px 0 18px;
-  color: var(--gold-100);
+  color: var(--gold);
   font-weight: 500;
 }
 
@@ -1432,7 +1439,7 @@ h3 {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgb(21 48 27 / 92%), rgb(21 48 27 / 35%) 70%);
+  background: linear-gradient(to top, rgb(11 79 60 / 92%), rgb(11 79 60 / 35%) 70%);
 }
 
 .company-hero__inner {
@@ -1902,8 +1909,8 @@ select.input {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgb(21 48 27 / 82%), rgb(21 48 27 / 22%) 50%, rgb(21 48 27 / 0%) 72%),
-    linear-gradient(to right, rgb(21 48 27 / 35%), rgb(21 48 27 / 0%) 60%);
+    linear-gradient(to top, rgb(11 79 60 / 82%), rgb(11 79 60 / 22%) 50%, rgb(11 79 60 / 0%) 72%),
+    linear-gradient(to right, rgb(11 79 60 / 35%), rgb(11 79 60 / 0%) 60%);
   pointer-events: none;
 }
 
@@ -1967,7 +1974,7 @@ select.input {
 }
 
 .statement__accent {
-  color: var(--gold);
+  color: var(--gold-dark);
 }
 
 .jintro__grid {
@@ -2026,7 +2033,7 @@ select.input {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgb(21 48 27 / 85%), rgb(21 48 27 / 25%) 60%, rgb(21 48 27 / 5%));
+  background: linear-gradient(to top, rgb(11 79 60 / 85%), rgb(11 79 60 / 25%) 60%, rgb(11 79 60 / 5%));
   pointer-events: none;
 }
 
@@ -2105,7 +2112,7 @@ select.input {
   top: 12px;
   right: 0;
   font-size: 0.6875rem;
-  color: var(--gold-100);
+  color: var(--gold);
   font-variant-numeric: tabular-nums;
 }
 
@@ -2375,7 +2382,7 @@ main:has(> .section--green:last-child) + .site-footer {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gold-100);
+  color: var(--gold);
 }
 
 .site-footer__links {
@@ -2622,7 +2629,7 @@ main:has(> .section--green:last-child) + .site-footer {
   }
 
   .jfeature::after {
-    background: linear-gradient(to left, rgb(21 48 27 / 85%), rgb(21 48 27 / 50%) 50%, rgb(21 48 27 / 0%) 85%);
+    background: linear-gradient(to left, rgb(11 79 60 / 85%), rgb(11 79 60 / 50%) 50%, rgb(11 79 60 / 0%) 85%);
   }
 
   .jfeature__panel {
@@ -2763,7 +2770,7 @@ main:has(> .section--green:last-child) + .site-footer {
     border: 1px solid var(--line);
     border-radius: 12px;
     background: var(--paper);
-    box-shadow: 0 12px 32px rgb(21 48 27 / 14%);
+    box-shadow: 0 12px 32px rgb(11 79 60 / 14%);
     opacity: 0;
     visibility: hidden;
     transform: translateY(4px);

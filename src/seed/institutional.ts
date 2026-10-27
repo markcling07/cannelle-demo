@@ -38,7 +38,7 @@ export const companies: CompanySeed[] = [
     shortName: 'MFC',
     name: 'Madagascar Fragrances Company',
     initials: 'MFC',
-    colour: '#1d3d23',
+    colour: '#0b4f3c',
     cover: 'journal-cacao-fermentation',
     order: 1,
     email: 'mfc@demo.local',
@@ -86,7 +86,7 @@ export const companies: CompanySeed[] = [
     shortName: 'EAC',
     name: 'EURUSA AFRASIA CORPORATION',
     initials: 'EAC',
-    colour: '#8a6226',
+    colour: '#7e610c',
     cover: 'journal-conserver-epices',
     order: 2,
     email: 'eac@demo.local',
@@ -150,7 +150,7 @@ export const team: TeamSeed[] = [
   {
     name: 'Nom du fondateur · Founder’s name',
     initials: 'GJ',
-    colour: '#15301b',
+    colour: '#0b4f3c',
     company: null,
     founder: true,
     order: 0,
@@ -163,7 +163,7 @@ export const team: TeamSeed[] = [
   {
     name: 'Mialy Razafindrabe',
     initials: 'MR',
-    colour: '#2b5633',
+    colour: '#0e6249',
     company: null,
     order: 1,
     role: { fr: 'Coordinatrice du Groupe', en: 'Group coordinator' },
@@ -175,7 +175,7 @@ export const team: TeamSeed[] = [
   {
     name: 'Hanta Rakoto',
     initials: 'HR',
-    colour: '#1d3d23',
+    colour: '#0b4f3c',
     company: 'mfc',
     order: 2,
     role: { fr: 'Directrice générale', en: 'Managing Director' },
@@ -199,7 +199,7 @@ export const team: TeamSeed[] = [
   {
     name: 'Léa Marchand',
     initials: 'LM',
-    colour: '#8a6226',
+    colour: '#7e610c',
     company: 'eac',
     order: 4,
     role: { fr: 'Directrice commerciale Europe', en: 'Sales Director, Europe' },
@@ -346,7 +346,7 @@ export const partners: PartnerSeed[] = [
   {
     name: 'Coopérative Tsara Vanilla',
     initials: 'TV',
-    colour: '#2b5633',
+    colour: '#0e6249',
     type: 'cooperative',
     order: 1,
     country: { fr: 'Madagascar', en: 'Madagascar' },
@@ -382,7 +382,7 @@ export const partners: PartnerSeed[] = [
   {
     name: 'Laboratoire Qualis Analyse',
     initials: 'QA',
-    colour: '#8a6226',
+    colour: '#7e610c',
     type: 'laboratory',
     order: 4,
     country: { fr: 'France', en: 'France' },
@@ -453,7 +453,7 @@ export type NewsSeed = {
   en: { title: string; excerpt: string; body: string[] }
 }
 
-export const NEWS_AUTHOR = { name: 'Communication GROUPE JAOVAZAHA', initials: 'GJ', colour: '#15301b' }
+export const NEWS_AUTHOR = { name: 'Communication GROUPE JAOVAZAHA', initials: 'GJ', colour: '#0b4f3c' }
 
 export const news: NewsSeed[] = [
   {
