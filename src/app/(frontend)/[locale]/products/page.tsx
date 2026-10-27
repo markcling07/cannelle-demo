@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import type { Where } from 'payload'
 
 import { PageHeader } from '@/components/PageHeader'
-import { ProductStory } from '@/components/ProductStory'
+import { ProductStories } from '@/components/ProductStories'
 import { getGlobal, getPayloadClient, publishedIn } from '@/lib/content'
 import { isLocale, t, type Locale } from '@/lib/locale'
 
@@ -35,8 +35,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 /**
- * The professional catalogue, laid out like a blog index rather than a shop:
- * a category filter, then one large story per product. No prices.
+ * The professional catalogue, laid out like a magazine rather than a shop:
+ * a category filter, then the products in blocks of varied shapes. No prices.
  */
 export default async function ProductsPage({ params, searchParams }: PageProps) {
   const { locale: raw } = await params
@@ -116,12 +116,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
         {products.docs.length === 0 ? (
           <p className="empty">{t('noProducts', locale)}</p>
         ) : (
-          <ol className="story-list">
-            {products.docs.map((product, index) => (
-              // Only the first story is above the fold.
-              <ProductStory key={product.id} product={product} locale={locale} eager={index === 0} />
-            ))}
-          </ol>
+          <ProductStories products={products.docs} locale={locale} />
         )}
 
         {products.docs.length < products.totalDocs ? (

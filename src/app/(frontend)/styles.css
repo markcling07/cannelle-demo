@@ -907,46 +907,132 @@ h3 {
   font-weight: 500;
 }
 
-/* The catalogue page: one large story per product, like a blog index.
-   Stacked on a phone; side by side from 900px, alternating sides. */
-.story-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* --- the catalogue, laid out like a magazine ---------------------------------
+   Products are dealt into blocks of different shapes (ProductStories.tsx):
+   lead, pair, split, trio, band. Everything stacks on a phone. */
+.catalogue > * + * {
+  margin-top: 64px;
 }
 
-.story {
-  display: grid;
-  gap: 24px;
-  grid-template-columns: 1fr;
-  align-items: center;
-}
-
-.story + .story {
-  margin-top: 48px;
-  padding-top: 48px;
-  border-top: 1px solid var(--line);
-}
-
-.story__media {
+/* Every photograph in the catalogue: rounded, filled, a slow zoom on hover. */
+.lead__media,
+.tile__media,
+.split-story__media,
+.band-story__media {
   display: block;
-  aspect-ratio: 4 / 3;
-  border-radius: 14px;
   overflow: hidden;
   background: var(--tile);
 }
 
-.story__media img {
+.lead__media img,
+.tile__media img,
+.split-story__media img,
+.band-story__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.5s ease;
 }
 
-.story__media:hover img {
+.lead__media:hover img,
+.tile__media:hover img,
+.split-story__media:hover img,
+.band-story__media:hover img {
   transform: scale(1.03);
 }
 
+/* Lead: a large photograph, the text panel overlapping its edge. */
+.lead {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.lead__media {
+  aspect-ratio: 5 / 4;
+  border-radius: 18px;
+}
+
+.lead__panel {
+  position: relative;
+  margin: -48px 16px 0;
+  padding: 28px 24px;
+  border-radius: 16px;
+  background: var(--paper);
+  box-shadow: 0 18px 50px rgb(21 48 27 / 12%);
+}
+
+/* Pair and trio: cards; the pair's second card sits lower on a desktop. */
+.tiles {
+  display: grid;
+  gap: 48px 32px;
+  grid-template-columns: 1fr;
+}
+
+.tile__media {
+  aspect-ratio: 4 / 3;
+  margin-bottom: 18px;
+  border-radius: 14px;
+}
+
+.tile--small .tile__media {
+  aspect-ratio: 1;
+}
+
+/* Split: photograph and text on a cream panel, sides alternating. */
+.split-story {
+  display: grid;
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--cream);
+}
+
+.split-story__media {
+  aspect-ratio: 4 / 3;
+}
+
+.split-story__body {
+  padding: 28px 24px 32px;
+}
+
+/* Band: the product on the brand green, with a quotation button. */
+.band-story {
+  display: grid;
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--green-900);
+  color: #fff;
+}
+
+.band-story__media {
+  order: -1;
+  aspect-ratio: 4 / 3;
+}
+
+.band-story__body {
+  padding: 32px 24px 36px;
+}
+
+.band-story .story__eyebrow {
+  color: var(--gold-100);
+}
+
+.band-story .story__title {
+  color: #fff;
+}
+
+.band-story .story__text {
+  color: rgb(255 255 255 / 82%);
+}
+
+.band-story .story__facts {
+  border-top-color: rgb(255 255 255 / 18%);
+}
+
+.band-story .story__facts dt {
+  color: rgb(255 255 255 / 65%);
+}
+
+/* Text shared by every block. */
 .story__eyebrow {
   margin: 0 0 10px;
   font-size: 0.75rem;
@@ -957,8 +1043,21 @@ h3 {
 }
 
 .story__title {
-  margin-bottom: 14px;
-  font-size: clamp(2rem, 4.5vw, 2.875rem);
+  margin-bottom: 12px;
+  font-size: clamp(1.875rem, 4vw, 2.5rem);
+}
+
+.story__title--xl {
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+}
+
+.story__title--md {
+  font-size: clamp(1.625rem, 3vw, 2rem);
+}
+
+.story__title--sm {
+  margin-bottom: 8px;
+  font-size: 1.375rem;
 }
 
 .story__title a:hover {
@@ -2466,19 +2565,61 @@ main:has(> .section--green:last-child) + .site-footer {
     padding-bottom: 104px;
   }
 
-  .story {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: 64px;
+  .catalogue > * + * {
+    margin-top: 112px;
   }
 
-  .story + .story {
-    margin-top: 72px;
-    padding-top: 72px;
+  .lead {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
   }
 
-  /* Every other story puts its photograph on the right. */
-  .story:nth-child(even) .story__media {
+  /* The panel reaches back over the photograph's right edge. */
+  .lead__panel {
+    margin: 0 0 0 -120px;
+    padding: 44px 48px;
+  }
+
+  .tiles--pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px;
+  }
+
+  .tiles--pair .tile:nth-child(2) {
+    margin-top: 112px;
+  }
+
+  .tiles--trio {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .split-story {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .split-story__media {
+    aspect-ratio: auto;
+    min-height: 460px;
+  }
+
+  .split-story--flip .split-story__media {
     order: 2;
+  }
+
+  .split-story__body,
+  .band-story__body {
+    align-self: center;
+    padding: 56px;
+  }
+
+  .band-story {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+
+  .band-story__media {
+    order: 0;
+    aspect-ratio: auto;
+    min-height: 480px;
   }
 
   .page-header {
@@ -2803,7 +2944,10 @@ main:has(> .section--green:last-child) + .site-footer {
   .card__media img,
   .jcard__media img,
   .album__thumb img,
-  .story__media img,
+  .lead__media img,
+  .tile__media img,
+  .split-story__media img,
+  .band-story__media img,
   .btn-arrow__icon,
   .main-nav__sub,
   .menu-toggle__bars::before,
@@ -2815,7 +2959,10 @@ main:has(> .section--green:last-child) + .site-footer {
   .card__link:hover .card__media img,
   .jcard:hover .jcard__media img,
   .album__thumb:hover img,
-  .story__media:hover img,
+  .lead__media:hover img,
+  .tile__media:hover img,
+  .split-story__media:hover img,
+  .band-story__media:hover img,
   .btn-arrow:hover .btn-arrow__icon {
     transform: none;
   }
