@@ -242,7 +242,7 @@ this list and restore the previous version."*
 ### 10. Unpublish and delete — 1 min
 
 **⋮** menu (top right of the form) → **Annuler la publication** first. Reload the public page: gone, but the
-product is still in the admin. Then **⋯** → **Supprimer** → confirm.
+product is still in the admin. Then **⋮** → **Supprimer** → confirm.
 
 **Say:** *"Unpublish is usually what you want — it takes it off the site and
 keeps everything. Delete is permanent."*
