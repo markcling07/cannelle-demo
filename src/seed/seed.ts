@@ -898,7 +898,7 @@ const seed = async () => {
         location: project.fr.location,
         period: project.fr.period,
         coverImage: coverId,
-        status: project.status,
+        progress: project.status,
         company: project.company ? companyIds[project.company] : null,
         order: project.order,
         _status: 'published',

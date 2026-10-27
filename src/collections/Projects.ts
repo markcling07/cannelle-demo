@@ -18,7 +18,7 @@ export const Projects: CollectionConfig = {
 
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'status', 'company', '_status'],
+    defaultColumns: ['title', 'progress', 'company', '_status'],
     group: ADMIN_GROUPS.group,
   },
 
@@ -90,7 +90,7 @@ export const Projects: CollectionConfig = {
     slugField(),
 
     {
-      name: 'status',
+      name: 'progress',
       type: 'select',
       required: true,
       defaultValue: 'planned',

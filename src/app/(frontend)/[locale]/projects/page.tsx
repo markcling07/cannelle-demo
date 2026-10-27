@@ -70,8 +70,8 @@ export default async function ProjectsPage({ params }: PageProps) {
                         sizes="(max-width: 900px) 100vw, 33vw"
                         eager={index < 3}
                       />
-                      <span className="badge card__badge" data-status={project.status}>
-                        {t(PROJECT_STATUS_KEYS[project.status], locale)}
+                      <span className="badge card__badge" data-status={project.progress}>
+                        {t(PROJECT_STATUS_KEYS[project.progress], locale)}
                       </span>
                     </div>
 

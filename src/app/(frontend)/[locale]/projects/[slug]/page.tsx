@@ -62,8 +62,8 @@ export default async function ProjectPage({ params }: PageParams) {
 
       <article className="article">
         <p>
-          <span className="badge" data-status={project.status}>
-            {t(PROJECT_STATUS_KEYS[project.status], locale)}
+          <span className="badge" data-status={project.progress}>
+            {t(PROJECT_STATUS_KEYS[project.progress], locale)}
           </span>
         </p>
 

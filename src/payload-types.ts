@@ -434,7 +434,7 @@ export interface Project {
    * Leave empty to generate it from the title. Separate for each language.
    */
   slug?: string | null;
-  status: 'planned' | 'in-progress' | 'completed';
+  progress: 'planned' | 'in-progress' | 'completed';
   /**
    * Leave empty for a Group project.
    */
@@ -770,7 +770,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   location?: T;
   period?: T;
   slug?: T;
-  status?: T;
+  progress?: T;
   company?: T;
   order?: T;
   updatedAt?: T;
