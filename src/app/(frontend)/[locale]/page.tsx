@@ -1,222 +1,257 @@
+import type { CSSProperties } from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
-import { getPayload } from 'payload'
-import config from '@payload-config'
-import type { Where } from 'payload'
 
-import { NewsletterForm } from '@/components/NewsletterForm'
-import { SortSelect, type SortKey } from '@/components/SortSelect'
-import { asMedia, buildSrcSet, bestUrl } from '@/lib/media'
-import { Stars } from '@/components/Stars'
-import { reviewStats } from '@/lib/reviews'
-import {
-  formatPrice,
-  isLocale,
-  ratingLabel,
-  showingResults,
-  stockStatus,
-  t,
-  type Locale,
-} from '@/lib/locale'
+import type { Product } from '@/payload-types'
+import { Arrow } from '@/components/Arrow'
+import { MediaImage } from '@/components/MediaImage'
+import { ProductCard } from '@/components/ProductCard'
+import { getCompanies, getGlobal, getPayloadClient, publishedIn } from '@/lib/content'
+import { asMedia } from '@/lib/media'
+import { fill, formatDate, isLocale, t, type Locale } from '@/lib/locale'
 
-// Always read the database on request, so a product published in the
-// administration area appears on the public site straight away.
+// Read on every request, so a change saved in the administration area shows
+// up straight away.
 export const dynamic = 'force-dynamic'
 
-const PAGE_SIZE = 6
+const isPublishedProduct = (value: number | Product): value is Product =>
+  typeof value === 'object' && value._status === 'published' && Boolean(value.title)
 
-const SORT_ORDER: Record<SortKey, string> = {
-  default: '-publishedAt',
-  'price-asc': 'price',
-  'price-desc': '-price',
-}
-
-type SearchParams = Promise<Record<string, string | string[] | undefined>>
-
-const first = (value: string | string[] | undefined): string | undefined =>
-  Array.isArray(value) ? value[0] : value
-
-export default async function CataloguePage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ locale: string }>
-  searchParams: SearchParams
-}) {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params
   if (!isLocale(raw)) notFound()
   const locale: Locale = raw
+  const base = `/${locale}`
 
-  const query = await searchParams
-  const activeCategory = first(query.category) ?? null
-  const sort = (first(query.sort) ?? 'default') as SortKey
-  const sortKey: SortKey = sort in SORT_ORDER ? sort : 'default'
-  const show = Math.max(PAGE_SIZE, Number(first(query.show)) || PAGE_SIZE)
+  const payload = await getPayloadClient()
 
-  const payload = await getPayload({ config })
-
-  const categories = await payload.find({
-    collection: 'categories',
-    locale,
-    limit: 20,
-    depth: 0,
-    sort: 'createdAt',
-  })
-
-  const selected = activeCategory
-    ? categories.docs.find((category) => category.slug === activeCategory)
-    : undefined
-
-  const conditions: Where[] = [
-    // Published only — drafts stay private to the administration area.
-    { _status: { equals: 'published' } },
-    // Skip anything not yet translated into this language.
-    { title: { exists: true } },
-  ]
-
-  if (selected) conditions.push({ category: { equals: selected.id } })
-
-  const [settings, products] = await Promise.all([
-    payload.findGlobal({ slug: 'site-settings', locale, depth: 0 }),
+  const [home, settings, companies, news, partners] = await Promise.all([
+    getGlobal('home-page', locale, 2),
+    getGlobal('site-settings', locale),
+    getCompanies(locale),
     payload.find({
-      collection: 'products',
+      collection: 'posts',
       locale,
       depth: 1,
-      limit: show,
-      sort: SORT_ORDER[sortKey],
+      limit: 3,
+      sort: '-publishedAt',
       draft: false,
-      where: { and: conditions },
+      where: { and: publishedIn() },
     }),
+    payload.find({ collection: 'partners', locale, depth: 1, limit: 8, sort: 'order' }),
   ])
 
-  /** Keeps the current sort when switching category, and restarts paging. */
-  const categoryHref = (slug: string | null): string => {
-    const next = new URLSearchParams()
-    if (slug) next.set('category', slug)
-    if (sortKey !== 'default') next.set('sort', sortKey)
-    const search = next.toString()
-    return search ? `/${locale}?${search}` : `/${locale}`
+  // The products chosen on the home page, or the latest ones if none are.
+  let featured = (home.featuredProducts ?? []).filter(isPublishedProduct)
+  if (featured.length === 0) {
+    const latest = await payload.find({
+      collection: 'products',
+      locale,
+      depth: 2,
+      limit: 3,
+      sort: '-publishedAt',
+      draft: false,
+      where: { and: publishedIn() },
+    })
+    featured = latest.docs
   }
 
-  const seeMoreHref = (): string => {
-    const next = new URLSearchParams()
-    if (activeCategory) next.set('category', activeCategory)
-    if (sortKey !== 'default') next.set('sort', sortKey)
-    next.set('show', String(show + PAGE_SIZE))
-    return `/${locale}?${next.toString()}`
-  }
-
-  const hasMore = products.docs.length < products.totalDocs
-  const ratings = await reviewStats(products.docs.map((product) => product.id))
+  const logo = asMedia(settings?.logo)
+  const siteName = settings?.siteName ?? 'GROUPE JAOVAZAHA'
 
   return (
-    <div className="container">
-      <h1 className="page-title">{t('catalogue', locale)}</h1>
+    <>
+      {/* --- hero ---------------------------------------------------------- */}
+      <section className="hero">
+        <MediaImage media={home.hero?.image} size="hero" sizes="100vw" className="hero__img" eager />
 
-      <div className="filter-bar">
-        <ul className="filter-pills">
-          <li>
-            <Link
-              href={categoryHref(null)}
-              className={activeCategory ? 'pill' : 'pill is-active'}
-              aria-current={activeCategory ? undefined : 'true'}
-            >
-              {t('allProducts', locale)}
+        <div className="container hero__inner">
+          {home.hero?.eyebrow ? <p className="eyebrow eyebrow--light">{home.hero.eyebrow}</p> : null}
+          <h1 className="hero__title">{home.hero?.title || siteName}</h1>
+          {home.hero?.text ? <p className="hero__text">{home.hero.text}</p> : null}
+
+          <div className="btn-row">
+            <Link href={`${base}/about`} className="btn btn--gold">
+              {t('aboutGroup', locale)}
             </Link>
-          </li>
-
-          {categories.docs.map((category) =>
-            category.slug && category.title ? (
-              <li key={category.id}>
-                <Link
-                  href={categoryHref(category.slug)}
-                  className={activeCategory === category.slug ? 'pill is-active' : 'pill'}
-                  aria-current={activeCategory === category.slug ? 'true' : undefined}
-                >
-                  {category.title}
-                </Link>
-              </li>
-            ) : null,
-          )}
-        </ul>
-
-        <div className="filter-meta">
-          <span>{showingResults(products.docs.length, products.totalDocs, locale)}</span>
-          <Suspense fallback={null}>
-            <SortSelect current={sortKey} locale={locale} />
-          </Suspense>
+            <Link href={`${base}/products`} className="btn btn--light">
+              {t('products', locale)}
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {products.docs.length === 0 ? (
-        <p className="empty">{t('noProducts', locale)}</p>
-      ) : (
-        <ul className="product-grid">
-          {products.docs.map((product, index) => {
-            const image = asMedia(product.image)
-            const price = formatPrice(product.price, product.currency, locale)
-            // The first row is above the fold on every screen size, so those
-            // images load straight away instead of waiting for a scroll.
-            const eager = index < 3
-            const rating = ratings.get(product.id)
-            const soldOut = stockStatus(product.stock, product.inStock, locale).tone === 'out'
+      {/* --- the Group above its companies --------------------------------- */}
+      <section className="section" aria-labelledby="structure-title">
+        <div className="container">
+          <div className="section__head">
+            <div>
+              <p className="eyebrow">{t('ourStructure', locale)}</p>
+              <h2 id="structure-title" className="section__title">
+                {home.structure?.title || t('companies', locale)}
+              </h2>
+              {home.structure?.text ? <p className="section__intro">{home.structure.text}</p> : null}
+            </div>
+          </div>
 
-            return (
-              <li key={product.id} className="product-card">
-                <Link href={`/${locale}/products/${product.slug}`}>
-                  <div className="product-card__media">
-                    {soldOut ? <span className="product-card__badge">{t('soldOut', locale)}</span> : null}
-                    {image ? (
-                      <img
-                        src={bestUrl(image, 'card')}
-                        srcSet={buildSrcSet(image)}
-                        sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-                        alt={image.alt ?? ''}
-                        loading={eager ? 'eager' : 'lazy'}
-                        fetchPriority={eager ? 'high' : undefined}
-                        decoding="async"
-                      />
+          <div className="org">
+            <div className="org__root">
+              {logo?.url ? <img src={logo.url} alt="" /> : null}
+              <p className="org__root-name">{siteName}</p>
+              <p className="org__root-label">{t('umbrellaBrand', locale)}</p>
+            </div>
+
+            <ul className="org__children" style={{ '--count': companies.length + 1 } as CSSProperties}>
+              {companies.map((company) => (
+                <li key={company.id} className="org__child">
+                  <article className="org-card">
+                    <p className="org-card__label">{t('independentCompany', locale)}</p>
+
+                    <div className="org-card__head">
+                      <MediaImage media={company.logo} size="thumbnail" className="org-card__logo" alt="" />
+                      <div>
+                        <h3 className="org-card__short">{company.shortName}</h3>
+                        <p className="org-card__name">{company.name}</p>
+                      </div>
+                    </div>
+
+                    {company.country ? (
+                      <p className="org-card__country">
+                        <span className="badge badge--gold">{company.country}</span>
+                      </p>
                     ) : null}
-                  </div>
 
-                  <div className="product-card__row">
-                    <h2 className="product-card__title">{product.title}</h2>
-                    {price ? <span className="product-card__price">{price}</span> : null}
-                  </div>
+                    {company.summary ? <p className="org-card__text">{company.summary}</p> : null}
 
-                  {product.shortDescription ? (
-                    <p className="product-card__text">{product.shortDescription}</p>
-                  ) : null}
+                    <Link href={`${base}/companies/${company.slug}`} className="section__link">
+                      {fill(t('discover', locale), { name: company.shortName })}
+                    </Link>
+                  </article>
+                </li>
+              ))}
 
-                  {rating ? (
-                    <p className="product-card__rating">
-                      <Stars value={rating.average} label={ratingLabel(rating.average, locale)} size="sm" />
-                      <span>({rating.count})</span>
-                    </p>
-                  ) : null}
-                </Link>
+              <li className="org__child">
+                <div className="org-card org-card--future">
+                  <p className="org-card__label">{siteName}</p>
+                  <h3 className="org-card__short">{t('futureProjects', locale)}</h3>
+                  <p className="org-card__text">{t('futureProjectsText', locale)}</p>
+                  <Link href={`${base}/projects`} className="section__link">
+                    {t('projects', locale)}
+                  </Link>
+                </div>
               </li>
-            )
-          })}
-        </ul>
-      )}
+            </ul>
 
-      {hasMore ? (
-        <div className="see-more">
-          <Link href={seeMoreHref()} className="btn-accent">
-            {t('seeMore', locale)}
-          </Link>
+            {home.structure?.note ? (
+              <div className="org__note">
+                <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+                  <circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                  <path d="M10 9v5M10 6.2v.1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+                <p>{home.structure.note}</p>
+              </div>
+            ) : null}
+          </div>
         </div>
+      </section>
+
+      {/* --- featured products --------------------------------------------- */}
+      {featured.length > 0 ? (
+        <section className="section section--cream" aria-labelledby="products-title">
+          <div className="container">
+            <div className="section__head">
+              <h2 id="products-title" className="section__title">
+                {t('featuredProducts', locale)}
+              </h2>
+              <Link href={`${base}/products`} className="section__link">
+                {t('seeAll', locale)}
+              </Link>
+            </div>
+
+            <ul className="product-grid">
+              {featured.map((product) => (
+                <ProductCard key={product.id} product={product} locale={locale} />
+              ))}
+            </ul>
+          </div>
+        </section>
       ) : null}
 
-      {/* --- newsletter --------------------------------------------------- */}
-      <section className="newsletter">
-        <h2 className="newsletter__heading">
-          {settings?.newsletterHeading ?? t('newsletterHeading', locale)}
-        </h2>
-        <NewsletterForm locale={locale} />
+      {/* --- latest news ---------------------------------------------------- */}
+      {news.docs.length > 0 ? (
+        <section className="section" aria-labelledby="news-title">
+          <div className="container">
+            <div className="section__head">
+              <h2 id="news-title" className="section__title">
+                {t('latestNews', locale)}
+              </h2>
+              <Link href={`${base}/news`} className="section__link">
+                {t('allArticles', locale)}
+              </Link>
+            </div>
+
+            <ul className="card-grid">
+              {news.docs.map((post) => (
+                <li key={post.id}>
+                  <Link href={`${base}/news/${post.slug}`} className="card__link">
+                    <div className="card__media">
+                      <MediaImage media={post.coverImage} sizes="(max-width: 900px) 100vw, 33vw" />
+                    </div>
+                    <p className="card__eyebrow">{formatDate(post.publishedAt, locale)}</p>
+                    <h3 className="card__title">{post.title}</h3>
+                    {post.excerpt ? <p className="card__text">{post.excerpt}</p> : null}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
+      {/* --- partners -------------------------------------------------------- */}
+      {partners.docs.length > 0 ? (
+        <section className="section section--cream" aria-labelledby="partners-title">
+          <div className="container">
+            <div className="section__head">
+              <h2 id="partners-title" className="section__title">
+                {t('ourPartners', locale)}
+              </h2>
+              <Link href={`${base}/partnerships`} className="section__link">
+                {t('partnerships', locale)}
+              </Link>
+            </div>
+
+            <ul className="partner-strip">
+              {partners.docs.map((partner) => (
+                <li key={partner.id}>
+                  <MediaImage media={partner.logo} size="thumbnail" alt="" />
+                  <span>{partner.name}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
+      {/* --- contact ---------------------------------------------------------- */}
+      <section className="section section--green">
+        <div className="container cta-band">
+          <div>
+            <h2 className="cta-band__title">{home.closing?.title || t('contact', locale)}</h2>
+            {home.closing?.text ? <p className="cta-band__text">{home.closing.text}</p> : null}
+          </div>
+
+          <div className="btn-row">
+            <Link href={`${base}/contact?type=quote`} className="btn btn--gold">
+              {t('requestQuote', locale)}
+            </Link>
+            <Link href={`${base}/contact`} className="btn-arrow">
+              {t('contactTeam', locale)}
+              <Arrow />
+            </Link>
+          </div>
+        </div>
       </section>
-    </div>
+    </>
   )
 }

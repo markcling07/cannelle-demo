@@ -2,18 +2,29 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { en } from '@payloadcms/translations/languages/en'
+import { fr } from '@payloadcms/translations/languages/fr'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
+import { Albums } from './collections/Albums'
 import { Categories } from './collections/Categories'
-import { Products } from './collections/Products'
+import { Companies } from './collections/Companies'
+import { Enquiries } from './collections/Enquiries'
+import { Media } from './collections/Media'
+import { Partners } from './collections/Partners'
 import { Posts } from './collections/Posts'
+import { Products } from './collections/Products'
+import { Projects } from './collections/Projects'
 import { Subscribers } from './collections/Subscribers'
-import { Reviews } from './collections/Reviews'
+import { Team } from './collections/Team'
+import { Users } from './collections/Users'
+import { AboutPage } from './globals/AboutPage'
+import { HomePage } from './globals/HomePage'
+import { LegalPages } from './globals/LegalPages'
+import { SectionIntros } from './globals/SectionIntros'
 import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -56,8 +67,30 @@ export default buildConfig({
     },
   },
 
-  collections: [Products, Categories, Reviews, Posts, Media, Users, Subscribers],
-  globals: [SiteSettings],
+  // The administration sidebar follows this order: enquiries first, because
+  // they are what needs looking at most often.
+  collections: [
+    Enquiries,
+    Companies,
+    Team,
+    Projects,
+    Partners,
+    Products,
+    Categories,
+    Posts,
+    Subscribers,
+    Albums,
+    Media,
+    Users,
+  ],
+  globals: [HomePage, AboutPage, SectionIntros, LegalPages, SiteSettings],
+
+  // The administration area in French or English. Each person picks their
+  // own under Account → Language; French is the default.
+  i18n: {
+    supportedLanguages: { fr, en },
+    fallbackLanguage: 'fr',
+  },
 
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

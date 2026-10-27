@@ -67,13 +67,18 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    enquiries: Enquiry;
+    companies: Company;
+    team: Team;
+    projects: Project;
+    partners: Partner;
     products: Product;
     categories: Category;
-    reviews: Review;
     posts: Post;
+    subscribers: Subscriber;
+    albums: Album;
     media: Media;
     users: User;
-    subscribers: Subscriber;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -81,13 +86,18 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>;
+    companies: CompaniesSelect<false> | CompaniesSelect<true>;
+    team: TeamSelect<false> | TeamSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    partners: PartnersSelect<false> | PartnersSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
-    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
+    albums: AlbumsSelect<false> | AlbumsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -98,9 +108,17 @@ export interface Config {
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('fr' | 'en') | ('fr' | 'en')[];
   globals: {
+    'home-page': HomePage;
+    'about-page': AboutPage;
+    'section-intros': SectionIntro;
+    'legal-pages': LegalPage;
     'site-settings': SiteSetting;
   };
   globalsSelect: {
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
+    'section-intros': SectionIntrosSelect<false> | SectionIntrosSelect<true>;
+    'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: 'fr' | 'en';
@@ -130,6 +148,33 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * Requests sent from the site: quotations, commercial enquiries, partnerships.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enquiries".
+ */
+export interface Enquiry {
+  id: number;
+  type: 'quote' | 'commercial' | 'partnership' | 'other';
+  product?: (number | null) | Product;
+  name: string;
+  company?: string | null;
+  email: string;
+  phone?: string | null;
+  country?: string | null;
+  volume?: string | null;
+  message: string;
+  status: 'new' | 'in-progress' | 'closed';
+  /**
+   * Never shown on the site.
+   */
+  notes?: string | null;
+  language?: ('fr' | 'en') | null;
+  consentAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * The catalogue. Every product exists in French and in English.
@@ -167,6 +212,9 @@ export interface Product {
    */
   image: number | Media;
   gallery?: (number | Media)[] | null;
+  /**
+   * One row per item: species, origin, grade, packaging, certification…
+   */
   features?:
     | {
         label: string;
@@ -178,17 +226,15 @@ export interface Product {
    * Internal code. The same in both languages.
    */
   reference?: string | null;
-  price?: number | null;
-  currency?: ('EUR' | 'USD' | 'MGA') | null;
   category?: (number | null) | Category;
   /**
-   * Units available. Goes down with every order; at 0 the product can no longer be ordered. Leave empty not to track stock.
+   * The Group company that supplies this product.
    */
-  stock?: number | null;
+  company?: (number | null) | Company;
   /**
-   * Untick to take the product off sale, whatever the stock.
+   * Optional. Full address of the product on EAC’s future Shopify store. The button only appears when this is filled in.
    */
-  inStock?: boolean | null;
+  shopUrl?: string | null;
   /**
    * Leave empty to generate it from the title. Separate for each language.
    */
@@ -250,7 +296,7 @@ export interface Media {
   };
 }
 /**
- * Product families, for example "Spices" or "Textiles".
+ * Product families, for example "Vanilla" or "Spices".
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
@@ -266,27 +312,156 @@ export interface Category {
   createdAt: string;
 }
 /**
- * Reviews left on product pages. A review only appears on the site once it is "Approved".
+ * The legally independent companies brought together under the GROUPE JAOVAZAHA brand.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reviews".
+ * via the `definition` "companies".
  */
-export interface Review {
+export interface Company {
   id: number;
-  product: number | Product;
-  name: string;
-  rating: number;
-  comment: string;
-  status: 'pending' | 'approved' | 'rejected';
   /**
-   * The language of the site when the review was written.
+   * For example: MFC
    */
-  language?: ('fr' | 'en') | null;
+  shortName: string;
+  name: string;
+  country?: string | null;
+  tagline?: string | null;
+  /**
+   * Two or three sentences, shown on the home page and on "Our companies".
+   */
+  summary?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  logo?: (number | null) | Media;
+  coverImage?: (number | null) | Media;
+  /**
+   * A few landmarks: activities, sourcing area, markets…
+   */
+  keyFacts?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  legal?: {
+    legalName?: string | null;
+    legalForm?: string | null;
+    registration?: string | null;
+    registeredAddress?: string | null;
+  };
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  website?: string | null;
+  /**
+   * Leave empty to generate it from the title. Separate for each language.
+   */
+  slug?: string | null;
+  /**
+   * Lowest first.
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team".
+ */
+export interface Team {
+  id: number;
+  name: string;
+  role: string;
+  /**
+   * Leave empty for a role at Group level.
+   */
+  company?: (number | null) | Company;
+  photo?: (number | null) | Media;
+  bio?: string | null;
+  /**
+   * Featured at the top of the page.
+   */
+  isFounder?: boolean | null;
+  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
- * Journal articles. Every article exists in French and in English.
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  summary?: string | null;
+  coverImage: number | Media;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  location?: string | null;
+  /**
+   * For example: 2025 – 2027
+   */
+  period?: string | null;
+  /**
+   * Leave empty to generate it from the title. Separate for each language.
+   */
+  slug?: string | null;
+  status: 'planned' | 'in-progress' | 'completed';
+  /**
+   * Leave empty for a Group project.
+   */
+  company?: (number | null) | Company;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners".
+ */
+export interface Partner {
+  id: number;
+  name: string;
+  type: 'cooperative' | 'logistics' | 'laboratory' | 'distributor' | 'institutional' | 'other';
+  country?: string | null;
+  website?: string | null;
+  logo?: (number | null) | Media;
+  description?: string | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * News from the Group, MFC and EAC. Each item exists in French and in English.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
@@ -295,7 +470,7 @@ export interface Post {
   id: number;
   title: string;
   /**
-   * One or two sentences, shown on the journal card.
+   * One or two sentences, shown on the news card.
    */
   excerpt?: string | null;
   coverImage: number | Media;
@@ -327,6 +502,41 @@ export interface Post {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * Addresses entered in the form on the public site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers".
+ */
+export interface Subscriber {
+  id: number;
+  email: string;
+  /**
+   * The language of the site when they signed up.
+   */
+  locale?: ('fr' | 'en') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * The albums on the Gallery page. Each photograph’s caption is edited in the media library.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "albums".
+ */
+export interface Album {
+  id: number;
+  title: string;
+  description?: string | null;
+  /**
+   * The first one is the cover. Drag to reorder.
+   */
+  photos: (number | Media)[];
+  date?: string | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * Accounts allowed to sign in to this administration area.
@@ -361,22 +571,6 @@ export interface User {
   collection: 'users';
 }
 /**
- * Addresses entered in the form on the public site.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "subscribers".
- */
-export interface Subscriber {
-  id: number;
-  email: string;
-  /**
-   * The language of the site when they signed up.
-   */
-  locale?: ('fr' | 'en') | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -401,6 +595,26 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'enquiries';
+        value: number | Enquiry;
+      } | null)
+    | ({
+        relationTo: 'companies';
+        value: number | Company;
+      } | null)
+    | ({
+        relationTo: 'team';
+        value: number | Team;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'partners';
+        value: number | Partner;
+      } | null)
+    | ({
         relationTo: 'products';
         value: number | Product;
       } | null)
@@ -409,12 +623,16 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
-        relationTo: 'reviews';
-        value: number | Review;
-      } | null)
-    | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'subscribers';
+        value: number | Subscriber;
+      } | null)
+    | ({
+        relationTo: 'albums';
+        value: number | Album;
       } | null)
     | ({
         relationTo: 'media';
@@ -423,10 +641,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
-      } | null)
-    | ({
-        relationTo: 'subscribers';
-        value: number | Subscriber;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -472,6 +686,114 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enquiries_select".
+ */
+export interface EnquiriesSelect<T extends boolean = true> {
+  type?: T;
+  product?: T;
+  name?: T;
+  company?: T;
+  email?: T;
+  phone?: T;
+  country?: T;
+  volume?: T;
+  message?: T;
+  status?: T;
+  notes?: T;
+  language?: T;
+  consentAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "companies_select".
+ */
+export interface CompaniesSelect<T extends boolean = true> {
+  shortName?: T;
+  name?: T;
+  country?: T;
+  tagline?: T;
+  summary?: T;
+  description?: T;
+  logo?: T;
+  coverImage?: T;
+  keyFacts?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  legal?:
+    | T
+    | {
+        legalName?: T;
+        legalForm?: T;
+        registration?: T;
+        registeredAddress?: T;
+      };
+  email?: T;
+  phone?: T;
+  address?: T;
+  website?: T;
+  slug?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team_select".
+ */
+export interface TeamSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  company?: T;
+  photo?: T;
+  bio?: T;
+  isFounder?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  summary?: T;
+  coverImage?: T;
+  description?: T;
+  location?: T;
+  period?: T;
+  slug?: T;
+  status?: T;
+  company?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners_select".
+ */
+export interface PartnersSelect<T extends boolean = true> {
+  name?: T;
+  type?: T;
+  country?: T;
+  website?: T;
+  logo?: T;
+  description?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
@@ -488,11 +810,9 @@ export interface ProductsSelect<T extends boolean = true> {
         id?: T;
       };
   reference?: T;
-  price?: T;
-  currency?: T;
   category?: T;
-  stock?: T;
-  inStock?: T;
+  company?: T;
+  shopUrl?: T;
   slug?: T;
   publishedAt?: T;
   updatedAt?: T;
@@ -506,20 +826,6 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reviews_select".
- */
-export interface ReviewsSelect<T extends boolean = true> {
-  product?: T;
-  name?: T;
-  rating?: T;
-  comment?: T;
-  status?: T;
-  language?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -539,6 +845,29 @@ export interface PostsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers_select".
+ */
+export interface SubscribersSelect<T extends boolean = true> {
+  email?: T;
+  locale?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "albums_select".
+ */
+export interface AlbumsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  photos?: T;
+  date?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -619,16 +948,6 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "subscribers_select".
- */
-export interface SubscribersSelect<T extends boolean = true> {
-  email?: T;
-  locale?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -668,7 +987,169 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * The wording shown around the catalogue, in French and in English.
+ * The words and photograph on the home page. The companies, products and news shown come from their own sections.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: number;
+  hero: {
+    eyebrow?: string | null;
+    title: string;
+    text?: string | null;
+    /**
+     * Landscape, at least 2400 × 1500 px.
+     */
+    image?: (number | null) | Media;
+  };
+  structure?: {
+    title?: string | null;
+    text?: string | null;
+    /**
+     * Shown under the diagram. Makes clear that GROUPE JAOVAZAHA is a shared brand, not a holding company.
+     */
+    note?: string | null;
+  };
+  /**
+   * Up to six published products, in the order chosen.
+   */
+  featuredProducts?: (number | Product)[] | null;
+  closing?: {
+    title?: string | null;
+    text?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page".
+ */
+export interface AboutPage {
+  id: number;
+  title: string;
+  intro?: string | null;
+  image?: (number | null) | Media;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  values?:
+    | {
+        title: string;
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * The title and short text at the top of each section of the site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "section-intros".
+ */
+export interface SectionIntro {
+  id: number;
+  companies?: {
+    title?: string | null;
+    intro?: string | null;
+  };
+  leadership?: {
+    title?: string | null;
+    intro?: string | null;
+  };
+  projects?: {
+    title?: string | null;
+    intro?: string | null;
+  };
+  partnerships?: {
+    title?: string | null;
+    intro?: string | null;
+  };
+  products?: {
+    title?: string | null;
+    intro?: string | null;
+  };
+  news?: {
+    title?: string | null;
+    intro?: string | null;
+    statement?: string | null;
+    accent?: string | null;
+  };
+  gallery?: {
+    title?: string | null;
+    intro?: string | null;
+  };
+  contact?: {
+    title?: string | null;
+    intro?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * To be checked by a lawyer before the final launch.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-pages".
+ */
+export interface LegalPage {
+  id: number;
+  legalNotice: {
+    title: string;
+    content?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  privacy: {
+    title: string;
+    content?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * The Group’s name, logo, footer and contact details, in French and in English.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -680,22 +1161,161 @@ export interface SiteSetting {
    * Shown in the header beside the site name, and as the browser tab icon. A square image works best.
    */
   logo?: (number | null) | Media;
+  /**
+   * Used as the site description in search engines.
+   */
   tagline?: string | null;
+  /**
+   * Shown at the bottom of every page. Explains that MFC and EAC are independent companies sharing a common brand.
+   */
+  footerNote?: string | null;
   /**
    * Shown above the sign-up form. Line breaks are kept.
    */
   newsletterHeading?: string | null;
-  journalStatement?: string | null;
-  /**
-   * Shown in green straight after the statement.
-   */
-  journalAccent?: string | null;
-  journalIntro?: string | null;
   contactEmail?: string | null;
   contactPhone?: string | null;
   address?: string | null;
+  social?:
+    | {
+        network: 'linkedin' | 'facebook' | 'instagram' | 'youtube';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        text?: T;
+        image?: T;
+      };
+  structure?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        note?: T;
+      };
+  featuredProducts?: T;
+  closing?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  title?: T;
+  intro?: T;
+  image?: T;
+  content?: T;
+  values?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "section-intros_select".
+ */
+export interface SectionIntrosSelect<T extends boolean = true> {
+  companies?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+      };
+  leadership?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+      };
+  projects?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+      };
+  partnerships?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+      };
+  products?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+      };
+  news?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+        statement?: T;
+        accent?: T;
+      };
+  gallery?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+      };
+  contact?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-pages_select".
+ */
+export interface LegalPagesSelect<T extends boolean = true> {
+  legalNotice?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+      };
+  privacy?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -705,13 +1325,18 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   logo?: T;
   tagline?: T;
+  footerNote?: T;
   newsletterHeading?: T;
-  journalStatement?: T;
-  journalAccent?: T;
-  journalIntro?: T;
   contactEmail?: T;
   contactPhone?: T;
   address?: T;
+  social?:
+    | T
+    | {
+        network?: T;
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

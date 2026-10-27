@@ -1,20 +1,21 @@
 import type { GlobalConfig } from 'payload'
 
+import { ADMIN_GROUPS } from '../adminGroups'
 import { isAdminOrEditor } from '../access/roles'
 
 /**
- * The wording around the catalogue — site name, homepage headline, footer
- * contact details. Kept here so the texts on the public pages can be changed
- * from the administration area instead of in the code.
+ * Everything shown on every page — name, logo, tagline, footer and the
+ * Group's own contact details. Kept here so they can be changed from the
+ * administration area instead of in the code.
  */
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: { fr: 'Réglages du site', en: 'Site settings' },
   admin: {
-    group: { fr: 'Contenu', en: 'Content' },
+    group: ADMIN_GROUPS.settings,
     description: {
-      fr: 'Les textes affichés autour du catalogue, en français et en anglais.',
-      en: 'The wording shown around the catalogue, in French and in English.',
+      fr: 'Le nom, le logo, le pied de page et les coordonnées du Groupe, en français et en anglais.',
+      en: 'The Group’s name, logo, footer and contact details, in French and in English.',
     },
   },
 
@@ -49,6 +50,24 @@ export const SiteSettings: GlobalConfig = {
       type: 'text',
       localized: true,
       label: { fr: 'Accroche', en: 'Tagline' },
+      admin: {
+        description: {
+          fr: 'Utilisée comme description du site dans les moteurs de recherche.',
+          en: 'Used as the site description in search engines.',
+        },
+      },
+    },
+    {
+      name: 'footerNote',
+      type: 'textarea',
+      localized: true,
+      label: { fr: 'Mention du pied de page', en: 'Footer statement' },
+      admin: {
+        description: {
+          fr: 'Affichée en bas de chaque page. Rappelle que MFC et EAC sont des sociétés indépendantes réunies sous une marque commune.',
+          en: 'Shown at the bottom of every page. Explains that MFC and EAC are independent companies sharing a common brand.',
+        },
+      },
     },
     {
       name: 'newsletterHeading',
@@ -64,59 +83,75 @@ export const SiteSettings: GlobalConfig = {
     },
     {
       type: 'collapsible',
-      label: { fr: 'Page Journal', en: 'Journal page' },
-      admin: {
-        description: {
-          fr: 'Le texte d’introduction sous la grande photo du journal.',
-          en: 'The introduction below the journal’s large photograph.',
-        },
-      },
+      label: { fr: 'Coordonnées du Groupe', en: 'Group contact details' },
       fields: [
         {
-          name: 'journalStatement',
-          type: 'textarea',
-          localized: true,
-          label: { fr: 'Phrase d’accroche', en: 'Statement' },
-        },
-        {
-          name: 'journalAccent',
-          type: 'text',
-          localized: true,
-          label: { fr: 'Fin de la phrase, en couleur', en: 'End of the statement, in colour' },
-          admin: {
-            description: {
-              fr: 'Affichée en vert juste après la phrase d’accroche.',
-              en: 'Shown in green straight after the statement.',
+          type: 'row',
+          fields: [
+            {
+              name: 'contactEmail',
+              type: 'email',
+              label: { fr: 'Courriel', en: 'Email' },
+              admin: { width: '50%' },
             },
-          },
-        },
-        {
-          name: 'journalIntro',
-          type: 'textarea',
-          localized: true,
-          label: { fr: 'Paragraphe d’introduction', en: 'Introduction paragraph' },
-        },
-      ],
-    },
-    {
-      type: 'collapsible',
-      label: { fr: 'Coordonnées', en: 'Contact details' },
-      fields: [
-        {
-          name: 'contactEmail',
-          type: 'email',
-          label: { fr: 'Courriel', en: 'Email' },
-        },
-        {
-          name: 'contactPhone',
-          type: 'text',
-          label: { fr: 'Téléphone', en: 'Telephone' },
+            {
+              name: 'contactPhone',
+              type: 'text',
+              label: { fr: 'Téléphone', en: 'Telephone' },
+              admin: { width: '50%' },
+            },
+          ],
         },
         {
           name: 'address',
           type: 'textarea',
           localized: true,
           label: { fr: 'Adresse', en: 'Address' },
+        },
+      ],
+    },
+    {
+      type: 'collapsible',
+      label: { fr: 'Réseaux sociaux', en: 'Social media' },
+      admin: { initCollapsed: true },
+      fields: [
+        {
+          name: 'social',
+          type: 'array',
+          label: false,
+          labels: {
+            singular: { fr: 'Lien', en: 'Link' },
+            plural: { fr: 'Liens', en: 'Links' },
+          },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'network',
+                  type: 'select',
+                  required: true,
+                  label: { fr: 'Réseau', en: 'Network' },
+                  admin: { width: '40%' },
+                  options: [
+                    { label: 'LinkedIn', value: 'linkedin' },
+                    { label: 'Facebook', value: 'facebook' },
+                    { label: 'Instagram', value: 'instagram' },
+                    { label: 'YouTube', value: 'youtube' },
+                  ],
+                },
+                {
+                  name: 'url',
+                  type: 'text',
+                  required: true,
+                  label: { fr: 'Adresse', en: 'Address' },
+                  admin: { width: '60%' },
+                  validate: (value: string | null | undefined) =>
+                    !value || /^https:\/\/\S+$/.test(value) || 'https://…',
+                },
+              ],
+            },
+          ],
         },
       ],
     },

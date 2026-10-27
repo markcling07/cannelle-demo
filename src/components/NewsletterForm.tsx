@@ -37,7 +37,7 @@ export function NewsletterForm({ locale }: { locale: Locale }) {
         placeholder={t('emailPlaceholder', locale)}
       />
 
-      <button type="submit" className="btn-accent" disabled={pending}>
+      <button type="submit" className="btn btn--primary" disabled={pending}>
         {t('send', locale)}
       </button>
 

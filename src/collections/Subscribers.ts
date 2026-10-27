@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { ADMIN_GROUPS } from '../adminGroups'
 import { isAdminOrEditor, isAdmin } from '../access/roles'
 
 /**
@@ -18,7 +19,7 @@ export const Subscribers: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['email', 'locale', 'createdAt'],
-    group: { fr: 'Administration', en: 'Administration' },
+    group: ADMIN_GROUPS.news,
     description: {
       fr: 'Adresses saisies dans le formulaire du site public.',
       en: 'Addresses entered in the form on the public site.',

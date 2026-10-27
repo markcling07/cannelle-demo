@@ -3,11 +3,13 @@
  *
  *   npm run seed
  *
- * Safe to run repeatedly: it clears products, reviews, categories, articles
- * and photographs first, then recreates them. User accounts and newsletter
+ * Safe to run repeatedly: it clears the companies, team, projects, partners,
+ * products, categories, news, gallery, enquiries and photographs first, then
+ * recreates them and rewrites every page's text. User accounts and newsletter
  * sign-ups are kept.
  *
  * Everything here is fictional sample content, as agreed for the demonstration.
+ * The institutional texts live in ./institutional.ts.
  */
 import fs from 'fs'
 import path from 'path'
@@ -18,6 +20,7 @@ import sharp from 'sharp'
 
 import { richText } from './richText'
 import { placeholderImage, avatarImage } from './placeholderImage'
+import * as content from './institutional'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -33,8 +36,9 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
  *
  * Numbering must not skip: the search stops at the first gap.
  *
- * Journal covers follow the same rule as `journal-<slug>`, ideally 1600x1000
- * so they fill the 16:10 article header exactly.
+ * Wide photographs used for banners, company covers and news follow the
+ * same rule as `journal-<name>`, ideally 1600x1000 so they fill the 16:10
+ * header exactly.
  */
 const MIME: Record<string, string> = {
   jpg: 'image/jpeg',
@@ -133,7 +137,18 @@ const seed = async () => {
   await ensureUser(EDITOR_EMAIL, EDITOR_PASSWORD, 'Éditeur', ['editor'])
 
   // --- clear previous sample content --------------------------------------
-  for (const collection of ['reviews', 'products', 'posts', 'categories', 'media'] as const) {
+  for (const collection of [
+    'enquiries',
+    'albums',
+    'projects',
+    'team',
+    'partners',
+    'products',
+    'posts',
+    'categories',
+    'companies',
+    'media',
+  ] as const) {
     const { docs } = await payload.find({ collection, limit: 500, depth: 0 })
     for (const doc of docs) {
       await payload.delete({ collection, id: doc.id })
@@ -142,48 +157,30 @@ const seed = async () => {
   }
 
   // --- site settings ------------------------------------------------------
-  await payload.updateGlobal({
-    slug: 'site-settings',
-    locale: 'fr',
-    data: {
-      siteName: 'GROUPE JAOVAZAHA',
-      tagline: 'Épices et vanille de Madagascar',
-      newsletterHeading:
-        'Inscrivez-vous à la lettre d’information\net recevez nos nouveautés',
-      journalStatement: 'Des carnets de terrain, de la plantation à la cuisine :',
-      journalAccent: 'ce que nos épices racontent.',
-      journalIntro:
-        'Récoltes, préparation, recettes et conseils : notre équipe partage ce qu’elle sait des épices de Madagascar, de la vanille de la SAVA au cacao du Sambirano.',
-      contactEmail: 'contact@demo.local',
-      contactPhone: '+33 7 83 74 69 83',
-      address: 'Antananarivo, Madagascar\nBureau commercial — France',
-    },
-  })
-
-  await payload.updateGlobal({
-    slug: 'site-settings',
-    locale: 'en',
-    data: {
-      siteName: 'GROUPE JAOVAZAHA',
-      tagline: 'Spices and vanilla from Madagascar',
-      newsletterHeading: 'Subscribe to the newsletter\nand stay up to date',
-      journalStatement: 'Field notes, from the plantation to the kitchen:',
-      journalAccent: 'the stories behind our spices.',
-      journalIntro:
-        'Harvests, curing, recipes and advice: our team shares what it knows about Madagascar’s spices, from SAVA vanilla to Sambirano cacao.',
-      contactEmail: 'contact@demo.local',
-      contactPhone: '+33 7 83 74 69 83',
-      address: 'Antananarivo, Madagascar\nSales office — France',
-    },
-  })
+  // Placeholder contact details only — nothing here points at the client's
+  // real domain, addresses or telephone numbers.
+  for (const locale of ['fr', 'en'] as const) {
+    await payload.updateGlobal({
+      slug: 'site-settings',
+      locale,
+      data: {
+        siteName: 'GROUPE JAOVAZAHA',
+        ...content.siteSettings[locale],
+        contactEmail: content.siteSettings.contactEmail,
+        contactPhone: content.siteSettings.contactPhone,
+        social: [],
+      },
+    })
+  }
   payload.logger.info('site settings written (fr + en)')
 
   // --- categories ---------------------------------------------------------
   const categoryData = [
-    { key: 'spices', fr: 'Épices', en: 'Spices' },
-    { key: 'pantry', fr: 'Épicerie fine', en: 'Fine foods' },
+    { key: 'vanilla', fr: 'Vanille', en: 'Vanilla' },
     { key: 'oils', fr: 'Huiles essentielles', en: 'Essential oils' },
-    { key: 'gifts', fr: 'Coffrets', en: 'Gift sets' },
+    { key: 'spices', fr: 'Épices', en: 'Spices' },
+    { key: 'cocoa', fr: 'Cacao', en: 'Cocoa' },
+    { key: 'natural', fr: 'Produits naturels', en: 'Natural products' },
   ]
 
   const categories: Record<string, number> = {}
@@ -251,49 +248,93 @@ const seed = async () => {
     payload.logger.info('logo set in site settings')
   }
 
+  /**
+   * Seed photographs are uploaded once and reused: the same vanilla photo can
+   * illustrate a product, an album and a news item without three copies in
+   * the media library.
+   */
+  const uploaded = new Map<string, number>()
+
+  const seedImage = async (name: string, alt: { fr: string; en: string }): Promise<number | null> => {
+    const known = uploaded.get(name)
+    if (known) return known
+
+    const photo = findPhoto(name)
+    if (!photo) {
+      payload.logger.warn(`missing seed photograph: ${name}`)
+      return null
+    }
+
+    const id = await uploadImage(name, photo.buffer, alt, photo.ext)
+    uploaded.set(name, id)
+    return id
+  }
+
+  /** Initials on a coloured square, for logos and portraits still to come. */
+  const initialsImage = (name: string, initials: string, colour: string, alt: { fr: string; en: string }) =>
+    avatarImage(sharp, initials, colour).then((buffer) => uploadImage(name, buffer, alt))
+
+  // --- companies ----------------------------------------------------------
+  const companyIds: Record<string, number> = {}
+
+  for (const company of content.companies) {
+    const logoId = await initialsImage(`logo-${company.key}`, company.initials, company.colour, {
+      fr: `Logo ${company.shortName} (provisoire)`,
+      en: `${company.shortName} logo (placeholder)`,
+    })
+    const coverId = await seedImage(company.cover, company.tagline)
+
+    const created = await payload.create({
+      collection: 'companies',
+      locale: 'fr',
+      data: {
+        shortName: company.shortName,
+        name: company.name,
+        country: company.country.fr,
+        tagline: company.tagline.fr,
+        summary: company.summary.fr,
+        description: richText(company.body.fr),
+        keyFacts: company.facts.fr,
+        logo: logoId,
+        coverImage: coverId,
+        legal: {
+          legalName: company.name,
+          legalForm: content.legalPlaceholders.legalForm.fr,
+          registration: content.legalPlaceholders.registration,
+          registeredAddress: company.registeredAddress,
+        },
+        email: company.email,
+        phone: company.phone,
+        address: company.address.fr,
+        slug: company.key,
+        order: company.order,
+        _status: 'published',
+      },
+    })
+
+    await payload.update({
+      collection: 'companies',
+      id: created.id,
+      locale: 'en',
+      data: {
+        country: company.country.en,
+        tagline: company.tagline.en,
+        summary: company.summary.en,
+        description: richText(company.body.en),
+        keyFacts: company.facts.en,
+        legal: { legalForm: content.legalPlaceholders.legalForm.en },
+        address: company.address.en,
+        slug: company.key,
+        _status: 'published',
+      },
+    })
+
+    companyIds[company.key] = created.id
+    payload.logger.info(`company published: ${company.shortName}`)
+  }
+
   // --- products -----------------------------------------------------------
   const products = [
-    {
-      slug: 'coffret-decouverte',
-      label: 'Coffret',
-      colours: ['#3d2512', '#8c6236'] as [string, string],
-      alt: {
-        fr: 'Coffret découverte de cannelles',
-        en: 'Cinnamon discovery gift box',
-      },
-      category: 'gifts',
-      reference: 'CAN-COF-006',
-      price: 45,
-      stock: 8,
-      fr: {
-        title: 'Coffret découverte',
-        shortDescription: 'Les quatre cannelles, en petits formats, dans une boîte en bois.',
-        body: [
-          'Le coffret réunit Ceylan en bâtons, Ceylan moulue, Cassia en bâtons et le mélange chaï.',
-          'Une fiche explique l’origine de chacune et comment les distinguer à l’œil et au nez.',
-        ],
-        features: [
-          { label: 'Contient', value: '4 références' },
-          { label: 'Boîte', value: 'Bois, réutilisable' },
-          { label: 'Fiche', value: 'Français et anglais' },
-          { label: 'Poids total', value: '320 g' },
-        ],
-      },
-      en: {
-        title: 'Discovery Gift Box',
-        shortDescription: 'All four cinnamons, in small formats, in a wooden box.',
-        body: [
-          'The box brings together Ceylon quills, ground Ceylon, Cassia sticks and the chai blend.',
-          'A card explains where each one comes from and how to tell them apart by eye and by nose.',
-        ],
-        features: [
-          { label: 'Contains', value: '4 products' },
-          { label: 'Box', value: 'Wood, reusable' },
-          { label: 'Card', value: 'French and English' },
-          { label: 'Total weight', value: '320 g' },
-        ],
-      },
-    },
     {
       slug: 'clous-de-girofle',
       label: 'Girofle',
@@ -303,9 +344,8 @@ const seed = async () => {
         en: 'Whole dried cloves',
       },
       category: 'spices',
+      company: 'mfc' as const,
       reference: 'EPI-GIR-007',
-      price: 14,
-      stock: 25,
       fr: {
         title: 'Clous de girofle entiers',
         shortDescription:
@@ -348,9 +388,8 @@ const seed = async () => {
         en: 'Amber bottles of essential oil',
       },
       category: 'oils',
+      company: 'mfc' as const,
       reference: 'EPI-YLA-008',
-      price: 28,
-      stock: 0,
       fr: {
         title: 'Huile essentielle d’Ylang-Ylang',
         shortDescription:
@@ -392,10 +431,9 @@ const seed = async () => {
         fr: 'Cabosse de cacao et fèves concassées',
         en: 'Cacao pod and cocoa nibs',
       },
-      category: 'pantry',
+      category: 'cocoa',
+      company: 'mfc' as const,
       reference: 'EPI-CAC-009',
-      price: 16,
-      stock: 15,
       fr: {
         title: 'Fèves de cacao torréfiées',
         shortDescription:
@@ -436,10 +474,9 @@ const seed = async () => {
         fr: 'Gousses de vanille Bourbon noires et charnues',
         en: 'Plump black Bourbon vanilla pods',
       },
-      category: 'spices',
+      category: 'vanilla',
+      company: 'mfc' as const,
       reference: 'EPI-VAN-010',
-      price: 24,
-      stock: 3,
       fr: {
         title: 'Vanille Bourbon de Madagascar',
         shortDescription:
@@ -482,9 +519,8 @@ const seed = async () => {
         en: 'Dried pink peppercorns',
       },
       category: 'spices',
+      company: 'mfc' as const,
       reference: 'EPI-BAI-011',
-      price: 11,
-      stock: 12,
       fr: {
         title: 'Baies roses de Madagascar',
         shortDescription:
@@ -527,9 +563,8 @@ const seed = async () => {
         en: 'Black peppercorns',
       },
       category: 'spices',
+      company: 'mfc' as const,
       reference: 'EPI-POI-012',
-      price: 9,
-      stock: 40,
       fr: {
         title: 'Poivre noir de Madagascar',
         shortDescription:
@@ -572,9 +607,8 @@ const seed = async () => {
         en: 'Ground turmeric and turmeric roots',
       },
       category: 'spices',
+      company: 'eac' as const,
       reference: 'EPI-CUR-013',
-      price: 8,
-      stock: 30,
       fr: {
         title: 'Curcuma moulu de Madagascar',
         shortDescription:
@@ -617,9 +651,8 @@ const seed = async () => {
         en: 'Ginger roots and ground ginger',
       },
       category: 'spices',
+      company: 'eac' as const,
       reference: 'EPI-GIN-014',
-      price: 8,
-      stock: 18,
       fr: {
         title: 'Gingembre moulu de Madagascar',
         shortDescription:
@@ -661,10 +694,9 @@ const seed = async () => {
         fr: 'Pot de miel ambré et cuillère à miel en bois',
         en: 'Jar of amber honey with a wooden dipper',
       },
-      category: 'pantry',
+      category: 'natural',
+      company: 'eac' as const,
       reference: 'EPI-MIE-015',
-      price: 14,
-      stock: 5,
       fr: {
         title: 'Miel de litchi de Madagascar',
         shortDescription:
@@ -706,10 +738,9 @@ const seed = async () => {
         fr: 'Noix de cajou décortiquées',
         en: 'Shelled cashew nuts',
       },
-      category: 'pantry',
+      category: 'natural',
+      company: 'eac' as const,
       reference: 'EPI-CAJ-016',
-      price: 12,
-      stock: 24,
       fr: {
         title: 'Noix de cajou de Madagascar',
         shortDescription:
@@ -762,13 +793,14 @@ const seed = async () => {
       product.alt,
       photo?.ext ?? 'jpg',
     )
+    if (photo) uploaded.set(product.slug, imageId)
 
     const galleryIds: number[] = []
 
     for (const extra of extras) {
-      galleryIds.push(
-        await uploadImage(`${product.slug}-${extra.index}`, extra.buffer, product.alt, extra.ext),
-      )
+      const extraId = await uploadImage(`${product.slug}-${extra.index}`, extra.buffer, product.alt, extra.ext)
+      uploaded.set(`${product.slug}-${extra.index}`, extraId)
+      galleryIds.push(extraId)
     }
 
     const created = await payload.create({
@@ -782,11 +814,15 @@ const seed = async () => {
         image: imageId,
         gallery: galleryIds,
         category: categories[product.category],
+        company: companyIds[product.company],
         reference: product.reference,
-        price: product.price,
-        currency: 'EUR',
-        stock: product.stock,
-        inStock: true,
+        // One example of the optional link to EAC's future online store, so
+        // the button can be shown. The .example domain is reserved and goes
+        // nowhere.
+        shopUrl:
+          product.slug === 'vanille-bourbon'
+            ? 'https://boutique-eac.example/products/vanille-bourbon'
+            : undefined,
         _status: 'published',
         publishedAt: new Date().toISOString(),
       },
@@ -810,298 +846,124 @@ const seed = async () => {
     payload.logger.info(`product published: ${product.fr.title} / ${product.en.title}`)
   }
 
-  // --- reviews ------------------------------------------------------------
-  // Sample reviews in both languages. One is left pending, so the approval
-  // queue in the admin panel has something in it for the demonstration.
-  const reviews: {
-    product: string
-    name: string
-    rating: number
-    language: 'fr' | 'en'
-    daysAgo: number
-    comment: string
-    pending?: boolean
-  }[] = [
-    { product: 'vanille-bourbon', name: 'Sophie L.', rating: 5, language: 'fr', daysAgo: 3, comment: 'Gousses très souples et charnues, avec un parfum incroyable. J’en ai utilisé une pour une crème brûlée : rien à voir avec la vanille du supermarché.' },
-    { product: 'vanille-bourbon', name: 'James W.', rating: 5, language: 'en', daysAgo: 12, comment: 'Plump, oily pods with a deep, almost smoky aroma. Worth every cent for baking.' },
-    { product: 'vanille-bourbon', name: 'Rindra A.', rating: 4, language: 'fr', daysAgo: 27, comment: 'Très belle qualité, le tube en verre garde bien la souplesse des gousses. Un peu cher, mais on en utilise peu.' },
-    { product: 'vanille-bourbon', name: 'Marc D.', rating: 3, language: 'fr', daysAgo: 1, comment: 'Bonne vanille, mais la livraison a été un peu longue à mon goût.', pending: true },
-    { product: 'baies-roses', name: 'Claire M.', rating: 5, language: 'fr', daysAgo: 6, comment: 'Parfaites sur un carpaccio de saint-jacques. Croquantes, fruitées, juste ce qu’il faut de piquant.' },
-    { product: 'baies-roses', name: 'Tom H.', rating: 4, language: 'en', daysAgo: 19, comment: 'Lovely sweet, resinous flavour. Smaller jar than I expected, but a little goes a long way.' },
-    { product: 'clous-de-girofle', name: 'Hery R.', rating: 5, language: 'fr', daysAgo: 9, comment: 'Des clous bien entiers et très parfumés. Indispensables dans mon vin chaud.' },
-    { product: 'clous-de-girofle', name: 'Anne-Laure P.', rating: 4, language: 'fr', daysAgo: 22, comment: 'Très puissants, il faut vraiment en mettre peu ! Bonne qualité.' },
-    { product: 'clous-de-girofle', name: 'Daniel K.', rating: 5, language: 'en', daysAgo: 40, comment: 'Fresh and aromatic — the difference from old supermarket cloves is obvious.' },
-    { product: 'cacao', name: 'Julie B.', rating: 5, language: 'fr', daysAgo: 4, comment: 'Les notes d’agrumes sont bien là, comme annoncé. J’en mets en éclats sur mon porridge.' },
-    { product: 'cacao', name: 'Mark S.', rating: 4, language: 'en', daysAgo: 15, comment: 'Great fruity beans. A bit bitter on their own, perfect crushed into baking.' },
-    { product: 'cacao', name: 'Fanja R.', rating: 5, language: 'fr', daysAgo: 33, comment: 'Le meilleur cacao que j’ai goûté. On sent une fermentation soignée.' },
-    { product: 'ylang-ylang', name: 'Nathalie G.', rating: 5, language: 'fr', daysAgo: 8, comment: 'Un parfum floral très doux, quelques gouttes suffisent dans le diffuseur.' },
-    { product: 'ylang-ylang', name: 'Emma C.', rating: 4, language: 'en', daysAgo: 25, comment: 'Beautiful scent and quite strong, so I dilute it well. Shame it sold out so fast.' },
-    { product: 'poivre-noir', name: 'Pierre V.', rating: 5, language: 'fr', daysAgo: 2, comment: 'Un poivre très aromatique, bien moins agressif que ceux du commerce. Je ne peux plus m’en passer.' },
-    { product: 'poivre-noir', name: 'Sarah J.', rating: 5, language: 'en', daysAgo: 11, comment: 'Woody, almost citrusy. My pepper mill has never smelled this good.' },
-    { product: 'poivre-noir', name: 'Lova R.', rating: 4, language: 'fr', daysAgo: 30, comment: 'Très bon poivre, des grains réguliers. Le bocal est pratique.' },
-    { product: 'curcuma', name: 'Isabelle T.', rating: 4, language: 'fr', daysAgo: 7, comment: 'Belle couleur et goût doux. Attention, ça tache vraiment !' },
-    { product: 'curcuma', name: 'Ravi P.', rating: 5, language: 'en', daysAgo: 21, comment: 'Vibrant and earthy, much fresher than what I usually buy. Great in dal.' },
-    { product: 'gingembre', name: 'Céline F.', rating: 5, language: 'fr', daysAgo: 5, comment: 'Parfait pour mes pains d’épices, bien piquant et parfumé.' },
-    { product: 'gingembre', name: 'Oliver B.', rating: 3, language: 'en', daysAgo: 17, comment: 'Good flavour, though I prefer fresh ginger for most dishes. Fine for baking.' },
-    { product: 'gingembre', name: 'Miora H.', rating: 4, language: 'fr', daysAgo: 36, comment: 'Bonne qualité, mouture très fine.' },
-    { product: 'miel-litchi', name: 'Hélène D.', rating: 5, language: 'fr', daysAgo: 3, comment: 'Un miel délicat au goût de fleur, mes enfants l’adorent sur leurs tartines.' },
-    { product: 'miel-litchi', name: 'Grace N.', rating: 5, language: 'en', daysAgo: 14, comment: 'Light, floral and not too sweet. Lovely in tea.' },
-    { product: 'miel-litchi', name: 'Tiana R.', rating: 4, language: 'fr', daysAgo: 29, comment: 'Très bon miel. Il a cristallisé au bout de quelques semaines, mais un passage au bain-marie a suffi.' },
-    { product: 'noix-de-cajou', name: 'Antoine M.', rating: 5, language: 'fr', daysAgo: 6, comment: 'Des noix entières, tendres et bien fraîches. Je les fais dorer à la poêle, un régal.' },
-    { product: 'noix-de-cajou', name: 'Lucy A.', rating: 4, language: 'en', daysAgo: 20, comment: 'Good quality whole cashews. Would love a roasted, salted option too.' },
-    { product: 'coffret-decouverte', name: 'Camille R.', rating: 5, language: 'fr', daysAgo: 10, comment: 'Offert à ma mère, elle a adoré la fiche qui explique les différences entre les cannelles.' },
-    { product: 'coffret-decouverte', name: 'Ben T.', rating: 4, language: 'en', daysAgo: 31, comment: 'Nice gift, well presented, and the wooden box is reusable.' },
-  ]
+  // --- founder and management ---------------------------------------------
+  for (const member of content.team) {
+    const photoId = await initialsImage(`portrait-${member.initials.toLowerCase()}-${member.order}`, member.initials, member.colour, {
+      fr: `Portrait provisoire — ${member.name}`,
+      en: `Placeholder portrait — ${member.name}`,
+    })
 
-  for (const review of reviews) {
-    const product = productIds[review.product]
-    if (!product) continue
-
-    await payload.create({
-      collection: 'reviews',
+    const created = await payload.create({
+      collection: 'team',
+      locale: 'fr',
       data: {
-        product,
-        name: review.name,
-        rating: review.rating,
-        comment: review.comment,
-        language: review.language,
-        status: review.pending ? 'pending' : 'approved',
-        createdAt: new Date(Date.now() - review.daysAgo * 24 * 60 * 60 * 1000).toISOString(),
+        name: member.name,
+        role: member.role.fr,
+        bio: member.bio.fr,
+        company: member.company ? companyIds[member.company] : null,
+        photo: photoId,
+        isFounder: Boolean(member.founder),
+        order: member.order,
+      },
+    })
+
+    await payload.update({
+      collection: 'team',
+      id: created.id,
+      locale: 'en',
+      data: { role: member.role.en, bio: member.bio.en },
+    })
+  }
+  payload.logger.info(`team created: ${content.team.length} (founder is a placeholder)`)
+
+  // --- projects -----------------------------------------------------------
+  for (const project of content.projects) {
+    const coverId = await seedImage(project.cover, { fr: project.fr.title, en: project.en.title })
+    if (!coverId) continue
+
+    const created = await payload.create({
+      collection: 'projects',
+      locale: 'fr',
+      data: {
+        title: project.fr.title,
+        summary: project.fr.summary,
+        description: richText(project.fr.body),
+        location: project.fr.location,
+        period: project.fr.period,
+        coverImage: coverId,
+        status: project.status,
+        company: project.company ? companyIds[project.company] : null,
+        order: project.order,
+        _status: 'published',
+      },
+    })
+
+    await payload.update({
+      collection: 'projects',
+      id: created.id,
+      locale: 'en',
+      data: {
+        title: project.en.title,
+        summary: project.en.summary,
+        description: richText(project.en.body),
+        location: project.en.location,
+        period: project.en.period,
+        _status: 'published',
       },
     })
   }
-  payload.logger.info(`reviews created: ${reviews.length} (1 pending approval)`)
+  payload.logger.info(`projects published: ${content.projects.length}`)
 
-  // --- journal ------------------------------------------------------------
-  const posts = [
-    {
-      slug: 'ceylan-cassia',
-      label: 'Journal',
-      colours: ['#5e3418', '#bf8347'] as [string, string],
-      alt: {
-        fr: 'Bâtons de cannelle de différentes épaisseurs sur un linge clair',
-        en: 'Cinnamon sticks of different thicknesses on pale linen',
-      },
-      author: { name: 'Hanta Rakoto', initials: 'HR', colour: '#7a4418' },
-      daysAgo: 4,
-      fr: {
-        title: 'Ceylan ou Cassia : comment les distinguer',
-        excerpt:
-          'Les deux sont vendues sous le nom de cannelle, mais elles ne se ressemblent ni à l’œil, ni au nez, ni en cuisine.',
-        body: [
-          'Posez un bâton de chaque côte à côte et la différence saute aux yeux. La Ceylan est claire, fine, composée de plusieurs couches d’écorce enroulées comme un cigare. La Cassia est sombre, épaisse, et se referme sur elle-même en un seul rouleau creux.',
-          'Au nez, la Ceylan est florale et presque sucrée. La Cassia est plus directe, plus piquante, avec une pointe de chaleur qui reste en bouche.',
-          'En cuisine, la règle est simple : la Ceylan pour tout ce qui est délicat, pâtisserie et infusion ; la Cassia pour ce qui mijote longtemps et doit tenir.',
-          'Un dernier point, moins connu : la Cassia contient de la coumarine, que l’on déconseille en grande quantité. Pour un usage quotidien, la Ceylan reste le choix le plus sûr.',
-        ],
-      },
-      en: {
-        title: 'Ceylon or Cassia: how to tell them apart',
-        excerpt:
-          'Both are sold as cinnamon, but they do not look, smell or cook the same way at all.',
-        body: [
-          'Put a stick of each side by side and the difference is obvious. Ceylon is pale and thin, made of several layers of bark rolled up like a cigar. Cassia is dark and thick, curling in on itself as a single hollow roll.',
-          'By nose, Ceylon is floral and almost sweet. Cassia is more direct, spicier, with a warmth that lingers.',
-          'In the kitchen the rule is simple: Ceylon for anything delicate, baking and infusions; Cassia for things that simmer a long time and need to hold up.',
-          'One last point, less widely known: Cassia contains coumarin, which is not recommended in large amounts. For everyday use, Ceylon remains the safer choice.',
-        ],
-      },
-    },
-    {
-      slug: 'trois-facons',
-      label: 'Cuisine',
-      colours: ['#6f4a20', '#d2a368'] as [string, string],
-      alt: {
-        fr: 'Tasse de café et bâtons de cannelle',
-        en: 'A cup of coffee and cinnamon sticks',
-      },
-      author: { name: 'Léa Marchand', initials: 'LM', colour: '#5c3a1e' },
-      daysAgo: 11,
-      fr: {
-        title: 'Trois façons d’utiliser la cannelle en cuisine',
-        excerpt:
-          'Au-delà du gâteau aux pommes : trois usages simples qui changent un plat du quotidien.',
-        body: [
-          'Dans le riz. Un bâton de Cassia glissé dans l’eau de cuisson parfume le riz sans le dominer. Retirez-le avant de servir.',
-          'Dans un plat de viande mijoté. La cannelle travaille très bien avec l’agneau et la tomate. Un bâton suffit pour quatre personnes, ajouté dès le début de la cuisson.',
-          'Dans le café. Une pincée de Ceylan moulue dans le filtre, avant de passer l’eau. Le résultat est plus rond, et demande moins de sucre.',
-          'Dans les trois cas, le même principe : la cannelle est un fond, pas un premier rôle. Si on la sent franchement, il y en a trop.',
-        ],
-      },
-      en: {
-        title: 'Three ways to cook with cinnamon',
-        excerpt:
-          'Beyond apple cake: three simple uses that change an everyday dish.',
-        body: [
-          'In rice. A Cassia stick dropped into the cooking water scents the rice without taking it over. Pull it out before serving.',
-          'In a slow-cooked meat dish. Cinnamon works beautifully with lamb and tomato. One stick is enough for four people, added at the start.',
-          'In coffee. A pinch of ground Ceylon in the filter, before the water goes through. The result is rounder, and needs less sugar.',
-          'In all three cases the same principle applies: cinnamon is a base note, not a lead. If you can clearly taste it, there is too much.',
-        ],
-      },
-    },
-    {
-      slug: 'chocolat-chaud',
-      label: 'Recette',
-      colours: ['#3b2114', '#8b5a34'] as [string, string],
-      alt: {
-        fr: 'Chocolat chaud, bâtons de cannelle et carrés de chocolat noir',
-        en: 'Hot chocolate, cinnamon sticks and squares of dark chocolate',
-      },
-      author: { name: 'Léa Marchand', initials: 'LM', colour: '#5c3a1e' },
-      daysAgo: 2,
-      fr: {
-        title: 'Chocolat chaud à la cannelle et à la vanille',
-        excerpt:
-          'Une recette pour deux tasses : du chocolat noir, une demi-gousse de vanille et un bâton de Ceylan.',
-        body: [
-          'Pour deux tasses : 50 cl de lait entier, 1 bâton de cannelle de Ceylan, ½ gousse de vanille, 80 g de chocolat noir à 70 %, une pincée de sel, et du sucre selon votre goût.',
-          'Fendez la demi-gousse dans la longueur et grattez les graines dans le lait. Ajoutez la gousse vidée et le bâton de cannelle, portez à frémissement, puis couvrez et laissez infuser dix minutes hors du feu. Retirez la gousse et le bâton.',
-          'Remettez sur feu doux, ajoutez le chocolat haché et le sel, et fouettez sans laisser bouillir jusqu’à ce que le mélange épaississe légèrement. Goûtez avant de sucrer : un chocolat à 70 % en demande peu.',
-          'Pour une version plus intense, faites infuser une cuillère à soupe d’éclats de fèves de cacao avec les épices, puis filtrez. Un clou de girofle apporte une note plus chaude, mais un seul suffit. Rincée et séchée, la gousse de vanille parfumera ensuite un bocal de sucre.',
-        ],
-      },
-      en: {
-        title: 'Hot chocolate with cinnamon and vanilla',
-        excerpt:
-          'A recipe for two cups: dark chocolate, half a vanilla pod and a Ceylon quill.',
-        body: [
-          'For two cups: 500 ml whole milk, 1 Ceylon cinnamon quill, ½ vanilla pod, 80 g dark chocolate (70%), a pinch of salt, and sugar to taste.',
-          'Split the half pod lengthways and scrape the seeds into the milk. Add the empty pod and the cinnamon, bring to a simmer, then cover and leave to infuse off the heat for ten minutes. Lift out the pod and the quill.',
-          'Return the pan to a low heat, add the chopped chocolate and the salt, and whisk without letting it boil until it thickens slightly. Taste before adding sugar: a 70% chocolate needs very little.',
-          'For a deeper version, infuse a tablespoon of cocoa nibs along with the spices, then strain. A single clove adds a warmer note, but one is plenty. Rinsed and dried, the vanilla pod will go on to scent a jar of sugar.',
-        ],
-      },
-    },
-    {
-      slug: 'vanille-affinage',
-      label: 'Vanille',
-      colours: ['#2a1a10', '#6e4a2c'] as [string, string],
-      alt: {
-        fr: 'Gousses de vanille noires et souples sur un linge blanc',
-        en: 'Supple black vanilla pods on white linen',
-      },
-      author: { name: 'Hanta Rakoto', initials: 'HR', colour: '#7a4418' },
-      daysAgo: 18,
-      fr: {
-        title: 'De la gousse verte à la gousse noire : l’affinage de la vanille',
-        excerpt:
-          'Au moment de la cueillette, la vanille est verte et ne sent presque rien. Son parfum naît pendant des mois de préparation.',
-        body: [
-          'Une gousse de vanille fraîchement cueillie est verte, ferme et presque inodore. La vanilline y est encore liée à un sucre, sous forme de glucovanilline, et ne se libère qu’au cours d’une lente transformation.',
-          'Dans la région SAVA, les gousses sont d’abord échaudées : plongées quelques minutes dans une eau à environ 65 °C, ce qui arrête leur maturation. Elles passent ensuite un jour ou deux enveloppées de couvertures au fond de caisses en bois, où elles « suent » et commencent à brunir.',
-          'Viennent alors des semaines d’alternance : exposées au soleil quelques heures par jour, puis rentrées pour transpirer de nouveau. Les gousses perdent peu à peu leur eau, deviennent souples et prennent leur couleur noire. Il faut en moyenne cinq à six kilos de vanille verte pour obtenir un kilo de vanille préparée.',
-          'Reste l’affinage : deux à trois mois de repos dans des malles fermées, avec un tri gousse par gousse. C’est là que le parfum s’arrondit. Sur les plus belles gousses apparaissent parfois de fins cristaux blancs, le givre : ce n’est pas de la moisissure, mais de la vanilline.',
-        ],
-      },
-      en: {
-        title: 'From green pod to black pod: how vanilla is cured',
-        excerpt:
-          'When it is picked, vanilla is green and has almost no scent. Its fragrance develops over months of careful preparation.',
-        body: [
-          'A freshly picked vanilla pod is green, firm and almost odourless. Its vanillin is still bound to a sugar, as glucovanillin, and is only released through a slow transformation.',
-          'In the SAVA region the pods are first blanched: dipped for a few minutes in water at around 65 °C, which stops them ripening. They then spend a day or two wrapped in blankets at the bottom of wooden boxes, where they "sweat" and begin to turn brown.',
-          'Weeks of alternation follow: a few hours in the sun each day, then back indoors to sweat again. The pods slowly lose their water, become supple and turn black. On average it takes five to six kilos of green vanilla to make one kilo of cured vanilla.',
-          'Last comes conditioning: two to three months resting in closed trunks, sorted pod by pod. This is where the scent rounds out. The finest pods sometimes grow fine white crystals, known as frost. It is not mould, but vanillin.',
-        ],
-      },
-    },
-    {
-      slug: 'cacao-fermentation',
-      label: 'Cacao',
-      colours: ['#3b2114', '#8b5a34'] as [string, string],
-      alt: {
-        fr: 'Cabosse de cacao ouverte, fèves dans leur pulpe blanche',
-        en: 'An open cacao pod, beans in their white pulp',
-      },
-      author: { name: 'Tojo Andrianaivo', initials: 'TA', colour: '#4f2410' },
-      daysAgo: 25,
-      fr: {
-        title: 'Ce que la fermentation donne au cacao',
-        excerpt:
-          'Une fève de cacao crue n’a pas le goût du chocolat. Il apparaît en sept jours, dans une caisse en bois.',
-        body: [
-          'À l’ouverture d’une cabosse, les fèves sont enrobées d’une pulpe blanche, sucrée et acidulée. La fève elle-même, croquée crue, est amère, astringente, et n’évoque en rien le chocolat.',
-          'Dans le Sambirano, fèves et pulpe sont versées dans des caisses en bois et couvertes de feuilles de bananier. Les levures transforment d’abord les sucres de la pulpe en alcool, que des bactéries changent ensuite en acide acétique. La masse chauffe jusqu’à 45 à 50 °C.',
-          'Tous les deux jours environ, les fèves sont brassées, passées d’une caisse à l’autre pour y faire entrer de l’air. Le germe meurt, la fève vire du violet au brun, et se forment les précurseurs des arômes que la torréfaction révélera plus tard.',
-          'Au bout de sept jours, les fèves sont séchées au soleil jusqu’à ne plus contenir qu’environ 7 % d’eau. Pour vérifier le travail, on en coupe un échantillon dans la longueur : une fève bien fermentée est brune et fissurée à l’intérieur ; une fève grise et compacte, dite « ardoisée », ne l’a pas été.',
-        ],
-      },
-      en: {
-        title: 'What fermentation gives cacao',
-        excerpt:
-          'A raw cacao bean does not taste of chocolate. That flavour appears over seven days, in a wooden box.',
-        body: [
-          'When a pod is opened, the beans are coated in a white pulp, sweet and tart. The bean itself, bitten raw, is bitter and astringent, and tastes nothing like chocolate.',
-          'In the Sambirano, beans and pulp are tipped into wooden boxes and covered with banana leaves. Yeasts first turn the sugars in the pulp into alcohol, which bacteria then convert into acetic acid. The mass heats up to 45–50 °C.',
-          'Every couple of days the beans are turned, moved from one box to the next to let air in. The germ dies, the bean shifts from purple to brown, and the precursors of the flavours that roasting will later bring out begin to form.',
-          'After seven days the beans are dried in the sun until only about 7% water remains. To check the work, a sample is cut lengthways: a well-fermented bean is brown and cracked inside; a grey, dense bean, known as "slaty", was not fermented.',
-        ],
-      },
-    },
-    {
-      slug: 'conserver-epices',
-      label: 'Conseils',
-      colours: ['#5e3418', '#bf8347'] as [string, string],
-      alt: {
-        fr: 'Bocaux d’épices en verre sur une étagère',
-        en: 'Glass jars of spices on a shelf',
-      },
-      author: { name: 'Léa Marchand', initials: 'LM', colour: '#5c3a1e' },
-      daysAgo: 32,
-      fr: {
-        title: 'Bien conserver ses épices',
-        excerpt:
-          'La lumière, l’air, la chaleur et l’humidité : quatre ennemis, et quelques gestes simples pour garder le parfum plus longtemps.',
-        body: [
-          'Une épice ne se gâte pas vraiment : elle s’éteint. Son parfum tient dans des huiles essentielles volatiles, qui s’échappent un peu plus chaque fois que le bocal reste ouvert, au soleil ou près d’une source de chaleur.',
-          'Le bon endroit est donc un placard sombre, loin de la cuisinière et du four, dans des bocaux qui ferment bien. Le verre convient parfaitement, à condition d’être rangé à l’abri de la lumière. Et jamais de cuillère humide dans le bocal : l’humidité fait prendre la poudre en masse et peut faire moisir les baies.',
-          'Achetez entier quand c’est possible. Un bâton de cannelle ou un clou de girofle garde son parfum deux à trois ans ; la même épice moulue commence à faiblir au bout de six mois à un an. Un petit moulin réservé aux épices suffit pour moudre au dernier moment.',
-          'Deux cas particuliers : la vanille se garde dans un tube ou un papier bien fermé, au frais mais pas au réfrigérateur ; les huiles essentielles restent dans leur flacon ambré, bouchon bien vissé. Et pour savoir si une épice est encore bonne, frottez-en un peu entre vos doigts : si l’odeur est faible, il est temps de la renouveler.',
-        ],
-      },
-      en: {
-        title: 'How to store your spices',
-        excerpt:
-          'Light, air, heat and moisture: four enemies, and a few simple habits that keep the scent alive for longer.',
-        body: [
-          'Spices do not really go off: they fade. Their scent lives in volatile essential oils, which escape a little more every time the jar is left open, in the sun or near a source of heat.',
-          'The right place is a dark cupboard, away from the hob and the oven, in jars that close properly. Glass is perfect, as long as it is kept out of the light. And never put a damp spoon in the jar: moisture makes powders cake and can turn berries mouldy.',
-          'Buy whole whenever you can. A cinnamon stick or a clove keeps its scent for two to three years; the same spice ground starts to fade after six months to a year. A small grinder kept just for spices is all you need to grind at the last minute.',
-          'Two special cases: vanilla keeps in a tube or tightly closed paper, somewhere cool but not in the fridge; essential oils stay in their amber bottle with the cap screwed on tight. To tell whether a spice is still good, rub a little between your fingers: if the smell is faint, it is time to replace it.',
-        ],
-      },
-    },
-  ]
+  // --- partners -----------------------------------------------------------
+  for (const partner of content.partners) {
+    const logoId = await initialsImage(`partner-${partner.initials.toLowerCase()}`, partner.initials, partner.colour, {
+      fr: `Logo provisoire — ${partner.name}`,
+      en: `Placeholder logo — ${partner.name}`,
+    })
 
-  for (const post of posts) {
-    const cover = findPhoto(`journal-${post.slug}`)
-    if (cover) payload.logger.info(`using real photograph for journal-${post.slug}`)
+    const created = await payload.create({
+      collection: 'partners',
+      locale: 'fr',
+      data: {
+        name: partner.name,
+        type: partner.type,
+        country: partner.country.fr,
+        description: partner.description.fr,
+        logo: logoId,
+        order: partner.order,
+      },
+    })
 
-    const coverId = await uploadImage(
-      `journal-${post.slug}`,
-      cover?.buffer ?? (await placeholderImage(sharp, post.label, post.colours)),
-      post.alt,
-      cover?.ext ?? 'jpg',
-    )
+    await payload.update({
+      collection: 'partners',
+      id: created.id,
+      locale: 'en',
+      data: { country: partner.country.en, description: partner.description.en },
+    })
+  }
+  payload.logger.info(`partners created: ${content.partners.length} (all fictional)`)
 
-    const avatarId = await uploadImage(
-      `author-${post.slug}`,
-      await avatarImage(sharp, post.author.initials, post.author.colour),
-      { fr: post.author.name, en: post.author.name },
-    )
+  // --- news ---------------------------------------------------------------
+  for (const item of content.news) {
+    const coverId = await seedImage(item.cover, item.coverAlt)
+    if (!coverId) continue
 
-    const publishedAt = new Date(Date.now() - post.daysAgo * 24 * 60 * 60 * 1000).toISOString()
+    const avatarId = await initialsImage(`author-${item.slug}`, content.NEWS_AUTHOR.initials, content.NEWS_AUTHOR.colour, {
+      fr: content.NEWS_AUTHOR.name,
+      en: content.NEWS_AUTHOR.name,
+    })
+
+    const publishedAt = new Date(Date.now() - item.daysAgo * 24 * 60 * 60 * 1000).toISOString()
 
     const created = await payload.create({
       collection: 'posts',
       locale: 'fr',
       data: {
-        title: post.fr.title,
-        excerpt: post.fr.excerpt,
-        content: richText(post.fr.body),
+        title: item.fr.title,
+        excerpt: item.fr.excerpt,
+        content: richText(item.fr.body),
         coverImage: coverId,
-        authorName: post.author.name,
+        authorName: content.NEWS_AUTHOR.name,
         authorAvatar: avatarId,
         _status: 'published',
         publishedAt,
@@ -1113,15 +975,122 @@ const seed = async () => {
       id: created.id,
       locale: 'en',
       data: {
-        title: post.en.title,
-        excerpt: post.en.excerpt,
-        content: richText(post.en.body),
+        title: item.en.title,
+        excerpt: item.en.excerpt,
+        content: richText(item.en.body),
         _status: 'published',
       },
     })
 
-    payload.logger.info(`article published: ${post.fr.title} / ${post.en.title}`)
+    payload.logger.info(`news published: ${item.fr.title}`)
   }
+
+  // --- gallery ------------------------------------------------------------
+  for (const album of content.albums) {
+    const photoIds: number[] = []
+    for (const name of album.photos) {
+      const id = await seedImage(name, album.title)
+      if (id) photoIds.push(id)
+    }
+
+    const created = await payload.create({
+      collection: 'albums',
+      locale: 'fr',
+      data: {
+        title: album.title.fr,
+        description: album.description.fr,
+        photos: photoIds,
+        date: album.date,
+        order: album.order,
+      },
+    })
+
+    await payload.update({
+      collection: 'albums',
+      id: created.id,
+      locale: 'en',
+      data: { title: album.title.en, description: album.description.en },
+    })
+  }
+  payload.logger.info(`gallery albums created: ${content.albums.length}`)
+
+  // --- page texts -----------------------------------------------------------
+  const heroImage = await seedImage(content.homePage.heroImage, {
+    fr: 'Gousses de vanille de Madagascar',
+    en: 'Madagascar vanilla pods',
+  })
+  const aboutImage = await seedImage(content.aboutPage.image, {
+    fr: 'Épices de Madagascar',
+    en: 'Spices from Madagascar',
+  })
+
+  for (const locale of ['fr', 'en'] as const) {
+    await payload.updateGlobal({
+      slug: 'home-page',
+      locale,
+      data: {
+        hero: { ...content.homePage[locale].hero, image: heroImage },
+        structure: content.homePage[locale].structure,
+        closing: content.homePage[locale].closing,
+        featuredProducts: content.homePage.featured
+          .map((slug) => productIds[slug])
+          .filter((id): id is number => Boolean(id)),
+      },
+    })
+
+    await payload.updateGlobal({
+      slug: 'about-page',
+      locale,
+      data: {
+        title: content.aboutPage[locale].title,
+        intro: content.aboutPage[locale].intro,
+        content: richText(content.aboutPage[locale].body),
+        image: aboutImage,
+        values: content.aboutPage[locale].values,
+      },
+    })
+
+    const legal = content.legalPages[locale]
+    await payload.updateGlobal({
+      slug: 'legal-pages',
+      locale,
+      data: {
+        legalNotice: { title: legal.legalNotice.title, content: richText(legal.legalNotice.body) },
+        privacy: { title: legal.privacy.title, content: richText(legal.privacy.body) },
+      },
+    })
+
+    await payload.updateGlobal({
+      slug: 'section-intros',
+      locale,
+      data: content.sectionIntros[locale],
+    })
+  }
+  payload.logger.info('page texts written: home, about, legal, section introductions (fr + en)')
+
+  // --- sample enquiries -------------------------------------------------------
+  // So the "Enquiries" list in the administration area shows what arrives.
+  for (const enquiry of content.enquiries) {
+    await payload.create({
+      collection: 'enquiries',
+      data: {
+        type: enquiry.type,
+        product: enquiry.product ? productIds[enquiry.product] : undefined,
+        name: enquiry.name,
+        company: enquiry.company,
+        email: enquiry.email,
+        country: enquiry.country,
+        volume: enquiry.volume || undefined,
+        message: enquiry.message,
+        language: enquiry.language,
+        status: enquiry.status,
+        notes: 'notes' in enquiry ? enquiry.notes : undefined,
+        consentAt: new Date(Date.now() - enquiry.daysAgo * 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: new Date(Date.now() - enquiry.daysAgo * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    })
+  }
+  payload.logger.info(`sample enquiries created: ${content.enquiries.length}`)
 
   payload.logger.info('--- Done ---')
   payload.logger.info(
@@ -1129,7 +1098,7 @@ const seed = async () => {
   )
   payload.logger.info(`Administrator: ${ADMIN_EMAIL}`)
   payload.logger.info(`Editor:        ${EDITOR_EMAIL}`)
-  payload.logger.info('Passwords are the SEED_* values in .env (defaults are in src/seed/seed.ts).')
+  payload.logger.info('Passwords are the SEED_* values in .env.')
   payload.logger.info('Change them before sharing the link with anyone outside the project.')
 }
 

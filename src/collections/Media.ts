@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { ADMIN_GROUPS } from '../adminGroups'
 import { isAdminOrEditor } from '../access/roles'
 
 export const Media: CollectionConfig = {
@@ -9,7 +10,7 @@ export const Media: CollectionConfig = {
     plural: { fr: 'Médiathèque', en: 'Media library' },
   },
   admin: {
-    group: { fr: 'Contenu', en: 'Content' },
+    group: ADMIN_GROUPS.media,
     description: {
       fr: 'Toutes les photographies du site. Glissez un fichier pour le téléverser.',
       en: 'Every photograph used on the site. Drag a file in to upload it.',

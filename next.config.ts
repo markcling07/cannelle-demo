@@ -26,6 +26,13 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(dirname),
   },
+  // The journal became "News"; keep old links and search results working.
+  async redirects() {
+    return [
+      { source: '/:locale(fr|en)/journal', destination: '/:locale/news', permanent: true },
+      { source: '/:locale(fr|en)/journal/:slug', destination: '/:locale/news/:slug', permanent: true },
+    ]
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

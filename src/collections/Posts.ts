@@ -1,26 +1,28 @@
 import type { CollectionConfig } from 'payload'
 
-import { isAdminOrEditor } from '../access/roles'
+import { ADMIN_GROUPS } from '../adminGroups'
+import { isAdminOrEditor, publishedOrLoggedIn } from '../access/roles'
 import { slugField } from '../fields/slug'
 
 /**
- * The journal — short articles about cinnamon, its origins and how to use it.
+ * News from the Group and its companies. The collection keeps its original
+ * `posts` name so existing content and the database stay as they are.
  * Same draft/publish and French/English behaviour as the catalogue.
  */
 export const Posts: CollectionConfig = {
   slug: 'posts',
   labels: {
-    singular: { fr: 'Article', en: 'Article' },
-    plural: { fr: 'Journal', en: 'Journal' },
+    singular: { fr: 'Actualité', en: 'News item' },
+    plural: { fr: 'Actualités', en: 'News' },
   },
 
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'authorName', 'publishedAt', '_status'],
-    group: { fr: 'Contenu', en: 'Content' },
+    group: ADMIN_GROUPS.news,
     description: {
-      fr: 'Articles du journal. Chaque article existe en français et en anglais.',
-      en: 'Journal articles. Every article exists in French and in English.',
+      fr: 'Les actualités du Groupe, de MFC et d’EAC. Chacune existe en français et en anglais.',
+      en: 'News from the Group, MFC and EAC. Each item exists in French and in English.',
     },
   },
 
@@ -30,10 +32,7 @@ export const Posts: CollectionConfig = {
   },
 
   access: {
-    read: ({ req: { user } }) => {
-      if (user) return true
-      return { _status: { equals: 'published' } }
-    },
+    read: publishedOrLoggedIn,
     create: isAdminOrEditor,
     update: isAdminOrEditor,
     delete: isAdminOrEditor,
@@ -55,8 +54,8 @@ export const Posts: CollectionConfig = {
       label: { fr: 'Résumé', en: 'Excerpt' },
       admin: {
         description: {
-          fr: 'Une ou deux phrases, affichées sur la vignette du journal.',
-          en: 'One or two sentences, shown on the journal card.',
+          fr: 'Une ou deux phrases, affichées sur la vignette de l’actualité.',
+          en: 'One or two sentences, shown on the news card.',
         },
       },
     },

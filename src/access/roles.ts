@@ -21,6 +21,15 @@ export const isAdmin: Access = ({ req: { user } }) => hasRole(user as MaybeUser,
 export const isAdminOrEditor: Access = ({ req: { user } }) =>
   hasRole(user as MaybeUser, 'admin') || hasRole(user as MaybeUser, 'editor')
 
+/**
+ * Visitors see published documents only. Signed-in staff also see drafts,
+ * which is what makes the preview-before-publish step work.
+ */
+export const publishedOrLoggedIn: Access = ({ req: { user } }) => {
+  if (user) return true
+  return { _status: { equals: 'published' } }
+}
+
 /** Admins see every account; everyone else sees only their own. */
 export const isAdminOrSelf: Access = ({ req: { user } }) => {
   if (!user) return false

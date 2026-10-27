@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { ADMIN_GROUPS } from '../adminGroups'
 import { isAdminOrEditor } from '../access/roles'
 import { slugField } from '../fields/slug'
 
@@ -12,10 +13,10 @@ export const Categories: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'updatedAt'],
-    group: { fr: 'Contenu', en: 'Content' },
+    group: ADMIN_GROUPS.catalogue,
     description: {
-      fr: 'Familles de produits, par exemple « Épices » ou « Textile ».',
-      en: 'Product families, for example "Spices" or "Textiles".',
+      fr: 'Familles de produits, par exemple « Vanille » ou « Épices ».',
+      en: 'Product families, for example "Vanilla" or "Spices".',
     },
   },
 

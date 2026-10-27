@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { ADMIN_GROUPS } from '../adminGroups'
 import { isAdmin, isAdminOrSelf, isAdminFieldLevel } from '../access/roles'
 
 export const Users: CollectionConfig = {
@@ -11,7 +12,7 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'roles'],
-    group: { fr: 'Administration', en: 'Administration' },
+    group: ADMIN_GROUPS.settings,
     description: {
       fr: 'Comptes autorisés à se connecter à cette administration.',
       en: 'Accounts allowed to sign in to this administration area.',

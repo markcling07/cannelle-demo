@@ -17,102 +17,139 @@ export const LOCALE_LABELS: Record<Locale, string> = {
  * content. Everything else on the page comes from the administration area.
  */
 const STRINGS = {
-  catalogue: { fr: 'Catalogue', en: 'Catalog' },
-  journal: { fr: 'Journal', en: 'Journal' },
-  allProducts: { fr: 'Tout', en: 'All' },
-  sortBy: { fr: 'Trier par', en: 'Sort by' },
-  sortDefault: { fr: 'Par défaut', en: 'Default' },
-  sortPriceAsc: { fr: 'Prix croissant', en: 'Price: low to high' },
-  sortPriceDesc: { fr: 'Prix décroissant', en: 'Price: high to low' },
+  // --- navigation -----------------------------------------------------------
+  home: { fr: 'Accueil', en: 'Home' },
+  about: { fr: 'À propos', en: 'About' },
+  aboutGroup: { fr: 'À propos du Groupe', en: 'About the Group' },
+  leadership: { fr: 'Fondateur et direction', en: 'Founder and management' },
+  companies: { fr: 'Nos sociétés', en: 'Our companies' },
+  companiesOverview: { fr: 'Vue d’ensemble', en: 'Overview' },
+  products: { fr: 'Nos produits', en: 'Our products' },
+  projects: { fr: 'Nos projets', en: 'Our projects' },
+  partnerships: { fr: 'Partenariats', en: 'Partnerships' },
+  news: { fr: 'Actualités', en: 'News' },
+  gallery: { fr: 'Galerie', en: 'Gallery' },
+  contact: { fr: 'Contact', en: 'Contact' },
+  legalNotice: { fr: 'Mentions légales', en: 'Legal notice' },
+  privacy: { fr: 'Politique de confidentialité', en: 'Privacy policy' },
+  menu: { fr: 'Menu', en: 'Menu' },
+  mainMenu: { fr: 'Menu principal', en: 'Main menu' },
+  footerMenu: { fr: 'Plan du site', en: 'Site map' },
+  footerGroup: { fr: 'Le Groupe', en: 'The Group' },
+  footerActivities: { fr: 'Activités', en: 'What we do' },
+  allRightsReserved: { fr: 'Tous droits réservés.', en: 'All rights reserved.' },
+  language: { fr: 'Langue', en: 'Language' },
+
+  // --- shared ---------------------------------------------------------------
+  learnMore: { fr: 'En savoir plus', en: 'Learn more' },
+  seeAll: { fr: 'Tout voir', en: 'See all' },
   seeMore: { fr: 'Voir plus', en: 'See more' },
-  viewProduct: { fr: 'Voir le produit', en: 'View product' },
-  backToCatalogue: { fr: '← Retour au catalogue', en: '← Back to catalog' },
-  backToJournal: { fr: '← Retour au journal', en: '← Back to the journal' },
-  reference: { fr: 'Référence', en: 'Reference' },
+  explore: { fr: 'Explorer', en: 'Explore' },
+  notTranslated: {
+    fr: "Ce contenu n'a pas encore de version française.",
+    en: 'This content does not have an English version yet.',
+  },
   previousImage: { fr: 'Photographie précédente', en: 'Previous photograph' },
   nextImage: { fr: 'Photographie suivante', en: 'Next photograph' },
+  close: { fr: 'Fermer', en: 'Close' },
+  visitWebsite: { fr: 'Site web', en: 'Website' },
+
+  // --- home -----------------------------------------------------------------
+  ourStructure: { fr: 'Notre organisation', en: 'How we are organised' },
+  umbrellaBrand: { fr: 'Marque commune', en: 'Umbrella brand' },
+  independentCompany: { fr: 'Société indépendante', en: 'Independent company' },
+  futureProjects: { fr: 'Projets futurs', en: 'Future projects' },
+  futureProjectsText: {
+    fr: 'De nouvelles activités pourront rejoindre le Groupe.',
+    en: 'New activities may join the Group in future.',
+  },
+  featuredProducts: { fr: 'Produits à découvrir', en: 'Featured products' },
+  latestNews: { fr: 'Dernières actualités', en: 'Latest news' },
+  ourPartners: { fr: 'Nos partenaires', en: 'Our partners' },
+  discover: { fr: 'Découvrir {name}', en: 'Discover {name}' },
+
+  // --- about and leadership ------------------------------------------------
+  ourValues: { fr: 'Nos valeurs', en: 'Our values' },
+  founder: { fr: 'Fondateur', en: 'Founder' },
+  management: { fr: 'Direction', en: 'Management' },
+  groupLevel: { fr: 'Groupe', en: 'Group' },
+
+  // --- companies -----------------------------------------------------------
+  keyFacts: { fr: 'En bref', en: 'At a glance' },
+  legalDetails: { fr: 'Informations légales', en: 'Legal information' },
+  legalName: { fr: 'Dénomination', en: 'Registered name' },
+  legalForm: { fr: 'Forme juridique', en: 'Legal form' },
+  registration: { fr: 'Immatriculation', en: 'Registration' },
+  registeredAddress: { fr: 'Siège social', en: 'Registered office' },
+  companyProducts: { fr: 'Produits proposés', en: 'Products' },
+  companyProjects: { fr: 'Projets', en: 'Projects' },
+  contactCompany: { fr: 'Contacter {name}', en: 'Contact {name}' },
+  backToCompanies: { fr: '← Nos sociétés', en: '← Our companies' },
+
+  // --- products -------------------------------------------------------------
+  allProducts: { fr: 'Tout', en: 'All' },
+  viewProduct: { fr: 'Voir le produit', en: 'View product' },
+  backToProducts: { fr: '← Nos produits', en: '← Our products' },
   productPhotos: { fr: 'Photographies du produit', en: 'Product photographs' },
-  features: { fr: 'Caractéristiques', en: 'Key features' },
-  inStock: { fr: 'En stock', en: 'In stock' },
-  soldOut: { fr: 'Rupture de stock', en: 'Out of stock' },
-  soldOutNote: {
-    fr: 'Ce produit est momentanément épuisé.',
-    en: 'This product is temporarily sold out.',
-  },
-  stockShort: {
-    fr: 'Stock insuffisant : {count} au maximum, panier compris.',
-    en: 'Not enough stock: {count} at most, including your cart.',
-  },
-  cartOverStock: {
-    fr: 'Seulement {count} en stock : réduisez la quantité.',
-    en: 'Only {count} in stock: please reduce the quantity.',
-  },
-  cartUnavailable: {
-    fr: 'Ce produit n’est plus disponible : retirez-le du panier.',
-    en: 'This product is no longer available: please remove it.',
-  },
-  orderStockError: {
-    fr: 'Un article n’est plus disponible dans la quantité demandée. Vérifiez votre panier.',
-    en: 'An item is no longer available in the quantity requested. Please check your cart.',
-  },
-  // --- reviews --------------------------------------------------------------
-  reviews: { fr: 'Avis clients', en: 'Customer reviews' },
-  noReviews: {
-    fr: 'Aucun avis pour le moment. Soyez le premier à donner le vôtre.',
-    en: 'No reviews yet. Be the first to share yours.',
-  },
-  writeReview: { fr: 'Donner votre avis', en: 'Write a review' },
-  yourName: { fr: 'Votre nom', en: 'Your name' },
-  yourRating: { fr: 'Votre note', en: 'Your rating' },
-  yourComment: { fr: 'Votre avis', en: 'Your review' },
-  sendReview: { fr: 'Publier mon avis', en: 'Submit review' },
-  reviewThanks: {
-    fr: 'Merci ! Votre avis sera publié après validation par notre équipe.',
-    en: 'Thank you! Your review will appear once our team has approved it.',
-  },
-  reviewInvalid: {
-    fr: 'Indiquez votre nom, une note et un avis d’au moins 10 caractères.',
-    en: 'Please give your name, a rating and a review of at least 10 characters.',
-  },
-  reviewModeration: {
-    fr: 'Les avis sont vérifiés avant publication.',
-    en: 'Reviews are checked before they are published.',
+  technicalInfo: { fr: 'Fiche technique', en: 'Technical information' },
+  reference: { fr: 'Référence', en: 'Reference' },
+  suppliedBy: { fr: 'Proposé par', en: 'Supplied by' },
+  requestQuote: { fr: 'Demander un devis', en: 'Request a quotation' },
+  contactTeam: { fr: 'Contacter notre équipe', en: 'Contact our team' },
+  onlineStore: { fr: 'Boutique en ligne EAC', en: 'EAC online store' },
+  productEnquiryNote: {
+    fr: 'Pour les volumes, les conditionnements et les conditions commerciales, notre équipe vous répond directement.',
+    en: 'For volumes, packaging and commercial terms, our team will answer you directly.',
   },
   noProducts: {
     fr: 'Aucun produit publié pour le moment.',
     en: 'No products published yet.',
   },
-  noPosts: {
-    fr: 'Aucun article publié pour le moment.',
-    en: 'No articles published yet.',
+
+  // --- projects -------------------------------------------------------------
+  statusPlanned: { fr: 'En préparation', en: 'Planned' },
+  statusInProgress: { fr: 'En cours', en: 'In progress' },
+  statusCompleted: { fr: 'Réalisé', en: 'Completed' },
+  location: { fr: 'Lieu', en: 'Location' },
+  period: { fr: 'Période', en: 'Period' },
+  ledBy: { fr: 'Porté par', en: 'Led by' },
+  backToProjects: { fr: '← Nos projets', en: '← Our projects' },
+  noProjects: {
+    fr: 'Aucun projet publié pour le moment.',
+    en: 'No projects published yet.',
   },
-  notTranslated: {
-    fr: "Ce contenu n'a pas encore de version française.",
-    en: 'This content does not have an English version yet.',
+
+  // --- partnerships ---------------------------------------------------------
+  partnerCooperative: { fr: 'Coopératives et producteurs', en: 'Cooperatives and growers' },
+  partnerLogistics: { fr: 'Logistique', en: 'Logistics' },
+  partnerLaboratory: { fr: 'Laboratoires et certification', en: 'Laboratories and certification' },
+  partnerDistributor: { fr: 'Distribution', en: 'Distribution' },
+  partnerInstitutional: { fr: 'Institutions', en: 'Institutions' },
+  partnerOther: { fr: 'Autres partenaires', en: 'Other partners' },
+  becomePartner: { fr: 'Devenir partenaire', en: 'Become a partner' },
+
+  // --- gallery ---------------------------------------------------------------
+  photoCount: { fr: '{count} photographies', en: '{count} photographs' },
+  openPhoto: { fr: 'Agrandir la photographie', en: 'Enlarge photograph' },
+  noAlbums: {
+    fr: 'Aucun album publié pour le moment.',
+    en: 'No albums published yet.',
+  },
+
+  // --- news ------------------------------------------------------------------
+  backToNews: { fr: '← Actualités', en: '← News' },
+  noPosts: {
+    fr: 'Aucune actualité publiée pour le moment.',
+    en: 'No news published yet.',
   },
   readArticle: { fr: "Lire l'article", en: 'Read article' },
-  explore: { fr: 'Explorer', en: 'Explore' },
-  latestArticle: { fr: 'Dernier article', en: 'Latest article' },
-  featured: { fr: 'À la une', en: 'Featured' },
-  allArticles: { fr: 'Tous les articles', en: 'All articles' },
-  viewCatalogue: { fr: 'Voir le catalogue', en: 'See the catalog' },
+  latestArticle: { fr: 'À la une', en: 'Latest' },
+  featured: { fr: 'À lire aussi', en: 'Also read' },
+  allArticles: { fr: 'Toutes les actualités', en: 'All news' },
   subscribe: { fr: 'S’inscrire', en: 'Subscribe' },
-  journalNewsletterPrompt: {
-    fr: 'Recevez les prochains articles directement par e-mail.',
-    en: 'Get the next articles straight to your inbox.',
-  },
-  // Defaults for the journal introduction, used until Site settings has its own.
-  journalStatement: {
-    fr: 'Des carnets de terrain, de la plantation à la cuisine :',
-    en: 'Field notes, from the plantation to the kitchen:',
-  },
-  journalAccent: {
-    fr: 'ce que nos épices racontent.',
-    en: 'the stories behind our spices.',
-  },
-  journalIntro: {
-    fr: 'Récoltes, préparation, recettes et conseils : notre équipe partage ce qu’elle sait des épices de Madagascar, de la vanille de la SAVA au cacao du Sambirano.',
-    en: 'Harvests, curing, recipes and advice: our team shares what it knows about Madagascar’s spices, from SAVA vanilla to Sambirano cacao.',
+  newsNewsletterPrompt: {
+    fr: 'Recevez nos prochaines actualités par e-mail.',
+    en: 'Get our next news by email.',
   },
   newsletterHeading: {
     fr: 'Inscrivez-vous à la lettre d’information\net restez informé',
@@ -136,108 +173,52 @@ const STRINGS = {
     fr: 'Une erreur est survenue. Réessayez.',
     en: 'Something went wrong. Please try again.',
   },
-  // --- basket and mock checkout --------------------------------------------
-  cart: { fr: 'Panier', en: 'Cart' },
-  quantity: { fr: 'Quantité', en: 'Quantity' },
-  decrease: { fr: 'Diminuer la quantité', en: 'Decrease quantity' },
-  increase: { fr: 'Augmenter la quantité', en: 'Increase quantity' },
-  addToCart: { fr: 'Ajouter au panier', en: 'Add to cart' },
-  buyNow: { fr: 'Acheter maintenant', en: 'Buy now' },
-  addedToCart: { fr: 'Ajouté au panier.', en: 'Added to your cart.' },
-  viewCart: { fr: 'Voir le panier', en: 'View cart' },
-  cartError: {
-    fr: 'Ce produit ne peut pas être commandé pour le moment.',
-    en: 'This product cannot be ordered right now.',
-  },
-  cartEmpty: { fr: 'Votre panier est vide.', en: 'Your cart is empty.' },
-  continueShopping: { fr: '← Continuer mes achats', en: '← Continue shopping' },
-  remove: { fr: 'Retirer', en: 'Remove' },
-  each: { fr: 'l’unité', en: 'each' },
-  orderSummary: { fr: 'Récapitulatif', en: 'Order summary' },
-  subtotal: { fr: 'Sous-total', en: 'Subtotal' },
-  shipping: { fr: 'Livraison', en: 'Shipping' },
-  shippingFree: { fr: 'Offerte', en: 'Free' },
-  freeShippingHint: {
-    fr: 'Plus que {amount} pour la livraison offerte.',
-    en: '{amount} more for free shipping.',
-  },
-  total: { fr: 'Total', en: 'Total' },
-  proceedToCheckout: { fr: 'Passer au paiement', en: 'Proceed to checkout' },
-  checkout: { fr: 'Paiement', en: 'Checkout' },
-  backToCart: { fr: '← Retour au panier', en: '← Back to cart' },
-  testMode: { fr: 'Mode test', en: 'Test mode' },
-  testModeText: {
-    fr: 'Aucun paiement réel n’est effectué. Carte acceptée : 4242 4242 4242 4242 — carte refusée : 4000 0000 0000 0002, avec toute date future et tout CVC.',
-    en: 'No real payment is taken. Approved card: 4242 4242 4242 4242 — declined card: 4000 0000 0000 0002, with any future date and any CVC.',
-  },
-  contact: { fr: 'Contact', en: 'Contact' },
+
+  // --- contact and enquiries -------------------------------------------------
+  writeToUs: { fr: 'Écrivez-nous', en: 'Write to us' },
+  ourOffices: { fr: 'Nos coordonnées', en: 'How to reach us' },
+  enquiryType: { fr: 'Objet de votre demande', en: 'Your request' },
+  typeQuote: { fr: 'Demande de devis', en: 'Quotation request' },
+  typeCommercial: { fr: 'Demande commerciale', en: 'Commercial enquiry' },
+  typePartnership: { fr: 'Partenariat', en: 'Partnership' },
+  typeOther: { fr: 'Autre demande', en: 'Other' },
+  fullName: { fr: 'Nom complet', en: 'Full name' },
+  companyName: { fr: 'Société', en: 'Company' },
   emailAddress: { fr: 'Adresse e-mail', en: 'Email address' },
   phone: { fr: 'Téléphone', en: 'Phone' },
-  deliveryAddress: { fr: 'Adresse de livraison', en: 'Delivery address' },
-  fullName: { fr: 'Nom complet', en: 'Full name' },
-  address: { fr: 'Adresse', en: 'Address' },
-  postalCode: { fr: 'Code postal', en: 'Postcode' },
-  city: { fr: 'Ville', en: 'City' },
   country: { fr: 'Pays', en: 'Country' },
-  paymentMethod: { fr: 'Moyen de paiement', en: 'Payment method' },
-  methodCard: { fr: 'Carte bancaire', en: 'Card' },
-  methodMobile: { fr: 'Mobile Money', en: 'Mobile Money' },
-  methodPaypal: { fr: 'PayPal', en: 'PayPal' },
-  cardNumber: { fr: 'Numéro de carte', en: 'Card number' },
-  cardExpiry: { fr: 'Expiration (MM / AA)', en: 'Expiry (MM / YY)' },
-  cardCvc: { fr: 'CVC', en: 'CVC' },
-  cardName: { fr: 'Nom sur la carte', en: 'Name on card' },
-  operator: { fr: 'Opérateur', en: 'Operator' },
-  mobileNumber: { fr: 'Numéro Mobile Money', en: 'Mobile Money number' },
-  mobileHint: {
-    fr: 'Vous recevrez une demande de confirmation sur ce numéro.',
-    en: 'You will receive a confirmation request on this number.',
+  product: { fr: 'Produit concerné', en: 'Product' },
+  productNone: { fr: '— Aucun en particulier —', en: '— None in particular —' },
+  volume: { fr: 'Volume estimé', en: 'Estimated volume' },
+  volumeHint: { fr: 'Par exemple : 50 kg par mois', en: 'For example: 50 kg a month' },
+  message: { fr: 'Message', en: 'Message' },
+  optional: { fr: 'facultatif', en: 'optional' },
+  consent: {
+    fr: 'J’accepte que ces informations soient utilisées pour répondre à ma demande.',
+    en: 'I agree that this information is used to answer my request.',
   },
-  paypalHint: {
-    fr: 'Vous serez redirigé vers PayPal pour vous connecter et confirmer le paiement.',
-    en: 'You will be redirected to PayPal to sign in and confirm the payment.',
+  readPrivacy: { fr: 'Politique de confidentialité', en: 'Privacy policy' },
+  sendEnquiry: { fr: 'Envoyer ma demande', en: 'Send my request' },
+  enquiryThanks: {
+    fr: 'Merci, votre demande a bien été reçue. Notre équipe vous répondra rapidement.',
+    en: 'Thank you, your request has been received. Our team will get back to you shortly.',
   },
-  securePayment: {
-    fr: 'Paiement sécurisé par notre prestataire. Vos coordonnées bancaires ne sont jamais conservées sur ce site.',
-    en: 'Payment secured by our payment provider. Your card details are never stored on this site.',
-  },
-  payAmount: { fr: 'Payer {amount}', en: 'Pay {amount}' },
-  processing: { fr: 'Paiement en cours…', en: 'Processing payment…' },
-  processingHint: {
-    fr: 'Ne fermez pas cette page.',
-    en: 'Please do not close this page.',
-  },
-  awaitingMobile: {
-    fr: 'Demande envoyée au {phone}. Validez le paiement avec votre code secret sur votre téléphone.',
-    en: 'Request sent to {phone}. Confirm the payment with your PIN on your phone.',
-  },
-  redirectPaypal: { fr: 'Redirection vers PayPal…', en: 'Redirecting to PayPal…' },
-  declined: {
-    fr: 'Paiement refusé par votre banque. Vérifiez vos informations ou utilisez une autre carte.',
-    en: 'Your bank declined the payment. Check your details or use another card.',
+  enquiryDemoNote: {
+    fr: 'Démonstration : la demande est enregistrée dans l’administration, aucun e-mail n’est envoyé.',
+    en: 'Demonstration: the request is saved in the administration area; no email is sent.',
   },
   errRequired: { fr: 'Champ obligatoire.', en: 'This field is required.' },
   errEmail: { fr: 'Adresse e-mail invalide.', en: 'Invalid email address.' },
-  errPhone: { fr: 'Numéro de téléphone invalide.', en: 'Invalid phone number.' },
-  errCardNumber: { fr: 'Numéro de carte invalide.', en: 'Invalid card number.' },
-  errExpiry: { fr: 'Date d’expiration invalide.', en: 'Invalid expiry date.' },
-  errCvc: { fr: 'CVC invalide.', en: 'Invalid CVC.' },
+  errConsent: {
+    fr: 'Merci de cocher cette case pour envoyer votre demande.',
+    en: 'Please tick this box to send your request.',
+  },
   errFixForm: {
     fr: 'Vérifiez les champs signalés.',
     en: 'Please check the highlighted fields.',
   },
-  orderConfirmed: {
-    fr: 'Merci, votre commande est confirmée',
-    en: 'Thank you, your order is confirmed',
-  },
-  orderNumber: { fr: 'Commande n°', en: 'Order no.' },
-  orderDate: { fr: 'Date', en: 'Date' },
-  paidWith: { fr: 'Payé par', en: 'Paid with' },
-  deliverTo: { fr: 'Livraison à', en: 'Delivering to' },
-  demoNoCharge: {
-    fr: 'Démonstration : aucun montant n’a été débité et aucun e-mail n’a été envoyé.',
-    en: 'Demonstration: nothing has been charged and no email has been sent.',
-  },
+
+  // --- page furniture ---------------------------------------------------------
   skipToContent: { fr: 'Aller au contenu', en: 'Skip to content' },
   demoNotice: {
     fr: 'Démonstration — contenu fictif',
@@ -249,64 +230,28 @@ export type StringKey = keyof typeof STRINGS
 
 export const t = (key: StringKey, locale: Locale): string => STRINGS[key][locale]
 
+/** Labels for the project statuses chosen in the administration area. */
+export const PROJECT_STATUS_KEYS = {
+  planned: 'statusPlanned',
+  'in-progress': 'statusInProgress',
+  completed: 'statusCompleted',
+} as const satisfies Record<string, StringKey>
+
+/** Headings for the partner types, in the order the page lists them. */
+export const PARTNER_TYPE_KEYS = {
+  cooperative: 'partnerCooperative',
+  logistics: 'partnerLogistics',
+  laboratory: 'partnerLaboratory',
+  distributor: 'partnerDistributor',
+  institutional: 'partnerInstitutional',
+  other: 'partnerOther',
+} as const satisfies Record<string, StringKey>
+
 /** "Affichage de 6 sur 12 résultats" / "Showing 6 of 12 results" */
 export const showingResults = (shown: number, total: number, locale: Locale): string =>
   locale === 'fr'
     ? `Affichage de ${shown} sur ${total} résultats`
     : `Showing ${shown} of ${total} results`
-
-/** "Panier, 2 articles" / "Cart, 2 items" — the cart icon's accessible name. */
-export const cartLabel = (count: number, locale: Locale): string =>
-  locale === 'fr'
-    ? `Panier, ${count} article${count > 1 ? 's' : ''}`
-    : `Cart, ${count} item${count === 1 ? '' : 's'}`
-
-/** At or below this many units the product page warns that stock is low. */
-export const LOW_STOCK = 5
-
-export type StockTone = 'in' | 'low' | 'out'
-
-/**
- * "En stock — 24 disponibles", "Plus que 3 en stock", "Rupture de stock".
- * A product with no stock figure is not tracked and simply shows "In stock".
- */
-export const stockStatus = (
-  stock: number | null | undefined,
-  available: boolean | null | undefined,
-  locale: Locale,
-): { tone: StockTone; text: string } => {
-  if (available === false || stock === 0) return { tone: 'out', text: t('soldOut', locale) }
-  if (typeof stock !== 'number') return { tone: 'in', text: t('inStock', locale) }
-
-  if (stock <= LOW_STOCK) {
-    if (locale === 'fr') {
-      return { tone: 'low', text: stock === 1 ? 'Plus qu’un en stock' : `Plus que ${stock} en stock` }
-    }
-    return { tone: 'low', text: `Only ${stock} left in stock` }
-  }
-
-  return {
-    tone: 'in',
-    text: locale === 'fr' ? `En stock — ${stock} disponibles` : `In stock — ${stock} available`,
-  }
-}
-
-/** "8 avis" / "8 reviews". */
-export const reviewCount = (count: number, locale: Locale): string =>
-  locale === 'fr' ? `${count} avis` : `${count} review${count === 1 ? '' : 's'}`
-
-/** "4,6" / "4.6" — one decimal, in the reader's own notation. */
-export const formatRating = (value: number, locale: Locale): string =>
-  new Intl.NumberFormat(locale === 'fr' ? 'fr-FR' : 'en-GB', {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  }).format(value)
-
-/** Accessible name for a star rating: "Note : 4,6 sur 5" / "Rated 4.6 out of 5". */
-export const ratingLabel = (value: number, locale: Locale): string =>
-  locale === 'fr'
-    ? `Note : ${formatRating(value, locale)} sur 5`
-    : `Rated ${formatRating(value, locale)} out of 5`
 
 /** Fills a "{name}" placeholder in one of the strings above. */
 export const fill = (text: string, values: Record<string, string>): string =>
@@ -314,34 +259,6 @@ export const fill = (text: string, values: Record<string, string>): string =>
 
 /** The other language, for the switcher in the header. */
 export const otherLocale = (locale: Locale): Locale => (locale === 'fr' ? 'en' : 'fr')
-
-const CURRENCY_SYMBOLS: Record<string, string> = {
-  EUR: '€',
-  USD: '$',
-  GBP: '£',
-  MGA: 'Ar',
-}
-
-export const formatPrice = (
-  price: number | null | undefined,
-  currency: string | null | undefined,
-  locale: Locale,
-): string | null => {
-  if (typeof price !== 'number') return null
-
-  const code = currency ?? 'EUR'
-
-  try {
-    return new Intl.NumberFormat(locale === 'fr' ? 'fr-FR' : 'en-GB', {
-      style: 'currency',
-      currency: code,
-      maximumFractionDigits: code === 'MGA' ? 0 : 2,
-    }).format(price)
-  } catch {
-    // Unknown currency code — fall back to a plain number plus a symbol.
-    return `${price} ${CURRENCY_SYMBOLS[code] ?? code}`
-  }
-}
 
 export const formatDate = (value: string | null | undefined, locale: Locale): string | null => {
   if (!value) return null

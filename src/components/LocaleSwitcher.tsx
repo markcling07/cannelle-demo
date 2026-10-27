@@ -11,7 +11,7 @@ import { LOCALES, LOCALE_LABELS, type Locale } from '@/lib/locale'
  * product page itself, which redirects to the correct address for the chosen
  * language.
  */
-export function LocaleSwitcher({ current }: { current: Locale }) {
+export function LocaleSwitcher({ current, label }: { current: Locale; label: string }) {
   const pathname = usePathname() ?? `/${current}`
 
   const hrefFor = (locale: Locale): string => {
@@ -22,7 +22,7 @@ export function LocaleSwitcher({ current }: { current: Locale }) {
   }
 
   return (
-    <div className="locale-switcher" role="group" aria-label="Language">
+    <div className="locale-switcher" role="group" aria-label={label}>
       {LOCALES.map((locale) => {
         const isCurrent = locale === current
 

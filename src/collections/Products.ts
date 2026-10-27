@@ -1,8 +1,13 @@
 import type { CollectionConfig } from 'payload'
 
-import { isAdminOrEditor } from '../access/roles'
+import { ADMIN_GROUPS } from '../adminGroups'
+import { isAdminOrEditor, publishedOrLoggedIn } from '../access/roles'
 import { slugField } from '../fields/slug'
 
+/**
+ * The professional catalogue. No prices, stock or basket: every product page
+ * leads to a quotation request or to the team instead.
+ */
 export const Products: CollectionConfig = {
   slug: 'products',
   labels: {
@@ -12,8 +17,8 @@ export const Products: CollectionConfig = {
 
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'price', 'stock', '_status', 'updatedAt'],
-    group: { fr: 'Contenu', en: 'Content' },
+    defaultColumns: ['title', 'category', 'company', '_status', 'updatedAt'],
+    group: ADMIN_GROUPS.catalogue,
     description: {
       fr: 'Le catalogue. Chaque produit existe en français et en anglais.',
       en: 'The catalogue. Every product exists in French and in English.',
@@ -29,12 +34,7 @@ export const Products: CollectionConfig = {
   },
 
   access: {
-    // Visitors see published products only. Signed-in staff also see drafts,
-    // which is what makes the preview-before-publish step work.
-    read: ({ req: { user } }) => {
-      if (user) return true
-      return { _status: { equals: 'published' } }
-    },
+    read: publishedOrLoggedIn,
     create: isAdminOrEditor,
     update: isAdminOrEditor,
     delete: isAdminOrEditor,
@@ -106,10 +106,16 @@ export const Products: CollectionConfig = {
               // versions can have different wording and even a different
               // number of points.
               localized: true,
-              label: { fr: 'Caractéristiques', en: 'Key features' },
+              label: { fr: 'Fiche technique', en: 'Technical information' },
               labels: {
-                singular: { fr: 'Caractéristique', en: 'Feature' },
-                plural: { fr: 'Caractéristiques', en: 'Features' },
+                singular: { fr: 'Ligne', en: 'Row' },
+                plural: { fr: 'Lignes', en: 'Rows' },
+              },
+              admin: {
+                description: {
+                  fr: 'Une ligne par information : espèce, origine, calibre, conditionnement, certification…',
+                  en: 'One row per item: species, origin, grade, packaging, certification…',
+                },
               },
               fields: [
                 {
@@ -128,7 +134,7 @@ export const Products: CollectionConfig = {
           ],
         },
         {
-          label: { fr: 'Détails commerciaux', en: 'Commercial details' },
+          label: { fr: 'Classement et liens', en: 'Classification and links' },
           fields: [
             {
               name: 'reference',
@@ -145,63 +151,39 @@ export const Products: CollectionConfig = {
               type: 'row',
               fields: [
                 {
-                  name: 'price',
-                  type: 'number',
-                  min: 0,
-                  label: { fr: 'Prix', en: 'Price' },
+                  name: 'category',
+                  type: 'relationship',
+                  relationTo: 'categories',
+                  label: { fr: 'Catégorie', en: 'Category' },
                   admin: { width: '50%' },
                 },
                 {
-                  name: 'currency',
-                  type: 'select',
-                  defaultValue: 'EUR',
-                  label: { fr: 'Devise', en: 'Currency' },
-                  admin: { width: '50%' },
-                  options: [
-                    { label: 'EUR (€)', value: 'EUR' },
-                    { label: 'USD ($)', value: 'USD' },
-                    { label: 'MGA (Ar)', value: 'MGA' },
-                  ],
-                },
-              ],
-            },
-            {
-              name: 'category',
-              type: 'relationship',
-              relationTo: 'categories',
-              label: { fr: 'Catégorie', en: 'Category' },
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'stock',
-                  type: 'number',
-                  min: 0,
-                  admin: {
-                    width: '50%',
-                    step: 1,
-                    description: {
-                      fr: 'Unités disponibles. Diminue à chaque commande ; à 0, le produit ne peut plus être commandé. Laissez vide pour ne pas suivre le stock.',
-                      en: 'Units available. Goes down with every order; at 0 the product can no longer be ordered. Leave empty not to track stock.',
-                    },
-                  },
-                  label: { fr: 'Stock', en: 'Stock' },
-                },
-                {
-                  name: 'inStock',
-                  type: 'checkbox',
-                  defaultValue: true,
-                  label: { fr: 'Disponible', en: 'Available' },
+                  name: 'company',
+                  type: 'relationship',
+                  relationTo: 'companies',
+                  label: { fr: 'Société', en: 'Company' },
                   admin: {
                     width: '50%',
                     description: {
-                      fr: 'Décochez pour retirer le produit de la vente, quel que soit le stock.',
-                      en: 'Untick to take the product off sale, whatever the stock.',
+                      fr: 'La société du Groupe qui propose ce produit.',
+                      en: 'The Group company that supplies this product.',
                     },
                   },
                 },
               ],
+            },
+            {
+              name: 'shopUrl',
+              type: 'text',
+              label: { fr: 'Lien vers la boutique en ligne EAC', en: 'Link to the EAC online store' },
+              validate: (value: string | null | undefined) =>
+                !value || /^https:\/\/\S+$/.test(value) || 'https://…',
+              admin: {
+                description: {
+                  fr: 'Facultatif. Adresse complète du produit sur la future boutique Shopify d’EAC. Le bouton n’apparaît que si ce champ est rempli.',
+                  en: 'Optional. Full address of the product on EAC’s future Shopify store. The button only appears when this is filled in.',
+                },
+              },
             },
           ],
         },
