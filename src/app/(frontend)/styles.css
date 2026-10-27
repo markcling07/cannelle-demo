@@ -276,19 +276,26 @@ h3 {
   display: block;
 }
 
-.main-nav__list,
 .main-nav__sub {
   list-style: none;
   margin: 0;
-}
-
-.main-nav__sub {
   padding: 0;
 }
 
-/* Side padding comes from .container, on the same element. */
+/* Width, centring and side padding come from .container, on the same
+   element — so only the vertical margins and padding are set here. */
 .main-nav__list {
+  list-style: none;
+  margin-block: 0;
   padding-block: 8px 20px;
+}
+
+/* On a desktop, Contact sits in the top row beside the language switcher;
+   below that it stays at the end of the menu panel. */
+.site-header .header-contact {
+  display: none;
+  padding: 9px 20px;
+  font-size: 0.875rem;
 }
 
 .main-nav__link {
@@ -2593,8 +2600,13 @@ main:has(> .section--green:last-child) + .site-footer {
   .main-nav__list {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
     padding-block: 6px;
+  }
+
+  .site-header .header-contact {
+    display: inline-flex;
   }
 
   .main-nav__item {
@@ -2666,25 +2678,9 @@ main:has(> .section--green:last-child) + .site-footer {
     background: var(--cream);
   }
 
+  /* Shown in the top row instead (.header-contact). */
   .main-nav__item--cta {
-    margin-left: auto;
-  }
-
-  .main-nav__item--cta .main-nav__link {
-    margin-top: 0;
-    padding: 9px 20px;
-    border-radius: var(--radius-pill);
-    font-size: 0.875rem;
-  }
-
-  .main-nav__item--cta .main-nav__link:hover {
-    background: var(--green-700);
-  }
-
-  .main-nav__item--cta .main-nav__link.is-current {
-    box-shadow: none;
-    border-radius: var(--radius-pill);
-    color: #fff;
+    display: none;
   }
 }
 

@@ -15,9 +15,10 @@ export type NavItem = {
 }
 
 /**
- * The header. On a desktop the menu is a second row with drop-downs for
- * About and Our companies; below 1080px it folds into a "Menu" button that
- * opens a panel listing everything, sub-pages included.
+ * The header. On a desktop the menu is a centred second row with drop-downs
+ * for About and Our companies, and Contact sits beside the language
+ * switcher; below 1080px it folds into a "Menu" button that opens a panel
+ * listing everything, sub-pages and Contact included.
  */
 export function MainNav({
   brand,
@@ -54,6 +55,11 @@ export function MainNav({
       ? pathname === href
       : pathname === href || pathname.startsWith(`${href}/`)
 
+  // The call to action is drawn twice: as a button beside the language
+  // switcher on a desktop, and at the end of the menu panel on a phone.
+  const cta = items.find((item) => item.cta)
+  const ctaCurrent = cta ? isCurrent(cta) : false
+
   const link = (item: NavItem, current: boolean, hasChildren = false) => (
     <Link
       href={item.href}
@@ -71,6 +77,15 @@ export function MainNav({
         {brand}
 
         <div className="site-header__tools">
+          {cta ? (
+            <Link
+              href={cta.href}
+              className="btn btn--primary header-contact"
+              aria-current={ctaCurrent ? 'page' : undefined}
+            >
+              {cta.label}
+            </Link>
+          ) : null}
           {tools}
           <button
             type="button"
