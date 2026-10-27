@@ -37,7 +37,7 @@ export default async function AboutPage({ params }: PageProps) {
     <>
       <PageHeader eyebrow={t('aboutGroup', locale)} title={about.title} intro={about.intro} />
 
-      <div className="container split">
+      <div className="container split page-body">
         {about.content ? (
           <div className="rich-text">
             <RichText data={about.content} />

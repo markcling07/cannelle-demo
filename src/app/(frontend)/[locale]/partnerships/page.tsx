@@ -49,7 +49,7 @@ export default async function PartnershipsPage({ params }: PageProps) {
         intro={intros.partnerships?.intro}
       />
 
-      <div className="container">
+      <div className="container page-body">
         {groups.map((group) => (
           <section key={group.type} className="partner-group" aria-labelledby={`partners-${group.type}`}>
             <h2 id={`partners-${group.type}`} className="partner-group__title">

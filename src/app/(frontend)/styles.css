@@ -372,6 +372,12 @@ h3 {
   background: var(--cream);
 }
 
+/* A page's main content when a coloured band follows it: keeps the content
+   off the band's edge, with the same rhythm as the sections. */
+.page-body {
+  padding-bottom: 72px;
+}
+
 .section--green {
   background: var(--green-900);
   color: #fff;
@@ -2233,9 +2239,13 @@ select.input {
   font-size: 0.875rem;
 }
 
-/* A page that ends on a green band runs straight into the footer. */
-main:has(> .section--green:last-child) + .site-footer {
+/* A page that ends on a full-width band runs straight into the footer: the
+   band's own padding is the spacing, with no strip of page colour between. */
+main:has(> .section:last-child) + .site-footer {
   margin-top: 0;
+}
+
+main:has(> .section--green:last-child) + .site-footer {
   border-top: 1px solid rgb(255 255 255 / 14%);
 }
 
@@ -2365,6 +2375,10 @@ main:has(> .section--green:last-child) + .site-footer {
 
   .section {
     padding-block: 104px;
+  }
+
+  .page-body {
+    padding-bottom: 104px;
   }
 
   .page-header {
