@@ -278,10 +278,17 @@ const seed = async () => {
   const companyIds: Record<string, number> = {}
 
   for (const company of content.companies) {
-    const logoId = await initialsImage(`logo-${company.key}`, company.initials, company.colour, {
-      fr: `Logo ${company.shortName} (provisoire)`,
-      en: `${company.shortName} logo (placeholder)`,
-    })
+    // The official logo when src/seed/images/logo-<key> exists (logo-mfc,
+    // logo-eac); generated initials otherwise.
+    const logoId = findPhoto(`logo-${company.key}`)
+      ? await seedImage(`logo-${company.key}`, {
+          fr: `Logo ${company.shortName} — ${company.name}`,
+          en: `${company.shortName} — ${company.name} logo`,
+        })
+      : await initialsImage(`logo-${company.key}`, company.initials, company.colour, {
+          fr: `Logo ${company.shortName} (provisoire)`,
+          en: `${company.shortName} logo (placeholder)`,
+        })
     const coverId = await seedImage(company.cover, company.tagline)
 
     const created = await payload.create({

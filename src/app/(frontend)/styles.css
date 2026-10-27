@@ -734,12 +734,21 @@ h3 {
   margin-bottom: 12px;
 }
 
+/* The companies' logos are round emblems on a square background: cropping
+   to a circle shows the emblem alone. */
 .org-card__logo {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
   object-fit: cover;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--line);
   flex: none;
+}
+
+.company-row__body .org-card__logo {
+  width: 80px;
+  height: 80px;
 }
 
 .org-card__short {
@@ -1542,6 +1551,12 @@ h3 {
 
 .company-hero .org-card__head {
   margin-bottom: 14px;
+}
+
+.company-hero .org-card__logo {
+  width: 96px;
+  height: 96px;
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 85%);
 }
 
 .company-hero .back-link {

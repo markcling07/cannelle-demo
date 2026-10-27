@@ -7,7 +7,7 @@ import { Arrow } from '@/components/Arrow'
 import { MediaImage } from '@/components/MediaImage'
 import { ProductCard } from '@/components/ProductCard'
 import { getCompanies, getGlobal, getPayloadClient, publishedIn } from '@/lib/content'
-import { asMedia } from '@/lib/media'
+import { asMedia, bestUrl } from '@/lib/media'
 import { fill, formatDate, isLocale, t, type Locale } from '@/lib/locale'
 
 // Read on every request, so a change saved in the administration area shows
@@ -96,7 +96,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
           <div className="org">
             <div className="org__root">
-              {logo?.url ? <img src={logo.url} alt="" /> : null}
+              {logo?.url ? <img src={bestUrl(logo, 'thumbnail')} alt="" /> : null}
               <p className="org__root-name">{siteName}</p>
               <p className="org__root-label">{t('umbrellaBrand', locale)}</p>
             </div>

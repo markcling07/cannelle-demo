@@ -306,7 +306,9 @@ Deliberate choices for a demonstration, worth revisiting for the real project:
   be completed and checked by a lawyer before the site goes live.
 - **The photographs are stock images, not the client's.** Product and news
   photographs come from Pexels (free licence, commercial use, no attribution
-  required). Company logos, partner logos and portraits are generated initials.
+  required). The GROUPE JAOVAZAHA, MFC and EAC logos are the official ones
+  (`src/seed/images/logo`, `logo-mfc`, `logo-eac`); partner logos and
+  portraits are generated initials.
 - **Enquiries are not emailed.** They wait in the admin; nobody is notified
   that one has arrived. Email alerts need a mail service.
 - **Newsletter addresses are stored, not emailed.**

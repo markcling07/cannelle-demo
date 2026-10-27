@@ -8,7 +8,7 @@ import { LocaleSwitcher } from '@/components/LocaleSwitcher'
 import { MainNav, type NavItem } from '@/components/MainNav'
 import { getCompanies, getGlobal } from '@/lib/content'
 import { LOCALES, isLocale, t, type Locale } from '@/lib/locale'
-import { asMedia } from '@/lib/media'
+import { asMedia, bestUrl } from '@/lib/media'
 import '../styles.css'
 
 // Fetched at build time and served from the site itself: no request to
@@ -51,7 +51,7 @@ export async function generateMetadata({
   return {
     title: { default: name, template: `%s — ${name}` },
     description: settings?.tagline ?? undefined,
-    icons: logo?.url ? { icon: logo.url } : undefined,
+    icons: logo?.url ? { icon: bestUrl(logo, 'thumbnail') } : undefined,
   }
 }
 
@@ -103,7 +103,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   const brand = (
     <Link href={base} className={logo?.url ? 'brand brand--with-logo' : 'brand'}>
       {/* The site name beside it already names the link, so the logo is decorative. */}
-      {logo?.url ? <img src={logo.url} alt="" className="brand__logo" /> : null}
+      {logo?.url ? <img src={bestUrl(logo, 'thumbnail')} alt="" className="brand__logo" /> : null}
       <span className="brand__name">{siteName}</span>
     </Link>
   )
@@ -134,7 +134,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             <div className="site-footer__grid">
               <div>
                 <p className="site-footer__brand">
-                  {logo?.url ? <img src={logo.url} alt="" /> : null}
+                  {logo?.url ? <img src={bestUrl(logo, 'thumbnail')} alt="" /> : null}
                   <span className="site-footer__name">{siteName}</span>
                 </p>
                 {settings?.footerNote ? (

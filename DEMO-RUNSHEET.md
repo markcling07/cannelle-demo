@@ -388,8 +388,8 @@ Send one short email the same day with:
 - Every text, person, project, partner and enquiry on the site is fictional.
   The founder's biography and the legal identifiers are deliberate
   placeholders.
-- The photographs are stock images, not his. The logos of MFC, EAC and the
-  partners are generated initials.
+- The photographs are stock images, not his. The Group, MFC and EAC logos are
+  the official ones he sent; partner logos and portraits are generated initials.
 - Requests are not emailed and the newsletter is not sent. Do not imply
   otherwise.
 - If he asks something you do not know, say *"I will confirm that and come
