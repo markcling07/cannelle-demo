@@ -1,11 +1,20 @@
-# Demonstration run-sheet — Monday 26 October
+# Demonstration run-sheet — the institutional site
 
-For Célestin Mahavita Jaovazaha, GROUPE JAOVAZAHA.
-Target length: **20 minutes** for his seven points, then about **6 minutes**
-of extras (journal, basket, stock, reviews), plus questions. If time is short,
-cut the extras, never his points.
+For Célestin Mahavita Jaovazaha and Heide, GROUPE JAOVAZAHA.
+Target length: **25 minutes**, plus questions.
 
-Read this once the night before. On the day, keep it open on a second screen.
+His brief asked for an institutional site, not a shop, and for this
+demonstration in particular:
+
+- the temporary link to the administration area and temporary credentials;
+- how to create a product in French and English;
+- how to add or replace photographs;
+- how to edit, publish and delete a product;
+- how he and Heide manage content without touching code;
+- an institutional home page showing GROUPE JAOVAZAHA above MFC and EAC.
+
+Every one of these is covered below. Read this once the night before. On the
+day, keep it open on a second screen.
 
 ---
 
@@ -13,349 +22,289 @@ Read this once the night before. On the day, keep it open on a second screen.
 
 ### The evening before
 
-- [ ] **Change the demo passwords.** They live only in `.env`, which is not
-      committed — but the current values are throwaway ones I picked. Replace
-      them with your own:
-
-      SEED_ADMIN_EMAIL=...
-      SEED_ADMIN_PASSWORD=...
-      SEED_EDITOR_EMAIL=...
-      SEED_EDITOR_PASSWORD=...
-
-      then `npm run seed` to apply them.
-
-- [ ] **Make Célestin his own account.** He asked for temporary administrator
-      access. Admin panel → Users → Create New → his email, role
-      **Administrator**. Use a password you are happy to send in an email, and
-      tell him to change it.
-
-- [ ] **Check the site name and logo.** The demo carries his company name,
-      **GROUPE JAOVAZAHA**, and his logo. Both are under Site settings —
-      Site name in each language, Logo once for both. One field each, no code.
-
-- [ ] **Know where the photographs come from.** Every product has real
-      photographs now — stock images chosen to match each product, not his
-      own goods. Bring one of **his** product photos for step 3 anyway:
-      seeing his own picture on his own site lands better than anything else.
-
-- [ ] **Check the tagline.** Site settings → Tagline, in each language. It
-      shows in Google results. The seed sets *Épices et vanille de
-      Madagascar* / *Spices and vanilla from Madagascar*.
-
+- [ ] **The live site is up to date.** The new version must be merged, deployed
+      and the Neon database updated (README, *Deploying*, steps 4–5). Open the
+      Vercel address and click through every menu entry once.
+- [ ] **Change the demo passwords.** They live only in `.env`. Replace the
+      `SEED_*` values with your own, then re-run the seed against Neon.
+- [ ] **Create Célestin's and Heide's accounts** on the live admin: Settings →
+      Users → Create new → their email, role **Administrator** for Célestin,
+      **Editor** for Heide. Use passwords you are happy to send, and tell them
+      to change them at first login. Do **not** reuse the seed passwords.
+- [ ] **Set your own admin to French** (Account → Language → Français) if you
+      demonstrate in French, so the screens match what he will see.
+- [ ] **Have one of his own photographs ready on your desktop**, named sensibly,
+      under 4 MB. Seeing his own picture on his own site lands better than
+      anything else.
 - [ ] **Run through this whole sheet once, out loud, with a timer.** This is
       the single highest-value thing you can do. Do not skip it.
 
 ### Thirty minutes before
 
 - [ ] Open the public site and the admin panel in **two separate browser
-      tabs**. You will switch between them constantly. Do not do it in one tab.
-- [ ] Log into the admin tab already. Then **log out again** — you want to
-      demonstrate the login, but you want to know it works first.
-- [ ] Have a cinnamon photo file ready **on your desktop**, named sensibly.
-      Not buried in Downloads.
-- [ ] Close every other tab, notification, and messaging app.
+      tabs**. You will switch between them constantly.
+- [ ] Log into the admin tab, then **log out again** — you want to show the
+      login, but you want to know it works first.
 - [ ] Have the product text ready to paste, French and English, in a notepad.
       Do not compose sentences live.
-- [ ] Re-run `npm run seed` for a clean catalogue. This also refills the
-      stock your rehearsal orders used up, and puts back the one pending
-      review you will approve in step 10.
-- [ ] If you show the deployed site: after any collection change, the Neon
-      database must be updated first (README, *Deploying*, step 5) or pages
-      fail. Check the live site loads a product page before the call.
+- [ ] Close every other tab, notification and messaging app.
 
 ### The link
 
-- Public site: your Vercel URL, or `http://localhost:3001` if you are
-  screen-sharing locally.
+- Public site: your Vercel address, e.g. `https://<project>.vercel.app/fr`.
 - Admin panel: the same address with `/admin` on the end.
 
-> If you are running locally rather than deployed, say so plainly at the start:
-> *"Today I am showing you this from my machine. The public link follows after
-> the call."* Do not let him discover it.
+> Nothing is connected to groupejaovazaha.com, and nothing paid has been
+> subscribed. Say so at the start — he asked for both.
 
 ---
 
 ## Part 2 — Order of play
 
-His list had delete before publish. Deleting a product and then publishing it
-does not work, so the order below is rearranged. Every one of his seven points
-is still covered — the mapping is in the right-hand column.
-
-| # | What you do | His bullet |
+| # | What you do | His request |
 |---|---|---|
-| 1 | Log in | Log in securely |
-| 2 | Create the product in French | Create in French and English |
-| 3 | Add photograph and details | Add photograph, description, information |
-| 4 | Switch to English, fill it in | Create in French and English |
-| 5 | Publish, show the public site | Publish and view the result |
-| 6 | Edit and republish | Edit the product |
-| 7 | Computer and phone | Displays correctly on both |
-| 8 | Delete | Delete the product |
-| 9 | Journal + newsletter | *(extra — yours, not asked for)* |
-| 10 | Basket, stock and reviews | *(extra — yours, not asked for)* |
+| 1 | The home page: the Group above MFC and EAC | Institutional home page |
+| 2 | A quick tour of the sections | The structure he listed |
+| 3 | A product page, then a quotation request | Catalogue, quotation and contact buttons, Shopify link |
+| 4 | Log in to the admin | Temporary link and credentials |
+| 5 | Create a product in French | Create a product in FR and EN |
+| 6 | Add the photographs | Add or replace photographs |
+| 7 | The English version | Create a product in FR and EN |
+| 8 | Publish and view | Publish |
+| 9 | Edit, replace a photograph, versions | Edit, replace photographs |
+| 10 | Unpublish and delete | Delete |
+| 11 | Everything else they can change | Manage content without code |
 
 ---
 
-### 1. Log in — 2 min
+### 1. The home page — 3 min
 
-Go to `/admin`. Type the email and password while he watches.
+Open `/fr`. Let the banner sit for a second, then scroll to **Notre
+organisation**.
 
-**Say:** *"The password is never stored, only a one-way hash. The session is a
-secure cookie that expires after eight hours. After five wrong attempts the
-account locks itself for ten minutes."*
+Point at the diagram: GROUPE JAOVAZAHA on top, a line down to **MFC —
+Madagascar** and **EAC — France**, and a dashed card for **Projets futurs**.
+Then the note underneath.
 
-Then point at the left sidebar: **Products, Categories, Avis clients, Journal,
-Media library, Users, Newsletter.**
+**Say:** *"This is the point you insisted on. The Group is shown as a common
+brand, not a company. MFC and EAC each carry the label 'société indépendante',
+each has its own page with its own legal details, and this note — and the same
+sentence in the footer of every page — says it plainly. Quotations and invoices
+come from the company concerned."*
 
-**Say:** *"Everything the site shows is in this list. Nothing here needs a
-developer."*
+Scroll on: featured products, latest news, partners, the contact band.
 
 ---
 
-### 2. Create the product in French — 3 min
+### 2. The sections — 3 min
 
-Products → **Create New**.
+Use the menu, top to bottom. Do not linger anywhere.
 
-Check the top right says **Locale: Français** before you type anything. If it
-does not, change it first.
+- **À propos** → *À propos du Groupe* (the four values from the logo), then
+  *Fondateur et direction*. **Say:** *"The founder's text is deliberately a
+  placeholder — I will not write your biography for you. You write it, it goes
+  in one field."*
+- **Nos sociétés** → MFC, then EAC: presentation, *En bref*, *Informations
+  légales* — all marked *À compléter* until you send the real details.
+- **Nos projets**, **Partenariats**, **Actualités**, **Galerie** (open a photo,
+  use the arrows).
+- **Contact**, and the two legal pages in the footer.
+
+**Say:** *"Every word you are reading is fictional and editable. You will send
+the real texts, logos and photographs, and they go into the same fields."*
+
+---
+
+### 3. A product, and a quotation request — 3 min
+
+**Nos produits** → **Vanille Bourbon de Madagascar**.
+
+Point at what is there and what is not: photographs, description, **Fiche
+technique**, *Proposé par MFC*. No price, no stock, no basket.
+
+Then the three buttons:
+
+- **Demander un devis** — click it. The contact form opens with *Demande de
+  devis* and the vanilla already selected.
+- **Contacter notre équipe** — the same form, empty.
+- **Boutique en ligne EAC** — **Say:** *"This button only appears when the
+  product has a link to EAC's online store. I put an example link on the
+  vanilla so you can see it. When the Shopify store exists, you paste the
+  address in one field."*
+
+Fill the form quickly with a test name and send it. Keep the admin tab for
+step 4 — the request will be waiting there.
+
+---
+
+### 4. Log in — 2 min
+
+Admin tab, `/admin`. Type the email and password while he watches.
+
+**Say:** *"The password is never stored, only a one-way hash. After five wrong
+attempts the account locks itself for ten minutes."*
+
+The first thing in the sidebar is **Demandes** — open it. The request you just
+sent is there, with the product, the volume and the date the visitor
+consented. **Say:** *"No email is sent yet — that would need a mail service,
+and you asked for no subscriptions. Requests wait here; you mark them in
+progress, closed, and keep internal notes."*
+
+Then point at the rest of the sidebar: **Pages du site, Groupe et sociétés,
+Catalogue, Actualités, Photographies, Réglages.**
+
+---
+
+### 5. Create a product in French — 3 min
+
+Catalogue → **Produits** → **Créer un(e) nouveau ou nouvelle**.
+
+Check the top right says **Paramètres régionaux : Français** before typing.
 
 Fill in:
-- **Product name** — e.g. *Cannelle de Ceylan — bâtons*
-- **Short description** — one sentence
-- **Full description** — paste two paragraphs, then make one word **bold** so
-  he sees it is a real editor
+- **Nom du produit** — e.g. *Cannelle de Madagascar — bâtons*
+- **Description courte** — one sentence
+- **Description complète** — paste two paragraphs, make one word **bold**
+- **Fiche technique** — add three rows: *Espèce*, *Origine*, *Conditionnement*
 
-**Say:** *"Notice each field says 'Français'. I am only editing the French
-version right now."*
+Then the **Classement et liens** tab: a reference, the category **Épices**,
+the company **MFC**. Leave the store link empty.
+
+**Say:** *"Notice each text field says 'Français'. Reference, category and
+company sit outside the language system — set once, shared by both."*
 
 ---
 
-### 3. Photograph and commercial details — 3 min
+### 6. Add the photographs — 2 min
 
-**Main photograph** → drag your prepared file in → add alternative text.
+Back to **Contenu** → **Photographie principale** → drag in his photograph.
+Fill in the **Texte alternatif** in the window that opens.
 
 **Say:** *"The alternative text is what a blind visitor's screen reader says,
-and what Google reads. It is per language, so it gets translated too."*
+and what Google reads. It is translated too."*
 
-> **The photograph is required.** If Publish refuses later, this is why.
+Add one or two **Photographies supplémentaires** the same way, or pick
+existing ones with **Choisir parmi les existant(e)s**.
 
-Add two or three **Key features** with the + button.
+> **The main photograph is required.** If Publish refuses later, this is why.
+> Photographs over about 4 MB are refused online — resize them first.
 
-Then the **Commercial details** tab: reference, price, currency, category
-(**Épices**), and **Stock** — type 10.
-
-**Say:** *"Price, reference and stock sit outside the language system. One
-price, two languages — change it once. The stock goes down by itself every
-time someone orders."*
-
-Click **Save Draft**.
-
-**Say:** *"Saved, but not public. Let me show you."* Switch to the public tab,
-reload, show it is absent. **This is the moment that sells the system** — do
-not rush it.
+Click **Enregistrer le brouillon**. Switch to the public tab, reload *Nos
+produits*: the product is **not** there. **Say:** *"Saved, but private."*
+This is the moment that sells the system — do not rush it.
 
 ---
 
-### 4. The English version — 4 min
+### 7. The English version — 3 min
 
-**This is the part he actually cares about. Slow down.**
+**Slow down here — this is what he cares about most.**
 
-Top right, change **Locale: Français** → **English (en)**.
+Top right, switch to **English**. The text fields empty out.
 
-Watch the form: the fields empty out.
+**Say:** *"Same product, not a copy. Same photographs, same reference. Only
+the words are separate. Leave the English empty and the product simply does
+not appear on the English site."*
 
-**Say:** *"This is the same product, not a copy. Same price, same reference,
-same photograph. Only the words are separate. If I am only selling in French
-this week, I leave this empty and the product simply does not appear on the
-English site."*
+Fill in the English name, short description and technical information.
 
-Now fill in the English name and description.
+> **Shortcut if running late:** the **⋮** menu (top right of the form) → **Copier vers le lieu**
+> (*Copy to locale*) copies the French across as a starting point. Only if
+> practised.
 
-> **Shortcut if you are running late:** the **⋯** menu top right has
-> **Copy to locale** — it copies the French text across as a starting point to
-> translate over. Useful, but only use it if you have practised it.
-
-Point at the **Web address (slug)** in the right sidebar.
-
-**Say:** *"The address is different in each language — `/fr/products/cannelle-de-ceylan`
-and `/en/products/ceylon-cinnamon`. That matters for Google. And if someone on
-the French page switches to English, the site sends them to the right English
-address automatically."*
+Point at the **Adresse web (slug)** in the sidebar: different in each language.
 
 ---
 
-### 5. Publish and view — 2 min
+### 8. Publish and view — 2 min
 
-Click **Publish changes**.
+**Publier les modifications.**
 
-Switch to the public tab. Reload `/fr`. The product is there.
+Public tab → reload *Nos produits*. It is there. Open it, then click **EN** in
+the header: the same product, in English, at its English address.
 
-Click into it. Then click **EN** in the header — the same product, in English,
-at a different address.
-
-**Say:** *"Published pages are read fresh each time, so what you publish is live
-on the next page load. No waiting, no cache to clear."*
+**Say:** *"What you publish is live on the next page load. No cache to clear."*
 
 ---
 
-### 6. Edit and republish — 2 min
+### 9. Edit, replace a photograph, versions — 2 min
 
-Back to admin. Change the price. **Publish changes.** Reload the public page.
-New price.
+Back in the admin: change the short description. To **replace** the main
+photograph, click the **×** next to it, then drag in another one.
+**Publier les modifications.** Reload the public page.
 
-Now click the **Versions** tab.
+Then the **Versions** tab.
 
 **Say:** *"Every save is kept. If Heide changes something by mistake, you open
-this list and restore the previous version. Nothing is ever really lost."*
+this list and restore the previous version."*
 
 ---
 
-### 7. Computer and phone — 2 min
+### 10. Unpublish and delete — 1 min
 
-Open the public site **on your actual phone** and hold it up to the camera.
-This is far more convincing than resizing the browser window.
+**⋮** menu (top right of the form) → **Annuler la publication** first. Reload the public page: gone, but the
+product is still in the admin. Then **⋯** → **Supprimer** → confirm.
 
-If you cannot, resize the browser window slowly from wide to narrow and let him
-watch the three columns become one.
-
-**Say:** *"One site, one piece of content. It rearranges itself — there is no
-separate mobile version to maintain."*
+**Say:** *"Unpublish is usually what you want — it takes it off the site and
+keeps everything. Delete is permanent."*
 
 ---
 
-### 8. Delete — 1 min
+### 11. Everything else they can change — 3 min
 
-Back to the product. **⋯** menu top right → **Delete** → confirm.
+Walk the sidebar, opening one example in each group:
 
-Reload the public page. Gone.
+- **Pages du site → Accueil**: the banner title and text, the Group-and-companies
+  note, the featured products. Change the banner title, **Sauvegarder**, reload
+  the home page.
+- **Groupe et sociétés → Sociétés → MFC**: presentation, *Informations
+  légales*, contact.
+- **Fondateur et direction**, **Projets**, **Partenaires**: one form each.
+- **Photographies → Galerie**: albums; **Médiathèque**: every photograph, where
+  captions are edited.
+- **Réglages → Réglages du site**: name, logo, footer statement, contact
+  details. **Utilisateurs**: accounts and roles.
 
-**Also show him Unpublish** in the same menu.
+**Say:** *"None of this needs a developer. What does: a new kind of page, a new
+field on every product, or a change of design."*
 
-**Say:** *"Unpublish is usually what you want. It takes the product off the site
-but keeps everything, so you can put it back in one click. Delete is permanent."*
-
----
-
-### 9. The journal and the newsletter — 2 min
-
-*You added these. He did not ask for them. Say so — it reads as generosity
-rather than scope creep.*
-
-Click **Journal** in the header — it has its own page, separate from the
-catalogue. The latest article fills the screen as a large photograph; scroll
-through the introduction, the featured article and the numbered index, then
-open one article.
-
-**Say:** *"The journal works exactly like the products — same two languages,
-same draft and publish, same photographs. Publish a new article and it takes
-the top of the page by itself. Useful for Google, because a shop with nothing
-but product pages ranks poorly."*
-
-If he likes it, show that the introduction sentence is his to change:
-Site settings → **Page Journal**.
-
-Then the newsletter box. Type an address, click **Envoyer**, then show it appear
-under **Newsletter** in the admin.
-
-**Say:** *"The addresses are collected and stored. Sending the actual newsletter
-would be a separate tool — I have not connected one yet."*
-
----
-
-### 10. Basket, stock and reviews — 4 min
-
-*Also yours, not asked for. Say so, and say plainly that the payment is
-simulated — before he asks.*
-
-**Stock and reviews.** Open **Vanille Bourbon de Madagascar**. Point at the
-stars under the title, then the orange **Plus que 3 en stock**. Scroll to
-**Avis clients**: the average, the star bars, the reviews.
-
-**The order.** Back up, set the quantity to 3 — the + button stops there —
-**Ajouter au panier**. The cart icon shows 3. Open the cart, **Passer au
-paiement**, fill the form, pay with `4242 4242 4242 4242`, any future date,
-any CVC. Wait for the confirmation.
-
-Reload the vanilla page: **Rupture de stock**, no buy button.
-
-**Say:** *"It behaves exactly as if a payment provider were connected — the
-stock really went down — but no money moves. Connecting a real one, cards,
-PayPal, MVola, Orange Money, is part of the real project and I will price it
-separately."*
-
-*Optional, if he enjoys it:* pay with `4000 0000 0000 0002` instead — the
-"bank" refuses it and nothing is ordered.
-
-**Moderation.** Admin → **Avis clients** (*Reviews* if the admin is in
-English). One review is **En attente** / *Pending* (Marc D., on the vanilla).
-Open it, set **Approuvé** / *Approved*, save. Reload the vanilla
-page — it is there.
-
-**Say:** *"Nobody can post on your site without you seeing it first. Reviews
-wait here until you or Heide approve them."*
-
-> Re-run `npm run seed` after rehearsing this step — it refills the vanilla
-> and puts the pending review back.
+Finally: **Compte → Langue** switches the whole admin to French or English,
+per person.
 
 ---
 
 ## Part 3 — The two-language explanation
 
-He has asked about this in nearly every email. Have this straight.
+**Separate for each language:** titles, descriptions, technical information,
+web addresses, photograph descriptions, page texts, company presentations,
+roles and biographies.
 
-**Separate for each language:**
-product name, short description, full description, key features, web address,
-photograph alternative text, journal articles, and all the site wording.
-
-**Shared between both:**
-price, currency, reference, category, stock, availability, and the photograph
-itself.
-
-**Reviews** are written in one language and shown on both versions.
+**Shared between both:** the photographs themselves, references, links, company
+names and legal identifiers.
 
 **Say it like this:**
 
-> *"There are not two websites. There is one product, and the text on it exists
-> twice — once in French, once in English. The price only exists once, so when
-> it changes you change it in one place.*
->
-> *If the English version of a product is empty, that product just does not
-> appear on the English site. Nothing breaks, nothing shows half-translated.
-> You can add the English later and it appears then."*
+> *"There are not two websites. There is one product, and its text exists
+> twice — once in French, once in English. If the English is empty, the
+> product does not appear on the English site. Nothing breaks, nothing shows
+> half-translated."*
 
-**If he asks about automatic translation:** be straight. *"No. The system does
-not translate for you — it gives you a place to put each language and keeps them
-apart. Machine translation could be added, but you would still want someone to
-check it."*
+**If he asks about automatic translation:** *"No. The system gives you a place
+for each language and keeps them apart. Machine translation could be added, but
+someone should still check it."*
 
 ---
 
-## Part 4 — What Célestin and Heide can change without a developer
+## Part 4 — Who can do what
 
-Show this on screen by walking the sidebar, not by reading a list.
-
-| | Editor | Administrator |
+| | Editor (Heide) | Administrator (Célestin) |
 |---|---|---|
-| Products — create, edit, publish, delete | yes | yes |
-| Stock levels | yes | yes |
-| Approve or reject reviews | yes | yes |
-| Journal articles | yes | yes |
-| Categories | yes | yes |
-| Photographs | yes | yes |
-| Site name, logo, tagline, journal introduction, newsletter wording, contact details | yes | yes |
-| See the newsletter list | yes | yes |
-| Delete newsletter entries | no | yes |
-| Create accounts and set roles | no | yes |
-
-**Then be honest about the other side of the line:**
-
-> *"What does need me: changing the page layout, adding a new kind of field —
-> say a 'country of origin' box on every product — changing the design, or
-> adding a new type of page. Those are code changes. Everything you will do
-> week to week is in the panel."*
-
-**Worth mentioning:** Account → Language switches the whole admin interface to
-French. Confirmed working — French ships with the system.
+| Products, news, projects — create, edit, publish, delete | yes | yes |
+| Companies — edit and publish | yes | yes |
+| Companies — delete | no | yes |
+| Team, partners, gallery, photographs, page texts | yes | yes |
+| Read and follow up enquiries | yes | yes |
+| Delete enquiries (personal data) | no | yes |
+| Accounts and roles | no | yes |
 
 ---
 
@@ -363,89 +312,57 @@ French. Confirmed working — French ships with the system.
 
 ### "What organisation do you work through?"
 
-**He has asked this three times and you have not answered it.** He will ask
-again, and a vague answer here costs you more than any technical mistake.
+Decide beforehand whether you answer as an independent developer or through a
+named company, and say it in one plain sentence. Do not improvise this.
 
-Decide tonight whether you are answering as an independent developer or through
-a named company, and say it in one plain sentence. If you have been signing
-"Co-founder" of something, name it. If it is not relevant to this project, say
-that it is a separate venture and that you are doing this work personally.
+### "Where are the photographs stored? You mentioned Wasabi."
 
-Do not improvise this on the call.
+The demo uses **Vercel Blob**. **Say:** *"Wasabi has a monthly minimum charge,
+and you asked for no subscriptions. Vercel Blob does the same job and the demo
+costs nothing. For the real project we can use either — I will put the cost of
+each in the proposal."*
 
-### "You said Wasabi for the photographs."
+### "Will we receive the quotation requests by email?"
 
-You did, in writing. The demo uses **Vercel Blob** instead.
+**Say:** *"Not yet — they are saved in the administration area. Email alerts
+need a mail-sending service; there are free tiers, but it is a subscription
+decision I will not make for you. It is a small addition once you choose."*
 
-**Say:** *"I changed it. Wasabi has a monthly minimum charge, and you asked for
-no subscriptions. Vercel Blob does the same job and the demo costs nothing. For
-the real project we can use either — I will put the cost of each in the
-proposal."*
+### "Is the legal notice correct?"
 
-Raise this yourself before he finds it. It reads as diligence.
-
-### "Is it secure? You said WordPress gets hacked."
-
-**Say:** *"Most WordPress break-ins come through plugins — lots of separate
-pieces of code from different authors. This has no plugin system, so that route
-does not exist. Logins are hashed and rate-limited, the hosting handles
-certificates and patching. Nothing is unbreakable, but the surface is much
-smaller."*
-
-Do not oversell this.
+**Say:** *"It is a draft with the right headings and placeholders. The real
+details come from you, and it should be checked by a lawyer before the site
+goes live."*
 
 ### "How long for the real site, and how much?"
 
-You do not have to answer on the call, and you should not guess.
-
-**Say:** *"Let me put that in writing after you have seen this, so the numbers
-are based on the pages you actually want rather than my assumptions. You will
-have it within two days."*
-
-### "Can it take real payments?"
-
-**Say:** *"Not yet — the basket and checkout you saw are real, but the payment
-is simulated. Taking real money means opening accounts with payment providers —
-cards and PayPal, and MVola or Orange Money for customers in Madagascar — plus
-order emails, saving orders, and terms of sale. That is real additional work and
-I would rather price it properly than bolt it on."*
-
-Do not say yes to a date on the call.
-
-### "Are those reviews real?"
-
-**Say:** *"No — they are sample reviews I wrote so you can see how it looks.
-They are removed before the site goes live, and from then on every review comes
-from a real customer and waits for your approval."*
+**Say:** *"Let me put that in writing after you have seen this, based on the
+pages you actually want. You will have it within two days."*
 
 ### "Who owns it?"
 
 **Say:** *"You do. Source code, administrator access, the hosting and database
-accounts, all handed over on delivery. The system itself is open source, so
-there is no licence to pay and no one can take it away from you."*
+accounts, all handed over on delivery. The system is open source — no licence
+to pay."*
 
 ---
 
 ## Part 6 — If something breaks
 
-**Stay calm and narrate it.** He is evaluating how you handle problems as much
-as the software.
+**Stay calm and narrate it.**
 
 | Problem | Do this |
 |---|---|
-| Page will not load | Reload once. Then `npm run devsafe` and carry on talking while it restarts. |
-| Publish is refused | The photograph is missing. It is required. |
-| A field looks empty that should not be | Check the **Locale** selector top right — you are probably in the other language. |
-| Product will not appear publicly | Check the status says **Published**, not Draft. |
-| Images do not appear | Check `BLOB_READ_WRITE_TOKEN` is set in the Vercel environment variables. |
-| A product says **Rupture de stock** | A rehearsal order used it up. Raise its **Stock** in the admin, or re-seed. |
-| Checkout sends you back to the cart | A line asks for more than is in stock — the cart says which. Lower it. |
-| A new review does not appear | It is waiting under **Avis clients**. Set it to **Approuvé**. |
-| Product pages fail on the deployed site only | The Neon database is missing a recent change. README, *Deploying*, step 5. |
-| Everything is broken | *"Let me reset to a clean state — one moment."* Run `npm run seed`, restart. **Do not debug live.** |
+| Page will not load | Reload once. Locally, `npm run devsafe` and carry on talking while it restarts. |
+| Publish is refused | The main photograph is missing. It is required. |
+| A photograph upload fails online | It is over about 4 MB. Use a smaller one. |
+| A field looks empty that should not be | Check the language selector top right — you are probably in the other language. |
+| Something will not appear publicly | Check the status says **Publié**, not Brouillon. |
+| Images do not appear online | Check `BLOB_READ_WRITE_TOKEN` in the Vercel environment variables. |
+| Pages fail on the deployed site only | The Neon database is missing a recent change. README, *Deploying*, step 5. |
+| Everything is broken | *"Let me reset to a clean state."* Re-run `npm run seed`. **Do not debug live.** |
 
-**The rule: never type code on screen while he watches.** If you cannot fix it
-in thirty seconds, switch to talking about something else and come back.
+**The rule: never type code on screen while he watches.**
 
 ---
 
@@ -453,26 +370,24 @@ in thirty seconds, switch to talking about something else and come back.
 
 Send one short email the same day with:
 
-1. The public demonstration link.
-2. His administrator email and password, and a note to change it.
-3. A one-paragraph recap of what you showed.
-4. **The answer about your organisation**, in writing, so it is settled.
-5. One sentence on what happens next and when.
-
-Do not attach a price yet unless he asked for one on the call. Let him respond
-to the demonstration first.
+1. The public link and the admin link.
+2. His and Heide's email and temporary password, and a note to change them.
+3. The admin guide (French and English).
+4. A one-paragraph recap of what you showed.
+5. What you need from them: official logos (SVG or transparent PNG),
+   photographs, validated texts, and the legal details of MFC and EAC.
+6. One sentence on what happens next and when.
 
 ---
 
 ## Honest reminders
 
-- The photographs are stock images chosen to match each product, not his
-  goods. If he asks, say so — it is sample content, as agreed.
-- The reviews, stock figures and product details are invented sample content
-  too.
-- The payment is simulated: nothing is charged and orders are not saved. There
-  is no newsletter sending either. Do not imply otherwise.
-- This stack is new to you. That is fine. Show what it does, and if he asks
-  something you do not know, say *"I will confirm that and come back to you"*
-  rather than guessing. One wrong confident answer costs more than three
-  honest ones.
+- Every text, person, project, partner and enquiry on the site is fictional.
+  The founder's biography and the legal identifiers are deliberate
+  placeholders.
+- The photographs are stock images, not his. The logos of MFC, EAC and the
+  partners are generated initials.
+- Requests are not emailed and the newsletter is not sent. Do not imply
+  otherwise.
+- If he asks something you do not know, say *"I will confirm that and come
+  back to you"* rather than guessing.
