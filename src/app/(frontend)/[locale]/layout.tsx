@@ -120,10 +120,6 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           {t('skipToContent', locale)}
         </a>
 
-        <div className="demo-banner" role="status">
-          {t('demoNotice', locale)}
-        </div>
-
         <MainNav
           brand={brand}
           tools={<LocaleSwitcher current={locale} label={t('language', locale)} />}

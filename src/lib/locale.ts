@@ -220,10 +220,6 @@ const STRINGS = {
 
   // --- page furniture ---------------------------------------------------------
   skipToContent: { fr: 'Aller au contenu', en: 'Skip to content' },
-  demoNotice: {
-    fr: 'Démonstration — contenu fictif',
-    en: 'Demonstration — sample content',
-  },
 } satisfies Record<string, Record<Locale, string>>
 
 export type StringKey = keyof typeof STRINGS

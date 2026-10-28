@@ -112,16 +112,6 @@ h3 {
   white-space: nowrap;
 }
 
-.demo-banner {
-  background: var(--green-900);
-  color: var(--gold-100);
-  font-size: 0.6875rem;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  text-align: center;
-  padding: 7px 20px;
-}
-
 /* --- header -------------------------------------------------------------- */
 
 .site-header {
