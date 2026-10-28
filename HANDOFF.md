@@ -170,17 +170,19 @@ few minutes.
 
 ## 5. Still to do
 
-**Security, first:**
+**Done on 28 October:** the Neon database password and the Vercel Blob
+credentials were replaced (both had been pasted in a chat), and the GitHub
+repository was made private. If a key is ever exposed again:
 
-- **Replace the two live keys.** The Vercel Blob token and the Neon database
-  password were pasted in a chat while the site was being put live, so treat
-  them as known.
-  - **Neon:** reset the password of the `neondb_owner` role, then paste the
-    new connection string into Vercel's `DATABASE_URL`.
-  - **Vercel:** create a new Blob read-write token and update
-    `BLOB_READ_WRITE_TOKEN`.
-  - Then redeploy from Vercel. Menu names may differ slightly. Claude Code
-    can walk you through it in the browser.
+- **Neon:** Roles → `neondb_owner` → ⋮ → Reset password. Then, from the
+  green **Connect** button, copy the full `postgresql://…` address (not the
+  bare password) into Vercel's `DATABASE_URL`, and redeploy.
+- **Blob:** Vercel → Storage → `cannelle-media` → Settings → Rotate
+  Credentials. Set the delay to 0 hours; Vercel updates
+  `BLOB_READ_WRITE_TOKEN` itself. Then redeploy.
+
+Redeploying after changing a key asks for a code sent to the Vercel
+account's email.
 
 **For the client:**
 
@@ -229,5 +231,5 @@ few minutes.
 Claude Code on the new PC doesn't remember earlier conversations. Open the
 project folder, then start with:
 
-> Read HANDOFF.md and README.md first. Commits go out as markcling07.
-> Ask me before pushing to `main`.
+> Read HANDOFF.md and README.md first. Commits go out as markcling07 only,
+> with no co-author line. Ask me before pushing to `main`.
