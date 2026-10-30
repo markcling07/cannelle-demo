@@ -181,6 +181,7 @@ const seed = async () => {
     { key: 'spices', fr: 'Épices', en: 'Spices' },
     { key: 'cocoa', fr: 'Cacao', en: 'Cocoa' },
     { key: 'natural', fr: 'Produits naturels', en: 'Natural products' },
+    { key: 'fragrances', fr: 'Parfums', en: 'Fragrances' },
   ]
 
   const categories: Record<string, number> = {}
@@ -778,6 +779,140 @@ const seed = async () => {
           { label: 'Origin', value: 'North-west Madagascar' },
           { label: 'Preparation', value: 'Shelled, unsalted' },
           { label: 'Packaging', value: 'Kraft pouch, 200 g' },
+        ],
+      },
+    },
+
+    // ── fragrances ──────────────────────────────────────────────────────
+    {
+      slug: 'eau-de-vanille',
+      label: 'Vanille',
+      colours: ['#3a2a1a', '#c9a96e'] as [string, string],
+      alt: {
+        fr: 'Flacon de parfum à la vanille de Madagascar',
+        en: 'Madagascar vanilla perfume bottle',
+      },
+      category: 'fragrances',
+      company: 'mfc' as const,
+      reference: 'PAR-VAN-020',
+      fr: {
+        title: 'Eau de Vanille de Madagascar',
+        shortDescription:
+          'Fragrance artisanale à base d’absolue de vanille Bourbon. Chaude, gourmande et enveloppante.',
+        body: [
+          'L’absolue de vanille est extraite à froid des gousses affinées pendant plusieurs mois. Elle conserve ainsi toute la rondeur du fruit, sans la note brûlée que donne la distillation.',
+          'Ce parfum se porte comme un voile : quelques touches aux poignets et dans le cou suffisent. Le sillage est doux, jamais entêtant, et tient plusieurs heures sur la peau.',
+          'Le flacon en verre ambré protège la fragrance de la lumière. À conserver dans un endroit frais, à l’abri du soleil.',
+        ],
+        features: [
+          { label: 'Note principale', value: 'Vanille Bourbon absolue' },
+          { label: 'Famille olfactive', value: 'Orientale gourmande' },
+          { label: 'Concentration', value: 'Eau de parfum, 12 %' },
+          { label: 'Conditionnement', value: 'Flacon verre, 50 ml' },
+        ],
+      },
+      en: {
+        title: 'Madagascar Vanilla Eau de Parfum',
+        shortDescription:
+          'Artisan fragrance built on Bourbon vanilla absolute. Warm, gourmand and enveloping.',
+        body: [
+          'The vanilla absolute is cold-extracted from pods aged for several months. This preserves the fruit’s full roundness without the burnt note that distillation can bring.',
+          'Wear it like a veil: a few dabs at the wrists and neck are enough. The trail is soft, never heavy, and lasts several hours on the skin.',
+          'The amber glass bottle shields the fragrance from light. Store in a cool place away from direct sunlight.',
+        ],
+        features: [
+          { label: 'Key note', value: 'Bourbon vanilla absolute' },
+          { label: 'Olfactory family', value: 'Oriental gourmand' },
+          { label: 'Concentration', value: 'Eau de parfum, 12%' },
+          { label: 'Packaging', value: 'Glass bottle, 50 ml' },
+        ],
+      },
+    },
+    {
+      slug: 'brume-ylang',
+      label: 'Ylang',
+      colours: ['#4a3060', '#b08ad0'] as [string, string],
+      alt: {
+        fr: 'Brume parfumée à l’ylang-ylang dans un flacon vaporisateur',
+        en: 'Ylang-ylang scented mist in a spray bottle',
+      },
+      category: 'fragrances',
+      company: 'mfc' as const,
+      reference: 'PAR-YLA-021',
+      fr: {
+        title: 'Brume parfumée Ylang-Ylang',
+        shortDescription:
+          'Brume légère aux notes florales d’ylang-ylang et de jasmin. Fraîche et sensuelle.',
+        body: [
+          'L’ylang-ylang de Nosy Be, dans le nord de Madagascar, donne une huile essentielle aux facettes multiples : florale, fruitée et légèrement épicée.',
+          'Cette brume associe la fraction « extra » de l’ylang à un trait de jasmin et une base de bois blanc. Le résultat est frais, lumineux, idéal en été ou après la douche.',
+          'Vaporiser sur la peau, les cheveux ou le linge. Éviter le contact avec les yeux. Ne pas appliquer sur une peau irritée.',
+        ],
+        features: [
+          { label: 'Notes de tête', value: 'Bergamote, ylang-ylang' },
+          { label: 'Notes de cœur', value: 'Jasmin, fleur d’oranger' },
+          { label: 'Notes de fond', value: 'Bois blanc, musc' },
+          { label: 'Conditionnement', value: 'Vaporisateur, 100 ml' },
+        ],
+      },
+      en: {
+        title: 'Ylang-Ylang Scented Mist',
+        shortDescription:
+          'Light body mist with floral ylang-ylang and jasmine notes. Fresh and sensual.',
+        body: [
+          'Ylang-ylang from Nosy Be, in northern Madagascar, yields an essential oil with many facets: floral, fruity and gently spicy.',
+          'This mist pairs the "extra" fraction of ylang with a thread of jasmine and a white-wood base. The result is fresh and bright, ideal in summer or after a shower.',
+          'Spray on skin, hair or linen. Avoid contact with eyes. Do not apply on irritated skin.',
+        ],
+        features: [
+          { label: 'Top notes', value: 'Bergamot, ylang-ylang' },
+          { label: 'Heart notes', value: 'Jasmine, orange blossom' },
+          { label: 'Base notes', value: 'White wood, musk' },
+          { label: 'Packaging', value: 'Spray bottle, 100 ml' },
+        ],
+      },
+    },
+    {
+      slug: 'baume-ravintsara',
+      label: 'Ravintsara',
+      colours: ['#1a4a2a', '#6ab080'] as [string, string],
+      alt: {
+        fr: 'Pot de baume solide aux feuilles de ravintsara',
+        en: 'Solid balm pot with ravintsara leaves',
+      },
+      category: 'fragrances',
+      company: 'eac' as const,
+      reference: 'PAR-RAV-022',
+      fr: {
+        title: 'Baume solide au Ravintsara',
+        shortDescription:
+          'Baume parfumé à base d’huile essentielle de ravintsara et de cire d’abeille. Frais et aromatique.',
+        body: [
+          'Le ravintsara (Cinnamomum camphora) est un arbre endémique de Madagascar dont les feuilles distillées produisent une huile fraîche, camphrée et légèrement eucalyptée.',
+          'Ce baume solide combine cette huile à de la cire d’abeille locale et du beurre de karité. Le résultat est un parfum portable, discret et apaisant, qui fond au contact de la peau.',
+          'Appliquer sur les poignets, les tempes ou le plexus. Usage externe uniquement. Déconseillé aux femmes enceintes et aux enfants de moins de six ans.',
+        ],
+        features: [
+          { label: 'Huile essentielle', value: 'Ravintsara (Cinnamomum camphora)' },
+          { label: 'Base', value: 'Cire d’abeille, beurre de karité' },
+          { label: 'Famille olfactive', value: 'Aromatique fraîche' },
+          { label: 'Conditionnement', value: 'Pot aluminium, 30 g' },
+        ],
+      },
+      en: {
+        title: 'Ravintsara Solid Balm',
+        shortDescription:
+          'Scented balm made with ravintsara essential oil and beeswax. Fresh and aromatic.',
+        body: [
+          'Ravintsara (Cinnamomum camphora) is a tree native to Madagascar whose distilled leaves yield a fresh, camphoraceous, slightly eucalyptus oil.',
+          'This solid balm combines that oil with local beeswax and shea butter. The result is a portable, subtle and soothing fragrance that melts on contact with the skin.',
+          'Apply to the wrists, temples or chest. External use only. Not recommended for pregnant women or children under six.',
+        ],
+        features: [
+          { label: 'Essential oil', value: 'Ravintsara (Cinnamomum camphora)' },
+          { label: 'Base', value: 'Beeswax, shea butter' },
+          { label: 'Olfactory family', value: 'Fresh aromatic' },
+          { label: 'Packaging', value: 'Aluminium tin, 30 g' },
         ],
       },
     },
